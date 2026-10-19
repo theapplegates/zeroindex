@@ -1,0 +1,104 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+
+const pageSections = [
+  {
+    title: "Static",
+    columns: [
+      {
+        category: "Pages",
+        links: [
+          { text: "Home", href: "/" },
+          { text: "Status", href: "/status" },
+          { text: "404", href: "/404" },
+        ],
+      },
+      {
+        category: "System",
+        links: [
+          { text: "Colors", href: "/system/colors" },
+          { text: "Links", href: "/system/link" },
+          { text: "Buttons", href: "/system/buttons" },
+          { text: "Typography", href: "/system/typography" },
+        ],
+      },
+      {
+        category: "Resources",
+        links: [
+          { text: "License", href: "https://lexingtonthemes.com/legal/license" },
+          { text: "Documentation", href: "https://lexingtonthemes.com/documentation" },
+        ],
+      },
+    ],
+  },
+  {
+    title: "Content collections",
+    columns: [
+      {
+        category: "Docs",
+        links: [
+          { text: "Index", href: "/docs" },
+          { text: "Page", href: "/docs/getting-started/quickstart" },
+          { text: "Page as Markdown", href: "/docs/getting-started/quickstart.md" },
+        ],
+      },
+      {
+        category: "API reference",
+        links: [
+          { text: "Index", href: "/api" },
+          { text: "Endpoint", href: "/api/search" },
+          { text: "Endpoint as Markdown", href: "/api/search.md" },
+        ],
+      },
+      {
+        category: "SDKs",
+        links: [
+          { text: "Index", href: "/sdks" },
+          { text: "SDK", href: "/sdks/javascript" },
+        ],
+      },
+      {
+        category: "Changelog",
+        links: [
+          { text: "Index", href: "/changelog" },
+          { text: "Release", href: "/changelog/swap-indexes" },
+        ],
+      },
+    ],
+  },
+];
+---
+
+<section>
+  <Wrapper variant="standard" class="pb-24">
+    <div class="flex flex-col gap-4">
+      {
+        pageSections.map((section) => (
+          <div class="rounded-2xl border border-muted bg-surface">
+            <div class="border-b border-muted px-6 py-4">
+              <Text tag="h2" variant="textBase" class="font-medium">{section.title}</Text>
+            </div>
+            <div class="grid gap-10 p-6 sm:grid-cols-2 lg:grid-cols-4">
+              {section.columns.map((column) => (
+                <div class="flex flex-col gap-3">
+                  <Text tag="h3" variant="textSM" class="font-medium">{column.category}</Text>
+                  <ul role="list" class="flex flex-col gap-2">
+                    {column.links.map((link) => (
+                      <li>
+                        <Text tag="a" variant="textSM" href={link.href} class="text-muted-foreground transition-colors duration-200 hover:text-foreground">
+                          {link.text}
+                        </Text>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </Wrapper>
+</section>

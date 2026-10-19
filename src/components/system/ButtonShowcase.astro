@@ -1,0 +1,62 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Icons
+import Plus from "@/components/fundations/icons/Plus.astro";
+
+interface Props {
+  // Renders every button as a link, for the links page.
+  isLink?: boolean;
+}
+
+const { isLink = false } = Astro.props;
+const linkProps = isLink ? { isLink: true, href: "#_" } : {};
+const variants = [
+  { id: "primary", label: "Primary" },
+  { id: "accent", label: "Accent" },
+  { id: "muted", label: "Muted" },
+];
+const sizes = [
+  { id: "xxs", label: "XXS", icon: "sm" },
+  { id: "xs", label: "XS", icon: "sm" },
+  { id: "sm", label: "SM", icon: "base" },
+  { id: "base", label: "Base", icon: "base" },
+  { id: "md", label: "MD", icon: "lg" },
+  { id: "lg", label: "LG", icon: "xl" },
+  { id: "xl", label: "XL", icon: "xl" },
+];
+---
+
+<section>
+  <Wrapper variant="standard" class="pb-24">
+    <div class="flex flex-col gap-4">
+      {
+        variants.map((variant) => (
+          <div class="rounded-2xl border border-muted bg-surface">
+            <div class="border-b border-muted px-6 py-4">
+              <Text tag="h2" variant="textBase" class="font-medium">{variant.label}</Text>
+            </div>
+            <div class="flex flex-col gap-6 p-6">
+              <div class="flex flex-wrap items-center gap-3">
+                {sizes.map((size) => (
+                  <Button {...linkProps} size={size.id} variant={variant.id}>
+                    {variant.label} {size.label}
+                  </Button>
+                ))}
+              </div>
+              <div class="flex flex-wrap items-center gap-3">
+                {sizes.map((size) => (
+                  <Button {...linkProps} size={size.id} variant={variant.id} iconOnly aria-label={`${variant.label} ${size.label}`}>
+                    <Plus slot="icon" size={size.icon} />
+                  </Button>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </Wrapper>
+</section>
