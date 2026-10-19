@@ -1,0 +1,22 @@
+---
+import { render } from "astro:content";
+import ChangelogLayout from "@/layouts/ChangelogLayout.astro";
+import { docsComponents } from "@/components/docs";
+import { getReleases, releaseHref } from "@/lib/changelog";
+
+export async function getStaticPaths() {
+  const releases = await getReleases();
+  return releases.map((release, index) => ({
+    params: { slug: release.id },
+    props: { release, newer: releases[index - 1], older: releases[index + 1] },
+  }));
+}
+
+const { release, newer, older } = Astro.props;
+const { Content } = await render(release);
+const link = (entry?: typeof release) => (entry ? { title: entry.data.title, href: releaseHref(entry.id) } : undefined);
+---
+
+<ChangelogLayout frontmatter={release.data} previous={link(older)} next={link(newer)}>
+  <Content components={docsComponents} />
+</ChangelogLayout>

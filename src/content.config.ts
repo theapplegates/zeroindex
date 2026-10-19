@@ -43,8 +43,19 @@ const sdks = defineCollection({
   }),
 });
 
+const changelog = defineCollection({
+  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/changelog" }),
+  schema: z.object({
+    title: z.string(),
+    version: z.string(),
+    date: z.date(),
+    summary: z.string(),
+  }),
+});
+
 export const collections = {
   docs,
   api,
   sdks,
+  changelog,
 };

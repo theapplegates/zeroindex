@@ -1,0 +1,23 @@
+---
+title: Swap indexes without downtime
+version: "2.14.0"
+date: 2026-10-16
+summary: Replace a live index in one step, so a full rebuild never shows users empty or half imported results.
+---
+
+Rebuilding an index used to mean a few minutes of missing results, or a second index and a config change in your app. Now you build the new version next to the live one and swap them in a single task.
+
+```js
+await client.swapIndexes([{ indexes: ["products", "products_new"] }]);
+```
+
+Searches move to the new documents and settings at once. The old index keeps the previous version, so you can swap back if something looks wrong. Read the full walkthrough in [Syncing a database](/docs/guides/syncing-a-database).
+
+## Added
+
+- `POST /v1/swap-indexes`, available in every SDK as `swapIndexes`, `swap_indexes`, `SwapIndexes` and `swap_indexes`.
+- `indexSwap` tasks in the dashboard's task list.
+
+## Fixed
+
+- Settings updates on an empty index no longer wait behind document tasks on other indexes.

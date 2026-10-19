@@ -1,0 +1,54 @@
+---
+import type { CollectionEntry } from "astro:content";
+// Fundations
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Components
+import Badge from "@/components/docs/Badge.astro";
+import DocPagination from "@/components/doc/DocPagination.astro";
+// Icons
+import ChevronLeft from "@/components/fundations/icons/ChevronLeft.astro";
+// Content
+import { formatDate } from "@/lib/changelog";
+
+interface Link {
+  title: string;
+  href: string;
+}
+
+interface Props {
+  frontmatter: CollectionEntry<"changelog">["data"];
+  previous?: Link;
+  next?: Link;
+}
+
+const { frontmatter, previous, next } = Astro.props;
+---
+
+<BaseLayout>
+  <section>
+    <Wrapper variant="standard" class="py-24">
+      <article class="mx-auto max-w-2xl">
+        <a href="/changelog" class="flex w-fit items-center gap-1 text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground">
+          <ChevronLeft size="sm" />
+          All releases
+        </a>
+        <header class="mt-10 flex flex-col gap-4 border-b border-muted pb-10">
+          <div class="flex items-center gap-3">
+            <time datetime={frontmatter.date.toISOString()} class="text-sm text-muted-foreground">{formatDate(frontmatter.date)}</time>
+            <Badge variant="outline">v{frontmatter.version}</Badge>
+          </div>
+          <Text tag="h1" variant="displayMD" class="font-semibold tracking-tight text-pretty lg:text-balance">{frontmatter.title}</Text>
+          <Text tag="p" variant="textLG" class="text-pretty text-muted-foreground">{frontmatter.summary}</Text>
+        </header>
+        <Wrapper variant="prose" class="pt-10">
+          <slot />
+        </Wrapper>
+        <div class="pt-16">
+          <DocPagination previous={previous} next={next} />
+        </div>
+      </article>
+    </Wrapper>
+  </section>
+</BaseLayout>

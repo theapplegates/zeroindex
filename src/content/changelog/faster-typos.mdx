@@ -1,0 +1,18 @@
+---
+title: Faster typo tolerance on long queries
+version: "2.11.2"
+date: 2026-09-03
+summary: Queries of eight words or more with typos are now about 40% faster, and a few ranking edge cases are fixed.
+---
+
+People paste whole product names and error messages into search boxes. Long queries with typos were our slowest searches, so we rewrote how candidate words are matched. The median for queries of eight words or more dropped from 31 ms to 18 ms.
+
+## Improved
+
+- Long queries with typos are about 40% faster in every region.
+
+## Fixed
+
+- Words in quotes are no longer matched with typos.
+- `exactness` now ranks a full match of a multi word field above a match of its first word.
+- Highlights no longer split a word that contains an apostrophe.

@@ -1,0 +1,26 @@
+---
+title: Facet stats for number fields
+version: "2.13.0"
+date: 2026-10-02
+summary: Searches with facets now return the lowest and highest value of every number field, ready for price sliders.
+---
+
+Building a price slider used to take a second request to find the cheapest and most expensive product. Ask for a number field as a facet and the response now includes `facetStats` with its range.
+
+```json
+{
+  "facetStats": {
+    "price": { "min": 19, "max": 349 }
+  }
+}
+```
+
+The range follows the query and the filters, so the slider always matches the results on screen. See [Faceted search](/docs/guides/faceted-search) for a full example.
+
+## Added
+
+- `facetStats` in search responses for number fields listed in `facets`.
+
+## Improved
+
+- Facet counts on indexes with more than a million documents are up to three times faster.

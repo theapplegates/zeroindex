@@ -4,12 +4,14 @@ import { render } from "astro:content";
 import { getDocs, docHref, categories } from "@/lib/docs";
 import { getEndpoints, apiHref, groups } from "@/lib/api";
 import { getSdks, sdkHref } from "@/lib/sdks";
+import { getReleases, releaseHref } from "@/lib/changelog";
 // Icons
 import Search from "@/components/fundations/icons/Search.astro";
 
 const docs = await getDocs();
 const endpoints = await getEndpoints();
 const sdks = await getSdks();
+const releases = await getReleases();
 const headingsOf = async (entry: Parameters<typeof render>[0]) =>
   (await render(entry)).headings.filter((heading) => heading.depth <= 3).map((heading) => heading.text);
 const index = [
@@ -38,6 +40,15 @@ const index = [
       category: "SDKs",
       href: sdkHref(sdk.id),
       headings: await headingsOf(sdk),
+    })),
+  )),
+  ...(await Promise.all(
+    releases.map(async (release) => ({
+      title: release.data.title,
+      description: release.data.summary,
+      category: `Changelog v${release.data.version}`,
+      href: releaseHref(release.id),
+      headings: await headingsOf(release),
     })),
   )),
 ];

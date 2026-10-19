@@ -1,0 +1,45 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Components
+import Badge from "@/components/docs/Badge.astro";
+// Icons
+import ChevronRight from "@/components/fundations/icons/ChevronRight.astro";
+// Content
+import { getReleases, releaseHref, formatDate } from "@/lib/changelog";
+
+const releases = await getReleases();
+---
+
+<section>
+  <Wrapper variant="standard" class="pb-24">
+    <ol role="list" class="flex flex-col">
+      {
+        releases.map((release) => (
+          <li class="grid gap-4 border-t border-muted py-10 lg:grid-cols-12 lg:gap-8">
+            <div class="flex items-center gap-3 lg:col-span-3 lg:flex-col lg:items-start">
+              <time datetime={release.data.date.toISOString()} class="text-sm text-muted-foreground">
+                {formatDate(release.data.date)}
+              </time>
+              <Badge variant="outline">v{release.data.version}</Badge>
+            </div>
+            <div class="flex flex-col items-start lg:col-span-9">
+              <Text tag="h2" variant="displayXS" class="font-semibold tracking-tight text-pretty">
+                <a href={releaseHref(release.id)} class="transition-colors duration-200 hover:text-muted-foreground">{release.data.title}</a>
+              </Text>
+              <Text tag="p" variant="textBase" class="mt-3 max-w-2xl text-pretty text-muted-foreground">{release.data.summary}</Text>
+              <a
+                href={releaseHref(release.id)}
+                class="mt-5 flex items-center gap-1 text-sm font-medium text-foreground transition-colors duration-200 hover:text-muted-foreground"
+              >
+                Read the release notes
+                <ChevronRight size="sm" />
+              </a>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </Wrapper>
+</section>
