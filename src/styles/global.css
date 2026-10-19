@@ -127,3 +127,49 @@ summary::-webkit-details-marker {
 [data-sidebar-scroll]:hover {
   scrollbar-color: var(--muted) transparent;
 }
+
+/* Mobile menu: slides in from the left, the backdrop fades */
+[data-menu-dialog] {
+  opacity: 0;
+  translate: -1rem 0;
+  transition:
+    opacity 0.25s ease-out,
+    translate 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+    overlay 0.3s allow-discrete,
+    display 0.3s allow-discrete;
+}
+
+[data-menu-dialog][open] {
+  opacity: 1;
+  translate: 0 0;
+}
+
+[data-menu-dialog]::backdrop {
+  background-color: transparent;
+  transition:
+    background-color 0.3s ease-out,
+    overlay 0.3s allow-discrete,
+    display 0.3s allow-discrete;
+}
+
+[data-menu-dialog][open]::backdrop {
+  background-color: color-mix(in oklch, var(--foreground) 20%, transparent);
+}
+
+@starting-style {
+  [data-menu-dialog][open] {
+    opacity: 0;
+    translate: -1rem 0;
+  }
+
+  [data-menu-dialog][open]::backdrop {
+    background-color: transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-menu-dialog],
+  [data-menu-dialog]::backdrop {
+    transition: none;
+  }
+}

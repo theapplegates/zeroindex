@@ -11,9 +11,8 @@ const iconButton = "hidden size-8 items-center justify-center rounded-lg text-mu
 ---
 
 <aside
-  class="fixed inset-2 z-40 flex flex-col overflow-hidden rounded-2xl border border-muted bg-surface text-foreground shadow-xl sm:left-auto sm:w-96 sm:data-expanded:w-160"
+  class="invisible fixed inset-2 z-40 flex translate-x-4 flex-col overflow-hidden rounded-2xl border border-muted bg-surface text-foreground opacity-0 shadow-xl transition-all duration-300 ease-out data-open:visible data-open:translate-x-0 data-open:opacity-100 motion-reduce:transition-none sm:left-auto sm:w-96 sm:data-expanded:w-160"
   aria-label="Assistant"
-  hidden
   data-assistant
 >
   <div class="flex h-14 shrink-0 items-center justify-between gap-3 border-b border-muted px-4">
@@ -84,10 +83,11 @@ const iconButton = "hidden size-8 items-center justify-center rounded-lg text-mu
   const open = () => {
     if (!panel) return;
     document.querySelectorAll<HTMLDetailsElement>("[data-copy-page-menu]").forEach((menu) => (menu.open = false));
-    panel.hidden = false;
-    input?.focus();
+    panel.setAttribute("data-open", "");
+    input?.focus({ preventScroll: true });
   };
-  const close = () => panel && (panel.hidden = true);
+  const close = () => panel?.removeAttribute("data-open");
+  const isOpen = () => panel?.hasAttribute("data-open") ?? false;
 
   const renderChips = () => {
     if (!chips || !chipTemplate) return;
@@ -162,9 +162,9 @@ const iconButton = "hidden size-8 items-center justify-center rounded-lg text-mu
   document.addEventListener("keydown", (event) => {
     if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "i") {
       event.preventDefault();
-      if (panel?.hidden) open();
-      else close();
+      if (isOpen()) close();
+      else open();
     }
-    if (event.key === "Escape" && panel && !panel.hidden && panel.contains(document.activeElement)) close();
+    if (event.key === "Escape" && isOpen() && panel?.contains(document.activeElement)) close();
   });
 </script>

@@ -18,11 +18,11 @@ const links = [
 ---
 
 <dialog
-  class="m-0 h-svh max-h-none w-80 max-w-full flex-col bg-background p-0 text-foreground backdrop:bg-foreground/20 open:flex"
+  class="fixed inset-y-2 right-2 left-2 m-0 h-auto max-h-none w-auto max-w-none flex-col overflow-hidden rounded-2xl border border-muted bg-surface p-0 text-foreground shadow-xl open:flex sm:right-auto sm:w-80"
   aria-label="Menu"
   data-menu-dialog
 >
-  <div class="flex h-14 shrink-0 items-center justify-between px-4">
+  <div class="flex h-14 shrink-0 items-center justify-between border-b border-muted px-4">
     <Logo />
     <button type="button" class="flex size-9 items-center justify-center rounded-lg text-muted-foreground hover:text-foreground" aria-label="Close menu" data-menu-close>
       <Close size="base" />
