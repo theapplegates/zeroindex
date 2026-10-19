@@ -4,6 +4,7 @@ import Text from "@/components/fundations/elements/Text.astro";
 import Wrapper from "@/components/fundations/containers/Wrapper.astro";
 // Components
 import Card from "@/components/docs/Card.astro";
+import HeroShader from "@/components/landing/HeroShader.astro";
 
 const cards = [
   {
@@ -33,8 +34,9 @@ const cards = [
 ] as const;
 ---
 
-<section>
-  <Wrapper variant="panel" class="pt-32 pb-24">
+<section class="relative overflow-hidden">
+  <HeroShader />
+  <Wrapper variant="panel" class="relative pt-32 pb-24">
     <div class="flex max-w-2xl flex-col">
       <Text tag="h1" variant="displayLG" class="font-semibold tracking-tight text-pretty lg:text-balance">
         Add fast, typo tolerant search to your product
