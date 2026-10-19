@@ -5,6 +5,11 @@ import Wrapper from "@/components/fundations/containers/Wrapper.astro";
 // Components
 import ThemeToggle from "@/components/global/ThemeToggle.astro";
 
+interface Props {
+  variant?: "standard" | "panel";
+}
+
+const { variant = "standard" } = Astro.props;
 const links = [
   { label: "License", href: "https://lexingtonthemes.com/legal/license" },
   { label: "Documentation", href: "https://lexingtonthemes.com/documentation" },
@@ -12,7 +17,7 @@ const links = [
 ---
 
 <footer>
-  <Wrapper variant="standard" class="py-12">
+  <Wrapper variant={variant} class="py-12">
     <div class="flex flex-wrap items-center justify-between gap-4 border-t border-muted pt-6">
       <Text tag="p" variant="textSM" class="text-muted-foreground">© {new Date().getFullYear()} ZeroIndex</Text>
       <div class="flex items-center gap-6">
@@ -25,7 +30,7 @@ const links = [
           ))
           }
         </div>
-        <ThemeToggle />
+        {variant === "standard" && <ThemeToggle />}
       </div>
     </div>
   </Wrapper>

@@ -1,16 +1,18 @@
 ---
 // Fundations
-import BaseLayout from "@/layouts/BaseLayout.astro";
+import DocShell from "@/components/doc/DocShell.astro";
 // Components
+import Footer from "@/components/global/Footer.astro";
 import Hero from "@/components/landing/Hero.astro";
 import CodeSample from "@/components/landing/CodeSample.astro";
 import Sdks from "@/components/landing/Sdks.astro";
 import LatestReleases from "@/components/landing/LatestReleases.astro";
 ---
 
-<BaseLayout>
+<DocShell>
   <Hero />
   <CodeSample />
   <Sdks />
   <LatestReleases />
-</BaseLayout>
+  <Footer variant="panel" />
+</DocShell>
