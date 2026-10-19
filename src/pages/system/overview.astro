@@ -1,136 +1,69 @@
 ---
-// Assets
-import Header from "@/components/fundations/containers/Header.astro";
 // Fundations
-import DocsLayout from "@/layouts/DocsLayout.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
 import Text from "@/components/fundations/elements/Text.astro";
-// Data array
-const pageData = [
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+const pageSections = [
   {
-    categoryTitle: "Static",
-    links: [
+    title: "Static",
+    columns: [
       {
-        sectionTitle: "Landing Pages",
+        category: " Pages",
         links: [
-          {
-            title: "Home",
-            url: "/",
-          },
-          { title: "404", url: "/404" },
+          { text: "Home", href: "/" },
+          { text: "404", href: "/404" },
         ],
       },
       {
-        sectionTitle: "Forms ",
+        category: "System",
         links: [
-          {
-            title: "Sign in",
-            url: "/sign-in",
-          },
-          {
-            title: "Sign up",
-            url: "/sign-up",
-          },
+          { text: "Colors", href: "/system/colors" },
+          { text: "Links", href: "/system/link" },
+          { text: "Buttons", href: "/system/buttons" },
+          { text: "Typography", href: "/system/typography" },
         ],
       },
       {
-        sectionTitle: "System Pages",
+        category: "Resources",
         links: [
-          { title: "Links", url: "/system/links" },
-          { title: "Buttons", url: "/system/buttons" },
-          { title: "Colors", url: "/system/colors" },
-          { title: "Alerts", url: "/system/alerts" },
-          { title: "Badges", url: "/system/badges" },
-          { title: "Typography", url: "/system/typography" },
+          { text: "Social", href: "https://x.com/lexingtonthemes" },
           {
-            title: "License",
-            url: "https://lexingtonthemes.com/legal/license",
+            text: "License",
+            href: "https://lexingtonthemes.com/legal/license",
           },
           {
-            title: "Docs",
-            url: "https://lexingtonthemes.com/documentation",
+            text: "Documentation",
+            href: "https://lexingtonthemes.com/documentation/",
           },
         ],
       },
     ],
   },
   {
-    categoryTitle: "Content Collection",
-    links: [
+    title: "Content Collections",
+    columns: [
       {
-        sectionTitle: "Documentation",
+        category: "Blog Pages",
         links: [
-          {
-            title: "Details",
-            url: "/docs/getting-started/introduction",
-          },
+          { text: "Home ", href: "/blog/" },
+          { text: "Post", href: "/blog/posts/1" },
+          { text: "Tag Index", href: "/blog/tags" },
+          { text: "Tag Category", href: "/blog/tags/photography" },
+          { text: "RSS", href: "/rss.xml" },
         ],
       },
       {
-        sectionTitle: "Blog",
+        category: "Team",
         links: [
-          {
-            title: "Home",
-            url: "/blog",
-          },
-          {
-            title: "Post",
-            url: "/blog/posts/1",
-          },
-          { title: "Tag index", url: "/blog/tags" },
-          {
-            title: "Tag Category",
-            url: "/blog/tags/astro",
-          },
-          { title: "RSS", url: "/rss.xml" },
+          { text: "Home", href: "/team/" },
+          { text: "Details", href: "/team/jordan-wells" },
         ],
       },
       {
-        sectionTitle: "Integrations",
+        category: "Legal",
         links: [
-          {
-            title: "Home",
-            url: "/integrations/",
-          },
-          {
-            title: "Details",
-            url: "/integrations/1",
-          },
-        ],
-      },
-      {
-        sectionTitle: "Changelog",
-        links: [
-          {
-            title: "Home",
-            url: "/changelog/",
-          },
-          {
-            title: "Details",
-            url: "/changelog/command-palette",
-          },
-        ],
-      },
-      {
-        sectionTitle: "Team",
-        links: [
-          {
-            title: "Home",
-            url: "/team/",
-          },
-          {
-            title: "Details",
-            url: "/team/jordan-wells",
-          },
-        ],
-      },
-      {
-        sectionTitle: "Legal",
-        links: [
-          {
-            title: "Details",
-            url: "/legal/licensing",
-          },
-        
+          { text: "Terms", href: "/legal/terms" },
+          { text: "Privacy", href: "/legal/privacy" },
         ],
       },
     ],
@@ -138,45 +71,54 @@ const pageData = [
 ];
 ---
 
-<DocsLayout>
+<BaseLayout>
   <section>
-    <Header title="Overview" innerClass="pt-24" />
-    <div class="flex flex-col p-8 gap-12">
-      {
-        pageData.map((category) => (
-          <>
+    <Wrapper variant="standard" class="py-12 lg:py-24">
+      <Text tag="h2" variant="displaySM" class="font-medium text-foreground">
+        Overview
+      </Text>
+      <div class="flex flex-col mt-12 gap-12">
+        {
+          pageSections.map((section) => (
             <div>
               <Text
-                tag="h2"
-                variant="textLG"
-                class="font-medium  text-base-900 dark:text-white"
+                tag="h3"
+                variant="textBase"
+                class="font-medium text-foreground"
               >
-                {category.categoryTitle}
+                {section.title}
               </Text>
-              <div class="mt-4 gap-y-8 gap-x-4 grid grid-cols-2 lg:grid-cols-5 md:grid-cols-3 ">
-                {category.links.map((section) => (
+              <div class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 xl:grid-cols-4">
+                {section.columns.map((column) => (
                   <div>
                     <Text
-                      tag="h3"
+                      tag="p"
                       variant="textBase"
-                      class="text-base-900 dark:text-white"
+                      class="font-medium text-foreground"
                     >
-                      {section.sectionTitle}
+                      {column.category}
                     </Text>
-                    <div class="flex flex-col mt-4 text-sm gap-1 text-base-500">
-                      {section.links.map((link) => (
-                        <a class="hover:text-accent-500" href={link.url}>
-                          {link.title}
-                        </a>
+                    <ul role="list" class="mt-2 ">
+                      {column.links.map((link) => (
+                        <li>
+                          <Text
+                            tag="a"
+                            variant="textSM"
+                            href={link.href}
+                            class="text-muted-foreground hover:text-foreground duration-300"
+                          >
+                            {link.text}
+                          </Text>
+                        </li>
                       ))}
-                    </div>
+                    </ul>
                   </div>
                 ))}
               </div>
             </div>
-          </>
-        ))
-      }
-    </div>
+          ))
+        }
+      </div>
+    </Wrapper>
   </section>
-</DocsLayout>
+</BaseLayout>

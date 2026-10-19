@@ -1,10 +1,10 @@
 ---
 // Fundations
-import DocsLayout from "@/layouts/DocsLayout.astro";
-import Header from "@/components/fundations/containers/Header.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Text from "@/components/fundations/elements/Text.astro";
 import Wrapper from "@/components/fundations/containers/Wrapper.astro";
 // Components
-import BlogCard from "@/components/blog/BlogCard.astro";
+import BlogEntry from "@/components/blog/BlogCard.astro";
 // Content
 import { getCollection } from "astro:content";
 export async function getStaticPaths() {
@@ -26,12 +26,26 @@ const { tag } = Astro.params;
 const { posts } = Astro.props;
 ---
 
-<DocsLayout pageTitle={tag}>
+<BaseLayout pageTitle={tag}>
   <section>
-    <Header title={tag} innerClass="pt-24 capitalize" />
+    <Wrapper variant="standard" class="py-24 lg:pt-48">
+      <Text
+        tag="h1"
+        variant="textBase"
+        class="font-medium capitalize text-foreground"
+      >
+        {tag}</Text
+      >
 
-    <div class="flex flex-col px-8 pb-8 mt-4 gap-2">
-      {posts.map((post) => <BlogCard post={post} />)}
-    </div>
+      <div
+        class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-y-24 gap-4"
+      >
+        {
+          posts.map((post, index) => (
+            <BlogEntry post={post} index={index + 1} />
+          ))
+        }
+      </div>
+    </Wrapper>
   </section>
-</DocsLayout>
+</BaseLayout>

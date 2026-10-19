@@ -2,96 +2,48 @@
 // Assets
 import { Image } from "astro:assets";
 // Fundations
-import DocsLayout from "@/layouts/DocsLayout.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
 import Text from "@/components/fundations/elements/Text.astro";
-import Header from "@/components/fundations/containers/Header.astro";
 import Wrapper from "@/components/fundations/containers/Wrapper.astro";
-// Components
-import BlogCard from "@/components/blog/BlogCard.astro";
-// Load all posts
-import { getCollection } from "astro:content";
 // Content
-const allPosts = await getCollection("posts");
-// Get the team slug from the URL
-const teamSlug = Astro.url.pathname.split("/").filter(Boolean).pop();
-// Filter posts by this team (based on slug)
-const relatedPosts = allPosts.filter((post) => post.data.team === teamSlug);
 const { frontmatter } = Astro.props;
 ---
 
-<DocsLayout>
-  <Header title={frontmatter.name} description={frontmatter.role} />
-  <div class="p-8">
-    <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-      <div class="flex flex-col gap-2">
-        {
-          frontmatter.bio.split("\n").map((paragraph) => (
-            <Text tag="p" variant="textSM" class="text-base-500">
-              {paragraph}
-            </Text>
-          ))
-        }
-      </div>
-      <Image
-        width={1000}
-        height={800}
-        alt={frontmatter.image.alt}
-        src={frontmatter.image.url}
-        class="object-cover object-center size-full max-h-120 lg:col-span-2 rounded-xl"
-      />
-    </div>
-    <div class="flex items-center gap-2">
-      <a
-        href={frontmatter.socials.twitter}
-        class="text-sm text-base-600 hover:text-base-800 duration-300"
-        aria-label="X"
-      >
-        Twitter
-      </a>
-      <a
-        href={frontmatter.socials.linkedin}
-        class="text-sm text-base-600 hover:text-base-800 duration-300"
-        aria-label="LinkedIn"
-      >
-        Linkedin
-      </a>
-      <a
-        href={frontmatter.socials.email}
-        class="text-sm text-base-600 hover:text-base-800 duration-300"
-        aria-label="Email"
-      >
-        Email
-      </a>
-      <a
-        href={frontmatter.socials.website}
-        class="text-sm text-base-600 hover:text-base-800 duration-300"
-        aria-label="Website"
-      >
-        Website
-      </a>
-    </div>
-  </div>
+<BaseLayout>
   <section>
-    <div class="p-8">
-      {
-        relatedPosts.length > 0 && (
-          <div>
-            <Text
-              tag="h2"
-              variant="displaySM"
-              class="font-semibold text-base-900 dark:text-white"
-            >
-              More posts from{" "}
-              <span class="capitalize">{teamSlug.replace(/-/g, " ")}</span>
-            </Text>
-            <div class="flex flex-col  mt-4 gap-2">
-              {relatedPosts.map((post) => (
-                <BlogCard post={post} />
-              ))}
-            </div>
-          </div>
-        )
-      }
-    </div>
+    <Wrapper variant="standard" class="py-12 lg:py-24">
+      <div class="text-center">
+        <Text tag="p" variant="textXS" class="uppercase text-muted-foreground">
+          {frontmatter.role}
+        </Text>
+        <Text
+          tag="p"
+          variant="displaySM"
+          class="mt-12 text-foreground font-medium"
+        >
+          {frontmatter.name}
+        </Text>
+        <Text tag="p" variant="textXL" class="text-muted-foreground mt-2">
+          {frontmatter.bio}
+        </Text>
+        <div class="flex items-center justify-center gap-6 mt-8 text-muted-foreground">
+          {
+            frontmatter.socials?.map((social) => (
+              <a href={social.href}>{social.label}</a>
+            ))
+          }
+        </div>
+        <Image
+          alt={frontmatter.image.alt}
+          src={frontmatter.image.url}
+          width={1400}
+          height={1400}
+          loading="lazy"
+          decoding="async"
+          class="object-cover object-center mt-12"
+        />
+      </div>
+      <Wrapper variant="prose"><slot /></Wrapper>
+    </Wrapper>
   </section>
-</DocsLayout>
+</BaseLayout>

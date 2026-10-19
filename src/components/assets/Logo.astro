@@ -1,14 +1,5 @@
 ---
-const { class: className, ...rest } = Astro.props;
+const { class: className = "", ...rest } = Astro.props;
 ---
 
-<svg
-  class={className}
-  {...rest}
-  viewBox="0 0 200 200"
-  fill="none"
-  xmlns="http://www.w3.org/2000/svg"
->
-  <circle cx="100" cy="100" r="100" fill="currentColor"></circle>
-  <circle cx="133.333" cy="59.2591" r="14.8148" fill="currentColor" class="fill-accent-500"></circle>
-</svg>
+<span class={className} {...rest}> Template </span>

@@ -1,52 +1,45 @@
 ---
+// Assets
+import { Image } from "astro:assets";
 // Fundations
 import Text from "@/components/fundations/elements/Text.astro";
-// Icons
-import ChevronRight from "@/components/fundations/icons/ChevronRight.astro";
 // Content
-const { url, title, description, pubDate } = {
+const { title, description, url, image } = {
   url: "/blog/posts/" + Astro.props.post.id,
   title: Astro.props.post.data.title,
   description: Astro.props.post.data.description,
-  pubDate: new Date(Astro.props.post.data.pubDate).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "2-digit",
-  }),
+  image: Astro.props.post.data.image.url,
 };
+// Integrations: calculate reading time
+import readingTime from "reading-time";
+
+const timeToRead = readingTime(Astro.props.post.body);
 ---
 
-<div
-  class="p-6 bg-base-50 dark:bg-white/2 rounded-xl text-balance grid grid-cols-1 lg:grid-cols-3 gap-4"
->
-  <Text tag="p" variant="textXS" class="uppercase text-base-500">
-    <time datetime={pubDate}>{pubDate}</time>
-  </Text>
-  <div class="lg:col-span-2">
-    <Text
-      tag="h3"
-      variant="textBase"
-      class="font-medium text-base-900 dark:text-white"
-    >
-      {title}
+<article class="relative flex flex-col group">
+  <a
+    href={url}
+    title={`Read more: ${title}`}
+    aria-label={`Read blog post: ${title}`}
+    class="absolute inset-0 z-10"></a>
+  <Image
+    src={image}
+    alt={title}
+    width={1000}
+    height={100}
+    loading="lazy"
+    decoding="async"
+    class="object-cover object-center w-full aspect-square"
+  />
+  <div class="mt-4">
+    <Text tag="p" variant="textXS" class="text-muted-foreground uppercase">
+      {timeToRead.text}
     </Text>
-    <Text
-      tag="p"
-      variant="textSM"
-      class="text-base-500 dark:text-base-400 mt-1"
+    <Text tag="h3" variant="textSM" class="font-medium text-foreground mt-4"
+      >{title}</Text
     >
-      {description}
-    </Text>
-    <a
-      href={url}
-      title={`Read more: ${title}`}
-      aria-label={`Read blog post: ${title}`}
-      class="flex items-center mt-8 text-sm text-accent-600 hover:text-accent-500 dark:text-accent-400 gap-2 group"
-    >
-      View Details <ChevronRight
-        size="sm"
-        class="group-hover:translate-x-2 duration-300"
-      /></a
+    <Text tag="p" variant="textSM" class="text-muted-foreground mt-1"
+      >{description}</Text
     >
   </div>
-</div>
+</article>

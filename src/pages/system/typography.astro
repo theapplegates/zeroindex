@@ -1,53 +1,58 @@
 ---
-// Assets
-import Dots from "@/components/assets/Dots.astro";
-import Header from "@/components/fundations/containers/Header.astro";
 // Fundations
-import DocsLayout from "@/layouts/DocsLayout.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
 import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
 ---
 
-<DocsLayout>
-  <Header
-    title="Typography"
-    description="Geist - Geist Mono"
-    innerClass="pt-24"
-  >
-  </Header>
-  <div
-    class="flex flex-col p-8 font-medium text-base-900 dark:text-white space-y-8"
-  >
-    <Text tag="p" variant="textXS"> Text XS </Text>
-    <Text tag="p" variant="textSM"> Text SM </Text>
-    <Text tag="p" variant="textBase"> Text Base </Text>
-    <Text tag="p" variant="textLG"> Text LG </Text>
-    <Text tag="p" variant="textXL"> Text XL </Text>
-    <Text tag="p" variant="displaySM" class="font-display upercase">
-      Display SM
+<BaseLayout>
+  <Wrapper variant="standard" class="py-12 lg:py-24">
+    <Text tag="h2" variant="displaySM" class="font-medium text-foreground"
+      >Typography
     </Text>
-    <Text tag="p" variant="displayMD" class="font-display upercase">
-      Display MD
-    </Text>
-    <Text tag="p" variant="displayLG" class="font-display upercase">
-      Display LG
-    </Text>
-    <Text tag="p" variant="displayXL" class="font-display upercase">
-      Display XL
-    </Text>
-    <Text tag="p" variant="display2XL" class="font-display upercase">
-      Display 2XL
-    </Text>
-    <Text tag="p" variant="display3XL" class="font-display upercase">
-      Display 3XL
-    </Text>
-    <Text tag="p" variant="display4XL" class="font-display upercase">
-      Display 4XL
-    </Text>
-    <Text tag="p" variant="display5XL" class="font-display upercase">
-      Display 5XL
-    </Text>
-    <Text tag="p" variant="display6XL" class="font-display upercase">
-      Display 6XL
-    </Text>
-  </div>
-</DocsLayout>
+
+    <div
+      class="flex flex-col mt-12 font-medium text-foreground divide-y divide-border"
+    >
+      <div class="py-4">
+        <Text tag="p" variant="textXS"> Text XS </Text>
+      </div>
+      <div class="py-4">
+        <Text tag="p" variant="textSM"> Text SM </Text>
+      </div>
+      <div class="py-4">
+        <Text tag="p" variant="textBase"> Text Base </Text>
+      </div>
+      <div class="py-4">
+        <Text tag="p" variant="textLG"> Text LG </Text>
+      </div>
+      <div class="py-4">
+        <Text tag="p" variant="textXL"> Text XL </Text>
+      </div>
+      <div class="py-4">
+        <Text tag="p" variant="displayXS"> Display XS </Text>
+      </div>
+      <div class="py-4">
+        <Text tag="p" variant="displaySM"> Display SM </Text>
+      </div>
+      <div class="py-4">
+        <Text tag="p" variant="displayMD"> Display MD </Text>
+      </div>
+      <div class="py-4">
+        <Text tag="p" variant="displayLG"> Display LG </Text>
+      </div>
+      <div class="py-4">
+        <Text tag="p" variant="displayXL"> Display XL </Text>
+      </div>
+      <div class="py-4">
+        <Text tag="p" variant="display2XL"> Display 2XL </Text>
+      </div>
+      <div class="py-4">
+        <Text tag="p" variant="display3XL"> Display 3XL </Text>
+      </div>
+      <div class="py-4">
+        <Text tag="p" variant="display4XL"> Display 4XL </Text>
+      </div>
+    </div>
+  </Wrapper>
+</BaseLayout>

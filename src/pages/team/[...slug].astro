@@ -1,20 +1,18 @@
 ---
-// Imports
-import { getCollection, getEntry, render } from "astro:content";
+import { getCollection, render } from "astro:content";
 import TeamLayout from "@/layouts/TeamLayout.astro";
-// getStaticPaths
 export async function getStaticPaths() {
   const team = await getCollection("team");
-  return team.map((entry) => ({
-    params: { slug: entry.id },
-    props: { slug: entry.id },
-    trailingSlash: false,
-  }));
+  const paths = team.map((page) => {
+    return {
+      params: { slug: page.id },
+      props: { page },
+      trailingSlash: false,
+    };
+  });
+  return paths;
 }
-// Get props
-const { slug } = Astro.props;
-const page = await getEntry("team", slug);
-if (!page) return Astro.redirect("/404");
+const { page } = Astro.props;
 const { Content } = await render(page);
 ---
 <TeamLayout frontmatter={page.data}>

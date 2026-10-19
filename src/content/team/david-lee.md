@@ -8,10 +8,13 @@ bio: |
 
   David’s work has been featured in top industry magazines, and he continues to be a leading voice for sustainability in the fashion world.
 image:
-  url: "/src/images/team/10.jpeg"
+  url: "/src/images/team/1.jpeg"
   alt: "#_"
 socials:
-  twitter: "#_"
-  website: "#_"
-  linkedin: "#_"
+  - label: Twitter
+    href: "#_"
+  - label: Website
+    href: "#_"
+  - label: LinkedIn
+    href: "#_"
 ---

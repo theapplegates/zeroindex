@@ -1,122 +1,50 @@
 ---
-page: Privacy
-pubDate: 2025-07-01
+page: Terms
+pubDate: 2024-01-01
 ---
 
-# Privacy Policy
+# Terms of Service
 
-This Privacy Policy explains how **Unwrapped AB** collects, processes, and uses your personal information when you use our services.
+By accessing or using the service, you agree to these Terms of Service and any related policies we reference. If you do not agree, do not use the service.
 
-## Definitions
+## Using the service
+You agree to use the service in a lawful, respectful, and secure manner. You must not:
+- Violate applicable laws or regulations  
+- Interfere with or disrupt the service or other users  
+- Attempt to access systems, data, or accounts you are not authorized to use  
+- Circumvent or probe security or rate limits  
 
-### DPO
+You are responsible for all activity that occurs under your account.
 
-**DPO** stands for Data Protection Officer. This is the individual appointed to handle any inquiries related to this privacy policy and your personal information.
+## Accounts and content
+You are responsible for maintaining the confidentiality of your account credentials. You retain ownership of any content you submit or upload.
 
-### Personal Information
+By submitting content, you grant us a limited, non-exclusive license to host, process, and display that content solely for the purpose of operating and improving the service.
 
-**Personal Information** refers to any information that can identify you directly or indirectly. This includes, but is not limited to, cookies, usage data, and contact details.
+You may not upload content that is illegal, harmful, infringing, or otherwise violates the rights of others.
 
-### Services
+## Payments and subscriptions
+If the service includes paid features, fees are billed in advance and are non-refundable unless required by law or explicitly stated otherwise. Prices, billing cycles, and features may change, and we will provide notice when material changes affect you.
 
-**Services** include all products and offerings provided by **Michael Alexander Web Agency**, including but not limited to this website.
+Failure to pay may result in suspension or termination of access to paid features.
 
-### Website
+## Changes to the service
+We may modify, suspend, or discontinue any part of the service at any time. We will make reasonable efforts to provide advance notice when changes materially impact functionality, but we are not obligated to maintain specific features indefinitely.
 
-**Website** refers to this site and all other websites, applications, and communications that link to this Privacy Policy.
+## Availability and reliability
+We aim to provide a reliable service, but uptime is not guaranteed. The service may be unavailable due to maintenance, updates, or factors outside our control. You are responsible for backing up any data you rely on.
 
----
+## Termination
+We may suspend or terminate access to the service if you violate these terms or misuse the service. You may stop using the service at any time.
 
-## Personal Information Collection
+## Disclaimers and limitation of liability
+The service is provided “as is” and “as available.” To the maximum extent permitted by law, we disclaim all warranties, express or implied.
 
-We collect and use personal information only as needed to deliver our services and improve your experience on our website.
+We are not liable for indirect, incidental, or consequential damages, or for loss of data, profits, or business arising from use of the service.
 
----
+## Governing law
+These terms are governed by the laws of our principal place of business, unless local consumer protection laws require otherwise.
 
-## Personal Information Retention
-
-We retain personal information only for as long as necessary to:
-
-- Deliver our services
-- Comply with legal and regulatory obligations
-
-We evaluate retention periods based on the type of data collected and applicable legal requirements. Once no longer needed, your data is securely deleted or anonymized.
-
----
-
-## Personal Data from Third Parties
-
-At times, we may receive personal information from third parties to enhance our services. If we collect such data, we will:
-
-- Notify you within 30 days of receiving it
-- Disclose if and how it will be used or shared
-
----
-
-## Your Rights
-
-You have the following rights regarding your personal information:
-
-- **Access** – Request access to the data we hold about you.
-- **Rectification** – Request corrections to inaccurate or incomplete data.
-- **Erasure** – Request deletion of your data under certain conditions.
-- **Restriction** – Request limitations on how we process your data.
-- **Portability** – Request a copy of your data in a portable format.
-- **Objection** – Object to how your data is used under specific conditions.
-
-To exercise any of these rights, please contact us.
-
----
-
-## Social Media
-
-If you interact with our services via social media platforms (e.g., Facebook, Instagram, Twitter), we may receive limited personal information depending on your privacy settings. This data will be used in accordance with this policy.
-
-We recommend reviewing the privacy settings and policies of each platform for more information.
-
----
-
-## Minors
-
-We do not knowingly collect data from children under 16. If you believe a child has provided us with personal information, please contact us immediately. We will take steps to delete such information promptly.
-
----
-
-## Third-Party Links
-
-Our website may contain links to third-party websites. This Privacy Policy applies only to our website. We encourage you to review the privacy policies of any external sites you visit.
-
----
-
-## Payment Vendors
-
-We use third-party vendors to process payments. Currently, our provider is:
-
-- **PayPal** – View their [Privacy Policy](https://www.paypal.com/webapps/mpp/ua/privacy-full)
-
----
-
-## Business Transfers
-
-In the event of a merger, acquisition, or asset sale, your personal information may be transferred as part of that transaction.
-
----
-
-## Policy Updates
-
-We regularly review and update our Privacy Policy. This version was last updated on **August 21, 2021**.
-
----
-
-## Contact Us
-
-If you have questions or concerns about this policy or the data we hold about you, contact us at:
-
-[support@unwrapped.design](mailto:support@unwrapped.design)  
- Mariehamn, Åland Islands
-
----
-
-## Complaints
-
-If you believe your rights under this Privacy Policy have been violated, please contact us. If you're unsatisfied with our response, you may file a complaint with your local data protection authority.
+## Contact
+Questions about these terms can be sent to  
+[support@example.com](mailto:support@example.com).

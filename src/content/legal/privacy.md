@@ -1,57 +1,44 @@
 ---
 page: Privacy
-pubDate: 2025-07-01
+pubDate: 2024-01-01
 ---
 
-# California Privacy Notice
+# Privacy Policy
 
-If you are a California resident, the **California Consumer Privacy Act (CCPA)**, as amended by the **California Privacy Rights Act of 2020 (CPRA)**, grants you additional rights regarding your personal information.
+We respect your privacy and collect only the information necessary to operate, maintain, and improve the service. This policy explains what we collect, how it’s used, and the choices you have.
 
-This section applies specifically to California residents, although the practices described here are also extended to all users under our main Privacy Policy. Please note that this notice does not apply to data collected from employees or job applicants — those are governed by separate policies.
+## Information we collect
+The types of data we may collect include:
+- Account information such as name, email address, and authentication details  
+- Usage data such as pages visited, features used, and interaction timestamps  
+- Technical data such as device type, browser, operating system, and IP address  
+- Communications you send to us, including support requests and feedback  
 
-## Categories of Personal Information We Collect
+We do not collect more data than needed to provide the service.
 
-| **Category** | **Purpose of Use** | **Disclosed To** | **Sold/Shared?** |
-|-------------|--------------------|------------------|------------------|
-| **Contact Information** (e.g. name, phone, email) | Provide services, communicate, improve the platform, comply with laws, prevent fraud | Service providers, affiliates, legal entities | ❌ No |
-| **Customer Support Data** (e.g. survey responses, support requests) | Same as above | Same as above | ❌ No |
-| **Product Interaction Data** | Same as above | Same as above | ❌ No |
-| **Device/Network Data** (e.g. IP, browser info) | Analyze usage, enhance security | Same as above | ❌ No |
-| **Login Credentials** (e.g. username, password) | Authentication, security | Same as above | ❌ No |
-| **Professional Information** (e.g. company name/title) | Provide services, analytics, communications | Same as above | ❌ No |
-| **Other Voluntary Info** (e.g. profile photo) | Improve services, personalize experience | Same as above | ❌ No |
+## How we use your data
+We use collected information to:
+- Operate, maintain, and secure the service  
+- Diagnose bugs, prevent abuse, and troubleshoot issues  
+- Remember basic preferences and settings  
+- Understand usage patterns and improve features and performance  
 
-> For detailed explanations, see the “What we collect and why” and “When we access or disclose your information” sections of our full [Privacy Policy](/privacy).
+We do not use your data for unrelated purposes.
 
-## Your Rights Under the CCPA
+## Sharing and disclosure
+We do not sell personal data. We may share data with trusted service providers that help us run the product, such as hosting, analytics, and customer support vendors. These providers are permitted to use data only to perform services on our behalf.
 
-### Right to Opt-Out of Sale or Sharing
+We may also disclose information if required to do so by law or to protect the rights, safety, or integrity of the service.
 
-You have the right to opt out of the **sale or sharing** of your personal information. However, we **do not sell or share** personal data as defined by the CCPA. We have not sold or shared any personal data in the past 12 months.
+## Data storage and retention
+Data is stored using reasonable security measures and retained only for as long as necessary to fulfill the purposes described above or to meet legal obligations. When data is no longer required, it is deleted or anonymized.
 
-### Right to Limit Use of Sensitive Information
+## Your rights and choices
+You may request access to, correction of, or deletion of your personal information by contacting us. Where available, you can also opt out of optional analytics cookies through provided controls or your browser settings.
 
-Under the CCPA, you may limit the use of your **sensitive personal information**. We only use such data for business purposes where opt-out is not applicable, and we do not use it in ways requiring a limitation option.
+## Changes to this policy
+We may update this Privacy Policy from time to time. The publication date above reflects the most recent revision. Continued use of the service after changes indicates acceptance of the updated policy.
 
-### Financial Incentives
-
-If we ever offer financial incentives in exchange for your data, we will clearly inform you about the program and obtain your consent beforehand.
-
-### Exercising Your Rights
-
-To exercise your CCPA rights, please refer to the “Your Rights With Respect to Your Information” section in our main Privacy Policy. It explains how to request access, deletion, correction, and more.
-
-## Data Retention
-
-For how long we retain your personal data, please review the “Retention Of Your Information” section in our [Privacy Policy](/privacy).
-
----
-
-## Shine the Light Disclosure
-
-California’s “Shine the Light” law allows residents to request details about personal information shared with third parties for direct marketing purposes.  
-We **do not disclose** your personal data to third parties for their direct marketing use.
-
----
-
-For questions about this notice or your privacy rights, contact us at [privacy@example.com](mailto:privacy@example.com).
+## Contact
+If you have questions or concerns about this Privacy Policy, contact us at  
+[privacy@example.com](mailto:privacy@example.com).

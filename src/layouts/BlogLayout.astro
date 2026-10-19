@@ -2,22 +2,12 @@
 // Assets
 import { Image } from "astro:assets";
 // Fundations
-import DocsLayout from "@/layouts/DocsLayout.astro";
-import RightSidebarLayout from "@/layouts/RightSidebarLayout.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
 import Text from "@/components/fundations/elements/Text.astro";
-import Header from "@/components/fundations/containers/Header.astro";
 import Wrapper from "@/components/fundations/containers/Wrapper.astro";
-
-// Components
+// Sections
 import BlogCard from "@/components/blog/BlogCard.astro";
-import ShareButtons from "@/components/fundations/elements/ShareButtons.astro";
-// Scripts
-import TocAnimationScript from "@/components/fundations/scripts/TocAnimationScript.astro";
-// Content
-const { frontmatter, previous, next, headings = [] } = Astro.props;
-import { getEntry } from "astro:content";
-const team = await getEntry("team", frontmatter.team) ?? null;
-// Get all posts and filter by tag
+const { frontmatter, readingTime } = Astro.props;
 import { getCollection } from "astro:content";
 const allPosts = await getCollection("posts");
 const relatedPosts = allPosts.filter((post) =>
@@ -25,192 +15,68 @@ const relatedPosts = allPosts.filter((post) =>
 );
 ---
 
-<DocsLayout>
+<BaseLayout>
   <section>
-    <RightSidebarLayout>
-      <div slot="main">
-        <Header
-          title={frontmatter.page}
-          description={frontmatter.description}
-          innerClass="gap-24 lg:gap-32"
-        />
-        <section class="px-8 pb-8">
-          <Image
-            width={1000}
-            height={800}
-            alt={frontmatter.image.alt}
-            src={frontmatter.image.url}
-            class="object-cover object-center mt-8 size-full max-h-120 lg:col-span-2 rounded-xl"
-          />
-          <Wrapper variant="prose" class="mt-8"><slot /></Wrapper>
-        </section>
-        <div
-          class="p-8 border-t border-base-200 dark:border-base-800 grid grid-cols-1 lg:grid-cols-2 gap-8"
-        >
-          <div>
-            {
-              team && (
-                <div class="flex items-center gap-3 hover:opacity-80 transition ">
-                  <a href={`/team/${team.id}`}>
-                    {team?.data?.image?.url && (
-                      <Image
-                        width={100}
-                        height={100}
-                        src={team.data.image.url}
-                        alt={team.data.image.alt}
-                        class="inline-block object-cover object-center rounded-lg size-10"
-                      />
-                    )}
-                  </a>
-                  <Text
-                    tag="p"
-                    variant="textXS"
-                    class="text-base-500 dark:text-base-300"
-                  >
-                    Written in
-                    <span class="font-medium  text-base-500 dark:text-base-300">
-                      <time
-                        datetime={new Date(frontmatter.pubDate).toISOString()}
-                      >
-                        {new Date(frontmatter.pubDate).toLocaleDateString(
-                          "en-US",
-                          {
-                            year: "numeric",
-                            month: "long",
-                            day: "2-digit",
-                          }
-                        )}
-                      </time>
-                    </span>
-                    <span>
-                      by
-                      <span class="font-medium text-base-500 dark:text-base-300">
-                        {team.data.name}
-                      </span>
-                    </span>
-                    <span class="block">
-                      {team.data.role}
-                      in
-                      {frontmatter.tags.map((tag) => (
-                        <>
-                          <a href={`/blog/tags/${tag}`} class="capitalize ">
-                            {tag}
-                          </a>
-                        </>
-                      ))}
-                    </span>
-                  </Text>
-                </div>
-              )
-            }
-          </div>
-
-          <div class="flex flex-col gap-2 lg:ml-auto">
-            <Text
-              tag="p"
-              variant="textXS"
-              class="text-base-500 dark:text-base-300"
-            >
-              Share this article:
+    <Wrapper variant="standard" class="py-12 lg:py-24">
+      <div class="text-center">
+        {
+          frontmatter.tags.map((tag) => (
+            <Text tag="p" variant="textXS" class="uppercase text-muted-foreground">
+              <a href={`/blog/tags/${tag}`}>{tag}</a>
             </Text>
-            <ShareButtons description={frontmatter.description} />
-          </div>
-        </div>
-      </div>
-      <div slot="rightAside">
+          ))
+        }
+
         <Text
-          tag="h4"
-          variant="textSM"
-          class="ml-4 text text-base-900 dark:text-white">On this page</Text
+          tag="p"
+          variant="displaySM"
+          class="mt-12 text-foreground font-medium"
         >
-        <div class="flex flex-col h-full mt-4">
-          {
-            headings
-              .filter((h) => h.depth === 2 || h.depth === 3)
-              .map((heading) => (
-                <a
-                  href={`#${heading.slug ?? heading.text.toLowerCase().replace(/\s+/g, "-")}`}
-                  class="block py-1 text-xs border-l-2 border-transparent select-none hover:text-accent-600 dark:hover:text-accent-400 text-base-500 dark:text-base-400  transition-all duration-200 toc-link"
-                  style={`padding-left: ${heading.depth === 3 ? "1.8rem" : "1rem"}`}
-                  data-heading-id={heading.slug ?? heading.text.toLowerCase().replace(/\s+/g, "-")}
-                  data-heading-depth={heading.depth}
-                >
-                  {heading.text}
-                </a>
-              ))
-          }
-        </div>
+          {frontmatter.title}
+        </Text>
+        <Text tag="p" variant="textXL" class="text-muted-foreground mt-2">
+          {frontmatter.description}
+        </Text>
+        <Text tag="p" variant="textXS" class="text-muted-foreground mt-8">
+          Written on
+          <time datetime={new Date(frontmatter.pubDate).toISOString()}>
+            {
+              new Date(frontmatter.pubDate).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "2-digit",
+              })
+            }
+          </time>
+          {readingTime}
+        </Text>
+        <Image
+          width={1400}
+          height={1400}
+          loading="lazy"
+          decoding="async"
+          src={frontmatter.image.url}
+          alt={frontmatter.image.alt}
+          class="object-cover object-center mt-12"
+        />
       </div>
-    </RightSidebarLayout>
+      <Wrapper variant="prose"><slot /></Wrapper>
+    </Wrapper>
   </section>
-  <nav
-    aria-label="Infopage pagination"
-    class="w-full border-t grid grid-cols-1 md:grid-cols-2 divide-y divide-base-200 dark:divide-base-800 lg:divide-y-0 lg:divide-x border-base-200 dark:border-base-800"
-  >
-    <div class="w-full">
-      {
-        previous && (
-          <a
-            href={`/blog/posts/${previous.id}`}
-            class="flex flex-col w-full p-8 gap-12 group hover:bg-base-50 dark:hover:bg-white/1 duration-200"
-          >
-            <span class="font-mono text-xs font-medium tracking-wide uppercase text-base-500 dark:text-base-400">
-              Previous
-            </span>
-            <div>
-              <div class="text-sm font-medium truncate text-base-900 dark:text-white group-hover:text-accent-600 dark:group-hover:text-accent-400 transition-colors">
-                {previous.data.title || previous.data.page}
-              </div>
-              <div class="text-xs capitalize text-base-500 dark:text-base-400">
-                {previous.data.category?.replace("-", " ")}
-              </div>
-            </div>
-          </a>
-        )
-      }
-    </div>
-    <div class="w-full">
-      {
-        next && (
-          <a
-            href={`/blog/posts/${next.id}`}
-            class="flex flex-col justify-end w-full p-8 gap-12 group hover:bg-base-50 dark:hover:bg-white/1 duration-200"
-          >
-            <span class="font-mono text-xs font-medium tracking-wide uppercase text-base-500 dark:text-base-400">
-              Next
-            </span>
-            <div>
-              <div class="text-sm font-medium truncate text-base-900 dark:text-white group-hover:text-accent-600 dark:group-hover:text-accent-400 transition-colors">
-                {next.data.title || next.data.page}
-              </div>
-              <div class="text-xs capitalize text-base-500 dark:text-base-400">
-                {next.data.category?.replace("-", " ")}
-              </div>
-            </div>
-          </a>
-        )
-      }
-    </div>
-  </nav>
   {
     relatedPosts.length > 0 && (
       <section>
-        <div class="p-8 border-t border-base-200 dark:border-base-800">
-          <Text
-            tag="h2"
-            variant="textBase"
-            class=" font-medium tracking-tight text-base-900 dark:text-white"
-          >
+        <Wrapper variant="standard" class="py-12 lgpy-24">
+          <Text tag="h2" variant="displaySM" class="font-medium text-foreground">
             Related posts
           </Text>
-          <div class="flex flex-col mt-4 gap-2">
+          <div class="grid grid-cols-1 lg:grid-cols-3 mt-12 gap-8">
             {relatedPosts.slice(0, 3).map((post) => (
               <BlogCard post={post} />
             ))}
           </div>
-        </div>
+        </Wrapper>
       </section>
     )
   }
-</DocsLayout>
-<TocAnimationScript />
+</BaseLayout>

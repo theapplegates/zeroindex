@@ -1,44 +1,21 @@
 ---
 import { getCollection, render } from "astro:content";
-import LegalLayout from "../../layouts/LegalLayout.astro";
-
+import LegalLayout from "@/layouts/LegalLayout.astro";
 export async function getStaticPaths() {
-  const allPages = await getCollection("legal");
-
-  const sorted = allPages.sort(
-    (a, b) =>
-      new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
-  );
-
-  return sorted.map((page) => ({
-    params: { slug: page.id },
-    props: { slug: page.id },
-    trailingSlash: false,
-  }));
+  const legal = await getCollection("legal");
+  const paths = legal.map((page) => {
+    return {
+      params: { slug: page.id },
+      props: { page },
+      trailingSlash: false,
+    };
+  });
+  return paths;
 }
-
-const { slug } = Astro.props;
-
-const allPages = await getCollection("legal");
-
-const sorted = allPages.sort(
-  (a, b) =>
-    new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
-);
-
-const index = sorted.findIndex((item) => item.id === slug);
-const page = sorted[index];
-const previous = sorted[index - 1] || null;
-const next = sorted[index + 1] || null;
-
-const { Content, headings } = await render(page);
+const { page } = Astro.props;
+const { Content } = await render(page);
 ---
 
-<LegalLayout
-  frontmatter={page.data}
-  previous={previous}
-  next={next}
-  headings={headings}
->
+<LegalLayout frontmatter={page.data}>
   <Content />
 </LegalLayout>

@@ -11,7 +11,7 @@ const { url, name, image, role } = {
 };
 ---
 
-<div class="relative flex gap-2 flex-col">
+<div class="relative">
   <a
     href={url}
     title={`View profile for ${name}`}
@@ -19,24 +19,20 @@ const { url, name, image, role } = {
     class="absolute inset-0 z-10"></a>
 
   <Image
-    width="800"
-    height="800"
     src={image}
     alt={name}
-    loading="eager"
+    width={1000}
+    height={100}
+    loading="lazy"
     decoding="async"
-    class="object-cover w-full rounded-xl aspect-12/8 object-center"
+    class="object-cover object-center w-full aspect-square"
   />
 
-  <div>
-    <Text
-      tag="h3"
-      variant="textBase"
-      class="font-medium text-base-900 dark:text-white"
-    >
+  <div class="mt-4">
+    <Text tag="h3" variant="textBase" class="font-medium text-foreground">
       {name}
     </Text>
-    <Text tag="p" variant="textXS" class="text-base-500 dark:text-base-300">
+    <Text tag="p" variant="textSM" class="text-muted-foreground mt-1">
       {role}
     </Text>
   </div>
