@@ -1,0 +1,46 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Components
+import Badge from "@/components/docs/Badge.astro";
+// Icons
+import ChevronRight from "@/components/fundations/icons/ChevronRight.astro";
+// Content
+import { getSdks, sdkHref } from "@/lib/sdks";
+
+const sdks = await getSdks();
+---
+
+<section>
+  <Wrapper variant="standard" class="py-24">
+    <div class="flex flex-col gap-6 sm:flex-row sm:justify-between lg:items-end">
+      <div>
+        <Text tag="h2" variant="displaySM" class="font-semibold tracking-tight">SDKs for your stack</Text>
+        <Text tag="p" variant="textBase" class="mt-2 text-pretty text-muted-foreground">Official clients that cover every endpoint and retry for you.</Text>
+      </div>
+      <a href="/sdks" class="flex shrink-0 items-center gap-1 text-sm font-medium text-foreground transition-colors duration-200 hover:text-muted-foreground">
+        All SDKs
+        <ChevronRight size="sm" />
+      </a>
+    </div>
+    <ul role="list" class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        sdks.map((sdk) => (
+          <li>
+            <a
+              href={sdkHref(sdk.id)}
+              class="flex h-full flex-col gap-6 rounded-xl border border-muted bg-surface p-5 transition-colors duration-200 hover:border-muted-foreground/40"
+            >
+              <div class="flex items-center justify-between gap-3">
+                <Text tag="h3" variant="textBase" class="font-medium">{sdk.data.title}</Text>
+                <Badge variant="outline">v{sdk.data.version}</Badge>
+              </div>
+              <code class="mt-auto truncate font-mono text-sm text-muted-foreground">{sdk.data.install}</code>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </Wrapper>
+</section>
