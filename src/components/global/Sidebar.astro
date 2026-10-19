@@ -10,18 +10,18 @@ import { config } from "@/config";
 ---
 
 <aside class="hidden w-64 shrink-0 flex-col lg:flex">
-  <div class="flex flex-col gap-2 px-3 pt-2 pb-6">
+  <div class="flex gap-2 px-3 pt-2 pb-6">
     <SearchButton />
     {
       config.assistant && (
         <button
           type="button"
-          class="flex h-9 w-full items-center gap-2 rounded-lg border border-muted bg-surface px-3 text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground"
+          class="flex size-9 shrink-0 items-center justify-center rounded-lg border border-muted bg-surface text-accent transition-colors duration-200 hover:bg-background"
+          aria-label="Ask AI (⌘I)"
+          title="Ask AI (⌘I)"
           data-assistant-open
         >
-          <Sparkles size="sm" class="text-accent" />
-          <span class="grow text-left">Ask AI</span>
-          <kbd class="font-sans text-xs">⌘I</kbd>
+          <Sparkles size="sm" />
         </button>
       )
     }
