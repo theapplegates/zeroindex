@@ -29,7 +29,7 @@ const services: { name: string; description: string; uptime: string; state: Stat
                 <Text tag="p" variant="textSM" class="text-muted-foreground">{service.description}</Text>
               </div>
               <div class="flex shrink-0 items-center gap-6">
-                <Text tag="span" variant="textSM" class="hidden font-mono text-muted-foreground tabular-nums sm:block">{service.uptime}</Text>
+                <Text tag="span" variant="textSM" class="hidden text-muted-foreground tabular-nums sm:block">{service.uptime}</Text>
                 <div class="flex w-28 items-center gap-2">
                   <StatusDot state={service.state} />
                   <Text tag="span" variant="textSM">{labels[service.state]}</Text>
