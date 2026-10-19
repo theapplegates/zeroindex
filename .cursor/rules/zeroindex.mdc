@@ -1,0 +1,32 @@
+---
+description: ZeroIndex conventions for pages, sections, docs content and styling
+alwaysApply: true
+---
+
+# ZeroIndex conventions
+
+- **The shell:** docs, API, SDK and home pages live in `DocShell`: sidebar
+  on the ground, the page on a rounded `surface` panel that scrolls on its
+  own, the table of contents on the right. Status, changelog and 404 use
+  the contained layout with the footer.
+- **Pages compose, sections build:** `src/pages/` only imports a layout and
+  section components from `src/components/<page>/`. `[...slug].astro`
+  files only build paths; the markup lives in the collection's layout. New
+  pages are added to `src/components/system/SystemOverview.astro`.
+- **Docs content:** MDX in `src/content/`, using the components registered
+  in `src/components/docs/index.ts` (no imports). New components get
+  registered there and shown on `/docs/writing/components`.
+- **Shared blocks first:** use `Text`, `Button`, `Wrapper`, `Card`,
+  `CodeBlock`, `DocPagination` and the system components before writing
+  new markup.
+- **Colour:** the ten tokens in `src/styles/colors.css` only, light and
+  dark. Ultramarine `accent` for card icons, the TOC marker and POST; amber
+  `warning`, sky `info`, green `success`, red `danger` for states.
+- **Type:** Switzer for everything you read, IBM Plex Mono only for code,
+  field names, types and HTTP methods.
+- **Actions:** one per block. No kickers. Radii are concentric.
+- **Assistant and feedback:** interface only, switched in `src/config.ts`,
+  talking through `assistant:ask`, `assistant:answer` and `feedback`
+  events. Never wire them to a provider in the theme.
+- **Verify:** check lints. Build only for config or schema changes, and
+  delete `dist/` after.
