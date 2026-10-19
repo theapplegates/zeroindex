@@ -1,0 +1,39 @@
+---
+const options = [
+  { label: "Yes", helpful: true },
+  { label: "No", helpful: false },
+];
+---
+
+<div class="group flex items-center gap-3 text-sm text-muted-foreground" data-feedback>
+  <p class="group-data-sent:hidden">Was this page helpful?</p>
+  <div class="flex items-center gap-0.5 rounded-lg border border-muted p-0.5 group-data-sent:hidden" role="group" aria-label="Was this page helpful?">
+    {
+      options.map(({ label, helpful }) => (
+        <button
+          type="button"
+          class="flex h-7 items-center rounded-md px-3 text-sm font-medium text-muted-foreground transition-colors duration-200 hover:bg-muted hover:text-foreground"
+          data-feedback-value={String(helpful)}
+        >
+          {label}
+        </button>
+      ))
+    }
+  </div>
+  <p class="hidden group-data-sent:block" role="status">Thanks for the feedback.</p>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-feedback]").forEach((widget) => {
+    widget.querySelectorAll<HTMLButtonElement>("[data-feedback-value]").forEach((button) => {
+      button.addEventListener("click", () => {
+        widget.toggleAttribute("data-sent", true);
+        window.dispatchEvent(
+          new CustomEvent("feedback", {
+            detail: { helpful: button.dataset.feedbackValue === "true", page: location.pathname },
+          }),
+        );
+      });
+    });
+  });
+</script>
