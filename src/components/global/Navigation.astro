@@ -7,9 +7,13 @@ import SearchButton from "@/components/global/SearchButton.astro";
 import SearchDialog from "@/components/global/SearchDialog.astro";
 import ThemeToggle from "@/components/global/ThemeToggle.astro";
 import MobileMenu from "@/components/global/MobileMenu.astro";
+import AssistantPanel from "@/components/global/AssistantPanel.astro";
+// Config
+import { config } from "@/config";
 // Icons
 import Search from "@/components/fundations/icons/Search.astro";
 import Menu from "@/components/fundations/icons/Menu.astro";
+import Sparkles from "@/components/fundations/icons/Sparkles.astro";
 
 interface Props {
   // Docs pages carry search and the theme toggle in their sidebar.
@@ -54,6 +58,13 @@ const linkClass = "text-sm font-medium text-muted-foreground transition-colors d
       </Button>
     </nav>
     <div class="flex items-center gap-1 lg:hidden">
+      {
+        config.assistant && (
+          <button type="button" class="flex size-9 items-center justify-center rounded-lg text-muted-foreground hover:text-foreground" aria-label="Ask the assistant" data-assistant-open>
+            <Sparkles size="base" />
+          </button>
+        )
+      }
       <button type="button" class="flex size-9 items-center justify-center rounded-lg text-muted-foreground hover:text-foreground" aria-label="Search" data-search-open>
         <Search size="base" />
       </button>
@@ -65,3 +76,4 @@ const linkClass = "text-sm font-medium text-muted-foreground transition-colors d
 </header>
 <SearchDialog />
 <MobileMenu />
+{config.assistant && <AssistantPanel />}

@@ -6,6 +6,9 @@ import ChevronDown from "@/components/fundations/icons/ChevronDown.astro";
 import File from "@/components/fundations/icons/File.astro";
 import ChatGpt from "@/components/fundations/icons/ChatGpt.astro";
 import Claude from "@/components/fundations/icons/Claude.astro";
+import Sparkles from "@/components/fundations/icons/Sparkles.astro";
+// Config
+import { config } from "@/config";
 
 interface Props {
   markdown: string;
@@ -35,6 +38,14 @@ const itemClass = "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left
         <File size="sm" class="text-muted-foreground" />
         <span class="flex flex-col"><span>View as Markdown</span><span class="text-xs text-muted-foreground">The page as plain text</span></span>
       </a>
+      {
+        config.assistant && (
+          <button type="button" class={itemClass} data-assistant-open>
+            <Sparkles size="sm" class="text-muted-foreground" />
+            <span class="flex flex-col"><span>Ask the assistant</span><span class="text-xs text-muted-foreground">Questions about these docs</span></span>
+          </button>
+        )
+      }
       <button type="button" class={itemClass} data-open-in="chatgpt">
         <ChatGpt size="sm" class="text-muted-foreground" />
         <span class="flex flex-col"><span>Open in ChatGPT</span><span class="text-xs text-muted-foreground">Ask questions about this page</span></span>

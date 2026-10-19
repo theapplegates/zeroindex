@@ -1,7 +1,7 @@
-/* Copy buttons on code blocks: each [data-code-copy] copies the <pre> next to it. */
+/* Copy buttons on code blocks: each [data-code-copy] copies the <pre> in its block. */
 document.querySelectorAll<HTMLButtonElement>("[data-code-copy]").forEach((button) => {
   button.addEventListener("click", async () => {
-    const code = button.parentElement?.querySelector("pre")?.innerText ?? "";
+    const code = button.closest("[data-code-block]")?.querySelector("pre")?.innerText ?? "";
     await navigator.clipboard.writeText(code);
     const idle = button.querySelector("[data-copy-idle]");
     const done = button.querySelector("[data-copy-done]");
