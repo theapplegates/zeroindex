@@ -32,7 +32,7 @@ const sidebarLinks = [
         }
       </ul>
     </SystemRow>
-    <SystemRow name="Sidebar" text="Rounded rows. The current page gets a soft amber fill.">
+    <SystemRow name="Sidebar" text="Rounded rows. The current page gets a soft grey fill.">
       <ul role="list" class="flex max-w-64 flex-col gap-0.5">
         {
           sidebarLinks.map((link) => (
@@ -42,7 +42,7 @@ const sidebarLinks = [
                 aria-current={link.active ? "page" : undefined}
                 class:list={[
                   "block rounded-lg px-3 py-1.5 text-sm transition-colors duration-200",
-                  link.active ? "bg-accent/15 font-medium text-foreground" : "text-muted-foreground hover:text-foreground",
+                  link.active ? "bg-muted font-medium text-foreground" : "text-muted-foreground hover:text-foreground",
                 ]}
               >
                 {link.title}

@@ -5,10 +5,11 @@
   --foreground: #18191c;
   --muted: oklch(0.925 0.006 85);
   --muted-foreground: #64666d;
-  --accent: oklch(0.73 0.145 83);
+  --accent: oklch(0.47 0.22 266);
+  --warning: oklch(0.73 0.145 83);
   --danger: oklch(0.58 0.19 27);
   --success: oklch(0.6 0.13 155);
-  --info: oklch(0.56 0.12 255);
+  --info: oklch(0.6 0.1 228);
 }
 
 .dark {
@@ -18,10 +19,11 @@
   --foreground: #f2f3f5;
   --muted: #2c2d32;
   --muted-foreground: #8e9097;
-  --accent: oklch(0.79 0.14 83);
+  --accent: oklch(0.62 0.18 268);
+  --warning: oklch(0.79 0.14 83);
   --danger: oklch(0.7 0.16 27);
   --success: oklch(0.74 0.13 155);
-  --info: oklch(0.74 0.1 255);
+  --info: oklch(0.76 0.08 228);
 }
 
 @theme inline {
@@ -31,6 +33,7 @@
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
+  --color-warning: var(--warning);
   --color-danger: var(--danger);
   --color-success: var(--success);
   --color-info: var(--info);

@@ -50,7 +50,7 @@ const incidents = [
                   <Text tag="h3" variant="textBase" class="font-medium">{incident.title}</Text>
                   <Text tag="p" variant="textSM" class="text-muted-foreground">{incident.date}</Text>
                 </div>
-                <Badge variant={incident.resolved ? "outline" : "accent"}>{incident.resolved ? "Resolved" : "Investigating"}</Badge>
+                <Badge variant={incident.resolved ? "outline" : "warning"}>{incident.resolved ? "Resolved" : "Investigating"}</Badge>
               </div>
               <ol role="list" class="mt-6 flex flex-col gap-4 border-t border-muted pt-6">
                 {incident.updates.map((update) => (
