@@ -5,6 +5,7 @@ import Button from "@/components/fundations/elements/Button.astro";
 // Components
 import SearchButton from "@/components/global/SearchButton.astro";
 import SearchDialog from "@/components/global/SearchDialog.astro";
+import ThemeToggle from "@/components/global/ThemeToggle.astro";
 import MobileMenu from "@/components/global/MobileMenu.astro";
 import AssistantPanel from "@/components/global/AssistantPanel.astro";
 // Config
@@ -51,6 +52,7 @@ const linkClass = "text-sm font-medium text-muted-foreground transition-colors d
           </button>
         )
       }
+      {!sidebar && <ThemeToggle />}
       <Button isLink={true} href="https://lexingtonthemes.com/templates/zeroindex" size="sm" variant="primary">
         Buy ZeroIndex
       </Button>
