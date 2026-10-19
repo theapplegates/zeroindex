@@ -3,8 +3,6 @@
 import Text from "@/components/fundations/elements/Text.astro";
 import Button from "@/components/fundations/elements/Button.astro";
 import Wrapper from "@/components/fundations/containers/Wrapper.astro";
-// Components
-import SearchButton from "@/components/global/SearchButton.astro";
 ---
 
 <section>
@@ -16,10 +14,7 @@ import SearchButton from "@/components/global/SearchButton.astro";
       <Text tag="p" variant="textLG" class="mt-4 text-pretty text-muted-foreground">
         Guides, API reference and SDKs for ZeroIndex, the search API that answers in milliseconds.
       </Text>
-      <div class="mt-10 w-full max-w-lg">
-        <SearchButton size="lg" />
-      </div>
-      <Button isLink={true} href="/docs/getting-started/quickstart" size="lg" variant="muted" class="mt-6">
+      <Button isLink={true} href="/docs/getting-started/quickstart" size="lg" variant="muted" class="mt-10">
         Start with the quickstart
       </Button>
     </div>
