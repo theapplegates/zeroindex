@@ -15,7 +15,7 @@ export async function getStaticPaths() {
 
 const { entry, previous, next } = Astro.props;
 const { Content, headings } = await render(entry);
-const link = (item?: typeof entry) => (item ? { title: item.data.title, href: apiHref(item.id) } : undefined);
+const link = (item?: typeof entry) => (item ? { title: item.data.title, description: item.data.description, href: apiHref(item.id) } : undefined);
 ---
 
 <ApiLayout

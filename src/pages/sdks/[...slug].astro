@@ -14,7 +14,7 @@ export async function getStaticPaths() {
 
 const { sdk, previous, next } = Astro.props;
 const { Content, headings } = await render(sdk);
-const link = (entry?: typeof sdk) => (entry ? { title: entry.data.title, href: sdkHref(entry.id) } : undefined);
+const link = (entry?: typeof sdk) => (entry ? { title: entry.data.title, description: entry.data.description, href: sdkHref(entry.id) } : undefined);
 ---
 
 <SdksLayout
@@ -22,7 +22,7 @@ const link = (entry?: typeof sdk) => (entry ? { title: entry.data.title, href: s
   headings={headings}
   markdown={`# ${sdk.data.title} SDK\n\n${sdk.data.description}\n\n${sdk.body ?? ""}`}
   markdownHref={`${sdkHref(sdk.id)}.md`}
-  previous={previous ? link(previous) : { title: "All SDKs", href: "/sdks" }}
+  previous={previous ? link(previous) : { title: "All SDKs", description: "Official client libraries for every stack.", href: "/sdks" }}
   next={link(next)}
 >
   <Content components={docsComponents} />

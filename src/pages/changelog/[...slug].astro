@@ -14,7 +14,7 @@ export async function getStaticPaths() {
 
 const { release, newer, older } = Astro.props;
 const { Content } = await render(release);
-const link = (entry?: typeof release) => (entry ? { title: entry.data.title, href: releaseHref(entry.id) } : undefined);
+const link = (entry?: typeof release) => (entry ? { title: entry.data.title, description: entry.data.summary, href: releaseHref(entry.id) } : undefined);
 ---
 
 <ChangelogLayout frontmatter={release.data} previous={link(older)} next={link(newer)}>

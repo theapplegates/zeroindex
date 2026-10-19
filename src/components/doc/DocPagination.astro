@@ -6,6 +6,7 @@ import ChevronRight from "@/components/fundations/icons/ChevronRight.astro";
 interface Link {
   title: string;
   href: string;
+  description?: string;
 }
 
 interface Props {
@@ -14,32 +15,44 @@ interface Props {
 }
 
 const { previous, next } = Astro.props;
-const cardClass = "flex flex-col gap-1 rounded-xl border border-muted p-4 transition-colors duration-200 hover:border-muted-foreground/20";
+const card = next ?? previous;
+const isNext = Boolean(next);
+const cardClass =
+  "flex min-w-0 flex-1 items-center gap-4 rounded-xl border border-muted bg-surface p-4 shadow-xs transition-colors duration-200 hover:border-muted-foreground/20";
+const labelClass = "flex shrink-0 items-center gap-1 text-sm font-medium text-foreground";
 ---
 
-<nav class="grid grid-cols-1 gap-4 sm:grid-cols-2" aria-label="Previous and next">
-  {
-    previous ? (
-      <a href={previous.href} class={cardClass}>
-        <span class="flex items-center gap-1 text-xs text-muted-foreground">
+{
+  card && (
+    <nav class="flex rounded-2xl bg-background/50 p-1" aria-label="Previous and next">
+      {previous && next && (
+        <a
+          href={previous.href}
+          class="flex shrink-0 items-center gap-1 px-4 text-sm font-medium text-muted-foreground transition-colors duration-200 hover:text-foreground"
+          aria-label={`Previous: ${previous.title}`}
+        >
           <ChevronLeft size="xs" />
           Previous
+        </a>
+      )}
+      <a href={card.href} class={cardClass}>
+        {!isNext && (
+          <span class:list={[labelClass, "self-stretch border-r border-muted pr-4"]}>
+            <ChevronLeft size="xs" />
+            Previous
+          </span>
+        )}
+        <span class:list={["flex min-w-0 flex-1 flex-col gap-0.5", isNext && "items-end"]}>
+          <span class="max-w-full truncate text-sm font-medium text-foreground">{card.title}</span>
+          {card.description && <span class="max-w-full truncate text-sm text-muted-foreground">{card.description}</span>}
         </span>
-        <span class="text-sm font-medium text-foreground">{previous.title}</span>
+        {isNext && (
+          <span class:list={[labelClass, "self-stretch border-l border-muted pl-4"]}>
+            Next
+            <ChevronRight size="xs" />
+          </span>
+        )}
       </a>
-    ) : (
-      <span />
-    )
-  }
-  {
-    next && (
-      <a href={next.href} class:list={[cardClass, "sm:items-end"]}>
-        <span class="flex items-center gap-1 text-xs text-muted-foreground">
-          Next
-          <ChevronRight size="xs" />
-        </span>
-        <span class="text-sm font-medium text-foreground">{next.title}</span>
-      </a>
-    )
-  }
-</nav>
+    </nav>
+  )
+}
