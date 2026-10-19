@@ -1,0 +1,75 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Components
+import SystemRow from "@/components/system/SystemRow.astro";
+import Card from "@/components/docs/Card.astro";
+import DocPagination from "@/components/doc/DocPagination.astro";
+// Icons
+import ChevronRight from "@/components/fundations/icons/ChevronRight.astro";
+
+const navLinks = ["Guides", "API reference", "SDKs", "Changelog"];
+const sidebarLinks = [
+  { title: "Introduction", active: true },
+  { title: "Quickstart", active: false },
+  { title: "Authentication", active: false },
+];
+---
+
+<section>
+  <Wrapper variant="standard" class="pb-24">
+    <SystemRow name="Navigation" text="Small and medium weight in muted ink, turning dark on hover.">
+      <ul role="list" class="flex flex-wrap gap-6">
+        {
+          navLinks.map((label) => (
+            <li>
+              <Text tag="a" href="#_" variant="textSM" class="font-medium text-muted-foreground transition-colors duration-200 hover:text-foreground">
+                {label}
+              </Text>
+            </li>
+          ))
+        }
+      </ul>
+    </SystemRow>
+    <SystemRow name="Sidebar" text="Rounded rows. The current page gets a soft amber fill.">
+      <ul role="list" class="flex max-w-64 flex-col gap-0.5">
+        {
+          sidebarLinks.map((link) => (
+            <li>
+              <a
+                href="#_"
+                aria-current={link.active ? "page" : undefined}
+                class:list={[
+                  "block rounded-lg px-3 py-1.5 text-sm transition-colors duration-200",
+                  link.active ? "bg-accent/15 font-medium text-foreground" : "text-muted-foreground hover:text-foreground",
+                ]}
+              >
+                {link.title}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </SystemRow>
+    <SystemRow name="Text links" text="Medium weight with a chevron, for the one link after a block of text.">
+      <a href="#_" class="flex w-fit items-center gap-1 text-sm font-medium text-foreground transition-colors duration-200 hover:text-muted-foreground">
+        How search works
+        <ChevronRight size="sm" />
+      </a>
+    </SystemRow>
+    <SystemRow name="Links in prose" text="Medium weight, no underline, fading on hover.">
+      <div class="prose max-w-none">
+        <p>Before you put search in front of users, create a search key as described in <a href="#_">Authentication</a>.</p>
+      </div>
+    </SystemRow>
+    <SystemRow name="Cards" text="The whole card is the link, the border darkens on hover.">
+      <div class="max-w-sm">
+        <Card title="Quickstart" icon="rocket" href="#_">Your first search in five minutes.</Card>
+      </div>
+    </SystemRow>
+    <SystemRow name="Previous and next" text="At the end of every docs, API, SDK and changelog page.">
+      <DocPagination previous={{ title: "Introduction", href: "#_" }} next={{ title: "Authentication", href: "#_" }} />
+    </SystemRow>
+  </Wrapper>
+</section>

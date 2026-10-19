@@ -1,0 +1,55 @@
+---
+// Fundations
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+import Plus from "@/components/fundations/icons/Plus.astro";
+// Components
+import SystemRow from "@/components/system/SystemRow.astro";
+
+interface Props {
+  isLink?: boolean;
+}
+
+const { isLink = false } = Astro.props;
+const link = isLink ? { isLink: true, href: "#_" } : { type: "button" };
+
+const variants = [
+  { name: "Primary", variant: "primary", text: "Ink fill, for the one main action in a block, like Buy ZeroIndex." },
+  { name: "Accent", variant: "accent", text: "Amber fill, for an action that should stand out from the page." },
+  { name: "Muted", variant: "muted", text: "A soft fill, for secondary actions." },
+];
+const sizes = [
+  { size: "xxs", label: "XXS", icon: "sm" },
+  { size: "xs", label: "XS", icon: "sm" },
+  { size: "sm", label: "SM", icon: "base" },
+  { size: "base", label: "Base", icon: "base" },
+  { size: "md", label: "MD", icon: "lg" },
+  { size: "lg", label: "LG", icon: "xl" },
+  { size: "xl", label: "XL", icon: "xl" },
+];
+---
+
+<section>
+  <Wrapper variant="standard" class="pb-24">
+    {
+      variants.map((item) => (
+        <SystemRow name={item.name} text={item.text}>
+          <div class="flex flex-wrap items-end gap-3">
+            {sizes.map(({ size, label }) => (
+              <Button variant={item.variant} size={size} {...link}>
+                {item.name} {label}
+              </Button>
+            ))}
+          </div>
+          <div class="mt-6 flex flex-wrap items-end gap-3">
+            {sizes.map(({ size, label, icon }) => (
+              <Button variant={item.variant} size={size} iconOnly aria-label={`${item.name} ${label}`} {...link}>
+                <Plus slot="icon" size={icon} />
+              </Button>
+            ))}
+          </div>
+        </SystemRow>
+      ))
+    }
+  </Wrapper>
+</section>

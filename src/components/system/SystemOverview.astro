@@ -2,10 +2,13 @@
 // Fundations
 import Text from "@/components/fundations/elements/Text.astro";
 import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Components
+import SystemRow from "@/components/system/SystemRow.astro";
 
 const pageSections = [
   {
     title: "Static",
+    note: "The home page, status, the 404 and the system pages.",
     columns: [
       {
         category: "Pages",
@@ -35,6 +38,7 @@ const pageSections = [
   },
   {
     title: "Content collections",
+    note: "An index and one detail page for each collection. Docs and API pages also come as Markdown.",
     columns: [
       {
         category: "Docs",
@@ -73,32 +77,29 @@ const pageSections = [
 
 <section>
   <Wrapper variant="standard" class="pb-24">
-    <div class="flex flex-col gap-4">
-      {
-        pageSections.map((section) => (
-          <div class="rounded-2xl border border-muted bg-surface">
-            <div class="border-b border-muted px-6 py-4">
-              <Text tag="h2" variant="textBase" class="font-medium">{section.title}</Text>
-            </div>
-            <div class="grid gap-10 p-6 sm:grid-cols-2 lg:grid-cols-4">
-              {section.columns.map((column) => (
-                <div class="flex flex-col gap-3">
-                  <Text tag="h3" variant="textSM" class="font-medium">{column.category}</Text>
-                  <ul role="list" class="flex flex-col gap-2">
-                    {column.links.map((link) => (
-                      <li>
-                        <Text tag="a" variant="textSM" href={link.href} class="text-muted-foreground transition-colors duration-200 hover:text-foreground">
-                          {link.text}
-                        </Text>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
+    {
+      pageSections.map((section) => (
+        <SystemRow name={section.title} text={section.note}>
+          <div class="grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2">
+            {section.columns.map((column) => (
+              <div class="flex flex-col gap-3">
+                <Text tag="h3" variant="textSM" class="text-muted-foreground">
+                  {column.category}
+                </Text>
+                <ul role="list" class="flex flex-col gap-1">
+                  {column.links.map((link) => (
+                    <li>
+                      <Text tag="a" href={link.href} variant="textLG" class="font-medium text-foreground transition-colors duration-200 hover:text-muted-foreground">
+                        {link.text}
+                      </Text>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
-        ))
-      }
-    </div>
+        </SystemRow>
+      ))
+    }
   </Wrapper>
 </section>

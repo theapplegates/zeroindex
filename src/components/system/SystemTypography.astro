@@ -1,0 +1,68 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+
+const groups = [
+  {
+    title: "Display",
+    class: "font-semibold tracking-tight",
+    sample: "Search that forgives typos",
+    variants: [
+      { name: "Display 4XL", variant: "display4XL" },
+      { name: "Display 3XL", variant: "display3XL" },
+      { name: "Display 2XL", variant: "display2XL" },
+      { name: "Display XL", variant: "displayXL" },
+      { name: "Display LG", variant: "displayLG" },
+      { name: "Display MD", variant: "displayMD" },
+      { name: "Display SM", variant: "displaySM" },
+      { name: "Display XS", variant: "displayXS" },
+    ],
+  },
+  {
+    title: "Text",
+    class: "text-pretty",
+    sample: "Send your content as JSON and get ranked, typo tolerant results back in one request.",
+    variants: [
+      { name: "Text XL", variant: "textXL" },
+      { name: "Text LG", variant: "textLG" },
+      { name: "Text Base", variant: "textBase" },
+      { name: "Text SM", variant: "textSM" },
+      { name: "Text XS", variant: "textXS" },
+    ],
+  },
+];
+---
+
+<section>
+  <Wrapper variant="standard" class="flex flex-col gap-24 pb-24">
+    {
+      groups.map((group) => (
+        <div class="flex flex-col gap-6">
+          <Text tag="h2" variant="textLG" class="font-semibold tracking-tight text-foreground">
+            {group.title}
+          </Text>
+          <ul role="list" class="flex flex-col divide-y divide-muted border-t border-muted">
+            {group.variants.map((item) => (
+              <li class="grid grid-cols-1 gap-4 py-6 lg:grid-cols-12 lg:gap-8">
+                <Text tag="p" variant="textSM" class="text-muted-foreground lg:col-span-4">
+                  {item.name}
+                </Text>
+                <Text tag="p" variant={item.variant} class:list={["text-foreground lg:col-span-8", group.class]}>
+                  {group.sample}
+                </Text>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
+    <div class="flex flex-col gap-6">
+      <Text tag="h2" variant="textLG" class="font-semibold tracking-tight text-foreground">Code</Text>
+      <div class="grid grid-cols-1 gap-4 border-t border-muted py-6 lg:grid-cols-12 lg:gap-8">
+        <Text tag="p" variant="textSM" class="text-muted-foreground lg:col-span-4">Geist Mono</Text>
+        <code class="font-mono text-sm text-foreground lg:col-span-8">await client.index("products").search("wirless");</code>
+      </div>
+    </div>
+  </Wrapper>
+</section>

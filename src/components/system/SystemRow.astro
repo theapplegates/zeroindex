@@ -1,0 +1,25 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+
+interface Props {
+  name: string;
+  text: string;
+}
+
+const { name, text } = Astro.props;
+---
+
+<div class="grid grid-cols-1 gap-6 border-t border-muted py-10 lg:grid-cols-12 lg:gap-8">
+  <div class="flex flex-col gap-1 self-start lg:sticky lg:top-20 lg:col-span-4">
+    <Text tag="h2" variant="textLG" class="font-semibold tracking-tight text-foreground">
+      {name}
+    </Text>
+    <Text tag="p" variant="textSM" class="max-w-xs text-pretty text-muted-foreground">
+      {text}
+    </Text>
+  </div>
+  <div class="min-w-0 lg:col-span-8">
+    <slot />
+  </div>
+</div>

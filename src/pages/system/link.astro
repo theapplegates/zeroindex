@@ -1,12 +1,17 @@
 ---
 // Fundations
 import BaseLayout from "@/layouts/BaseLayout.astro";
-// Components
+// Sections
 import SystemHeader from "@/components/system/SystemHeader.astro";
-import ButtonShowcase from "@/components/system/ButtonShowcase.astro";
+import SystemTextLinks from "@/components/system/SystemTextLinks.astro";
+import SystemButtons from "@/components/system/SystemButtons.astro";
 ---
 
 <BaseLayout>
-  <SystemHeader title="Links" description="The same variants and sizes as the buttons, rendered as links." />
-  <ButtonShowcase isLink={true} />
+  <SystemHeader
+    title="Links"
+    description="Every text link style used across ZeroIndex, then the Button component rendered as a link with isLink and an href."
+  />
+  <SystemTextLinks />
+  <SystemButtons isLink />
 </BaseLayout>

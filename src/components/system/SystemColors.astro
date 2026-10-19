@@ -1,0 +1,54 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Components
+import SystemRow from "@/components/system/SystemRow.astro";
+
+const groups = [
+  {
+    name: "Ground and ink",
+    text: "The page ground, the content panel, text, and muted, which does both soft surfaces and lines.",
+    colors: [
+      { name: "Background", token: "--color-background", swatch: "bg-background border border-muted" },
+      { name: "Surface", token: "--color-surface", swatch: "bg-surface border border-muted" },
+      { name: "Foreground", token: "--color-foreground", swatch: "bg-foreground" },
+      { name: "Muted", token: "--color-muted", swatch: "bg-muted" },
+      { name: "Muted foreground", token: "--color-muted-foreground", swatch: "bg-muted-foreground" },
+    ],
+  },
+  {
+    name: "Signals",
+    text: "Amber for active items and card icons, green and red for states and HTTP methods.",
+    colors: [
+      { name: "Accent", token: "--color-accent", swatch: "bg-accent" },
+      { name: "Success", token: "--color-success", swatch: "bg-success" },
+      { name: "Danger", token: "--color-danger", swatch: "bg-danger" },
+    ],
+  },
+];
+---
+
+<section>
+  <Wrapper variant="standard" class="pb-24">
+    {
+      groups.map((group) => (
+        <SystemRow name={group.name} text={group.text}>
+          <ul role="list" class="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
+            {group.colors.map((color) => (
+              <li class="flex items-center gap-4">
+                <span class:list={["size-16 shrink-0 rounded-xl", color.swatch]} aria-hidden="true" />
+                <span class="flex flex-col">
+                  <Text tag="span" variant="textSM" class="font-medium text-foreground">
+                    {color.name}
+                  </Text>
+                  <code class="font-mono text-xs text-muted-foreground">{color.token}</code>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </SystemRow>
+      ))
+    }
+  </Wrapper>
+</section>
