@@ -35,7 +35,7 @@ const { title, description, method, path, request, response, status, lastUpdated
       <div class="px-4 py-10 sm:px-8 lg:px-12 lg:py-14">
         <div class="mx-auto w-full max-w-6xl">
           <DocHeader title={title} description={description} markdown={markdown} markdownHref={markdownHref}>
-            <div class="mt-2 flex min-w-0 items-center gap-3 rounded-xl border border-muted bg-background p-2 pr-4">
+            <div class="mt-2 flex min-w-0 items-center gap-3 rounded-xl border border-muted bg-background/50 p-2 pr-4">
               <MethodBadge method={method} />
               <code class="truncate font-mono text-sm text-foreground">{path}</code>
             </div>
