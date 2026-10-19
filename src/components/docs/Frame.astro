@@ -1,0 +1,18 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  darkSrc?: string;
+  caption?: string;
+}
+
+const { src, alt, darkSrc, caption } = Astro.props;
+---
+
+<figure class="not-prose my-6">
+  <div class="rounded-2xl border border-muted bg-background p-2">
+    <img src={src} alt={alt} loading="lazy" decoding="async" class:list={["w-full rounded-lg", darkSrc && "dark:hidden"]} />
+    {darkSrc && <img src={darkSrc} alt={alt} loading="lazy" decoding="async" class="hidden w-full rounded-lg dark:block" />}
+  </div>
+  {caption && <figcaption class="mt-3 text-center text-sm text-muted-foreground">{caption}</figcaption>}
+</figure>

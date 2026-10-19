@@ -1,0 +1,73 @@
+---
+// Icons
+import Play from "@/components/fundations/icons/Play.astro";
+
+interface Props {
+  title: string;
+  src?: string;
+  youtube?: string;
+  vimeo?: string;
+  poster?: string;
+  autoplay?: boolean;
+  caption?: string;
+}
+
+const { title, src, youtube, vimeo, poster, autoplay = false, caption } = Astro.props;
+const embed = youtube
+  ? `https://www.youtube-nocookie.com/embed/${youtube}?autoplay=1&rel=0`
+  : vimeo
+    ? `https://player.vimeo.com/video/${vimeo}?autoplay=1`
+    : undefined;
+---
+
+<figure class="not-prose my-6">
+  <div class="rounded-2xl border border-muted bg-background p-2">
+    {
+      src && (
+        <video
+          src={src}
+          poster={poster}
+          title={title}
+          class="aspect-video w-full rounded-lg bg-muted object-cover"
+          preload={autoplay ? "auto" : "none"}
+          controls={!autoplay}
+          autoplay={autoplay}
+          muted={autoplay}
+          loop={autoplay}
+          playsinline
+        />
+      )
+    }
+    {
+      embed && (
+        <button
+          type="button"
+          class="group relative flex aspect-video w-full items-center justify-center overflow-hidden rounded-lg bg-muted"
+          aria-label={`Play ${title}`}
+          data-video-embed={embed}
+          data-video-title={title}
+        >
+          {poster && <img src={poster} alt="" loading="lazy" decoding="async" class="absolute inset-0 size-full object-cover" />}
+          <span class="relative flex size-14 items-center justify-center rounded-full bg-foreground text-surface shadow-lg transition-transform duration-200 group-hover:scale-105">
+            <Play size="md" />
+          </span>
+        </button>
+      )
+    }
+  </div>
+  {caption && <figcaption class="mt-3 text-center text-sm text-muted-foreground">{caption}</figcaption>}
+</figure>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>("[data-video-embed]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const iframe = document.createElement("iframe");
+      iframe.src = button.dataset.videoEmbed ?? "";
+      iframe.title = button.dataset.videoTitle ?? "";
+      iframe.allow = "autoplay; fullscreen; picture-in-picture; encrypted-media";
+      iframe.allowFullscreen = true;
+      iframe.className = "aspect-video w-full rounded-lg";
+      button.replaceWith(iframe);
+    });
+  });
+</script>

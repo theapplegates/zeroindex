@@ -159,3 +159,52 @@ Badges label versions and states: <Badge>Beta</Badge> <Badge variant="accent">Ne
 ```
 
 The variants are `muted`, `accent`, `success`, `danger` and `outline`.
+
+## Images
+
+Wrap screenshots in a `Frame` to give them a border and an optional caption. Pass `darkSrc` and readers in dark mode see the dark version. Put image files in `public/images/`.
+
+<Frame
+  src="/images/docs/dashboard-light.webp"
+  darkSrc="/images/docs/dashboard-dark.webp"
+  alt="The Indexes page of the ZeroIndex dashboard, listing five indexes with their document counts"
+  caption="The Indexes page in the dashboard."
+/>
+
+```mdx
+<Frame
+  src="/images/docs/dashboard-light.webp"
+  darkSrc="/images/docs/dashboard-dark.webp"
+  alt="The Indexes page of the ZeroIndex dashboard"
+  caption="The Indexes page in the dashboard."
+/>
+```
+
+Plain Markdown images get the same border, without a frame or caption.
+
+## Video
+
+`Video` plays a file you host. Add `autoplay` for short clips that loop silently, like a screen recording. Without it, the video waits behind a poster with controls.
+
+<Video
+  src="/images/docs/dashboard-tour.mp4"
+  poster="/images/docs/dashboard-tour.webp"
+  title="A look around the Indexes page"
+  autoplay
+/>
+
+```mdx
+<Video
+  src="/images/docs/dashboard-tour.mp4"
+  poster="/images/docs/dashboard-tour.webp"
+  title="A look around the Indexes page"
+  autoplay
+/>
+```
+
+For YouTube or Vimeo, pass the video id instead of `src`. The player only loads when someone presses play, so the page stays fast.
+
+```mdx
+<Video youtube="VIDEO_ID" poster="/images/docs/talk.webp" title="Search relevance in ten minutes" />
+<Video vimeo="VIDEO_ID" title="Setting up faceted search" />
+```

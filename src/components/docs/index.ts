@@ -6,12 +6,14 @@ import Card from "./Card.astro";
 import CardGroup from "./CardGroup.astro";
 import CodeBlock from "./CodeBlock.astro";
 import CodeGroup from "./CodeGroup.astro";
+import Frame from "./Frame.astro";
 import ParamField from "./ParamField.astro";
 import ResponseField from "./ResponseField.astro";
 import Step from "./Step.astro";
 import Steps from "./Steps.astro";
 import Tab from "./Tab.astro";
 import Tabs from "./Tabs.astro";
+import Video from "./Video.astro";
 
 export const docsComponents = {
   pre: CodeBlock,
@@ -21,10 +23,12 @@ export const docsComponents = {
   Card,
   CardGroup,
   CodeGroup,
+  Frame,
   ParamField,
   ResponseField,
   Step,
   Steps,
   Tab,
   Tabs,
+  Video,
 };

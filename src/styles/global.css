@@ -90,6 +90,11 @@
   line-height: 1.7;
 }
 
+.prose :where(img):not(:where(.not-prose, .not-prose *)) {
+  border: 1px solid var(--muted);
+  border-radius: 0.75rem;
+}
+
 summary::-webkit-details-marker {
   display: none;
 }
