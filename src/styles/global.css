@@ -60,6 +60,10 @@
   --tw-prose-td-borders: var(--muted);
 }
 
+.prose :where(p, li):not(:where(.not-prose, .not-prose *)) {
+  text-wrap: pretty;
+}
+
 .prose :where(a):not(:where(.not-prose, .not-prose *)) {
   font-weight: 500;
   text-decoration: none;

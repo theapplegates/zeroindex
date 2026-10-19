@@ -24,6 +24,6 @@ const { icon: Icon, box, iconClass } = styles[type];
   <Icon size="base" class:list={["mt-0.5", iconClass]} />
   <div class="flex min-w-0 flex-col gap-1">
     {title && <p class="font-medium text-foreground">{title}</p>}
-    <div class="text-muted-foreground"><slot /></div>
+    <div class="text-pretty text-muted-foreground"><slot /></div>
   </div>
 </aside>

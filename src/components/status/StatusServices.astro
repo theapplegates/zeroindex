@@ -19,14 +19,14 @@ const services: { name: string; description: string; uptime: string; state: Stat
   <Wrapper variant="standard" class="pb-24">
     <div class="mx-auto max-w-3xl">
       <Text tag="h2" variant="displaySM" class="font-semibold tracking-tight">Services</Text>
-      <Text tag="p" variant="textBase" class="mt-2 text-muted-foreground">Uptime over the last 90 days.</Text>
+      <Text tag="p" variant="textBase" class="mt-2 text-pretty text-muted-foreground">Uptime over the last 90 days.</Text>
       <ul role="list" class="mt-8 divide-y divide-muted rounded-2xl border border-muted bg-surface">
         {
           services.map((service) => (
             <li class="flex items-center justify-between gap-6 p-5">
               <div class="flex flex-col gap-0.5">
                 <Text tag="p" variant="textSM" class="font-medium">{service.name}</Text>
-                <Text tag="p" variant="textSM" class="text-muted-foreground">{service.description}</Text>
+                <Text tag="p" variant="textSM" class="text-pretty text-muted-foreground">{service.description}</Text>
               </div>
               <div class="flex shrink-0 items-center gap-6">
                 <Text tag="span" variant="textSM" class="hidden text-muted-foreground tabular-nums sm:block">{service.uptime}</Text>
