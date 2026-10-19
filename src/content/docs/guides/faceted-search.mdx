@@ -1,0 +1,74 @@
+---
+title: Faceted search
+description: Show counts for each category, brand or price range next to the results, and let people narrow down with one click.
+category: guides
+order: 2
+lastUpdated: 2026-10-16
+---
+
+Facets are the lists of filters you see beside search results in a shop, each with a count: Audio (24), Lighting (9). ZeroIndex returns these counts in the same request as the results.
+
+## Ask for facets
+
+Any field in `filterableAttributes` can be a facet. Pass the ones you want to count.
+
+<CodeGroup labels={["cURL", "JavaScript", "Python"]}>
+
+```bash
+curl https://api.zeroindex.test/v1/indexes/products/search \
+  -H "Authorization: Bearer $ZEROINDEX_KEY" \
+  -d '{ "q": "wireless", "facets": ["category", "brand"] }'
+```
+
+```js
+const { hits, facetDistribution } = await client.index("products").search("wireless", {
+  facets: ["category", "brand"],
+});
+```
+
+```python
+results = client.index("products").search("wireless", {"facets": ["category", "brand"]})
+```
+
+</CodeGroup>
+
+The response counts how many matching documents have each value:
+
+```json
+{
+  "facetDistribution": {
+    "category": { "Audio": 24, "Accessories": 11, "Lighting": 3 },
+    "brand": { "Vesterlund": 17, "Casa Bruna": 12, "Tarnelli": 9 }
+  }
+}
+```
+
+## Narrow down
+
+When someone ticks a value, add it to the filter and search again. Values in the same facet are joined with `OR`, and different facets with `AND`.
+
+```js
+const selected = { category: ["Audio"], brand: ["Vesterlund", "Tarnelli"] };
+
+const filter = Object.entries(selected)
+  .map(([field, values]) => `${field} IN [${values.map((value) => `"${value}"`).join(", ")}]`)
+  .join(" AND ");
+
+await client.index("products").search("wireless", { filter, facets: ["category", "brand"] });
+```
+
+<Callout type="tip" title="Keep other options visible">
+  If you count facets with the filter applied, every other brand drops to zero once one is ticked. Run a second search without the brand filter to keep their counts, and send both in one call with `multiSearch`.
+</Callout>
+
+## Price ranges
+
+Number fields return their lowest and highest value in `facetStats`. Use them to set the ends of a price slider, then filter with `price 40 TO 120`.
+
+```json
+{
+  "facetStats": {
+    "price": { "min": 19, "max": 349 }
+  }
+}
+```

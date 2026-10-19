@@ -1,0 +1,88 @@
+---
+title: Syncing a database
+description: Import your existing rows once, then keep the index up to date on every insert, update and delete.
+category: guides
+order: 3
+lastUpdated: 2026-10-17
+---
+
+Your database stays the source of truth, and ZeroIndex holds a copy of the fields you want to search. This guide uses Postgres and Node.js, but the pattern works with any database: one full import, then small updates as rows change.
+
+<Steps>
+  <Step title="Choose the fields">
+    Only send what people search, filter, sort or see in results. Leaving out large text fields keeps the index small and fast.
+
+```js
+const toDocument = (row) => ({
+  id: row.id,
+  name: row.name,
+  brand: row.brand,
+  category: row.category,
+  price: Number(row.price),
+  in_stock: row.stock > 0,
+  updated_at: Math.floor(row.updated_at.getTime() / 1000),
+});
+```
+
+  </Step>
+  <Step title="Import everything once">
+    Read the table in pages and send each page as a batch.
+
+```js
+import pg from "pg";
+import { ZeroIndex } from "@zeroindex/client";
+
+const db = new pg.Pool();
+const index = new ZeroIndex(process.env.ZEROINDEX_KEY).index("products");
+
+let lastId = 0;
+while (true) {
+  const { rows } = await db.query(
+    "select * from products where id > $1 order by id limit 1000",
+    [lastId],
+  );
+  if (rows.length === 0) break;
+  await index.addDocuments(rows.map(toDocument));
+  lastId = rows.at(-1).id;
+}
+```
+
+  </Step>
+  <Step title="Send changes as they happen">
+    Update the index wherever your app writes to the table. Send the document after the database transaction commits, so a rollback never leaves the index ahead of the database.
+
+```js
+export async function saveProduct(product) {
+  const row = await db.query("update products set ... returning *", [...]);
+  await index.updateDocuments([toDocument(row.rows[0])]);
+}
+
+export async function removeProduct(id) {
+  await db.query("delete from products where id = $1", [id]);
+  await index.deleteDocument(id);
+}
+```
+
+  </Step>
+  <Step title="Catch anything you missed">
+    Run a small job every few minutes that sends rows changed since the last run. It covers writes made outside your app, like a migration or a manual fix.
+
+```js
+const { rows } = await db.query("select * from products where updated_at > $1", [lastRun]);
+if (rows.length > 0) await index.updateDocuments(rows.map(toDocument));
+```
+
+  </Step>
+</Steps>
+
+## Rebuilding without downtime
+
+To change your document shape or settings from scratch, import into a new index such as `products_new`, then swap it with the live one. Searches move over in one step, with no empty results in between.
+
+```js
+await client.swapIndexes([{ indexes: ["products", "products_new"] }]);
+```
+
+<Callout type="note">
+  After the swap, `products_new` holds the old documents. Delete it once you are happy with the new index.
+</Callout>

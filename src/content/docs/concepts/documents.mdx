@@ -1,0 +1,99 @@
+---
+title: Documents
+description: Documents are plain JSON objects. Add them in batches, update a few fields at a time and track each change as a task.
+category: concepts
+order: 2
+lastUpdated: 2026-10-11
+---
+
+A document is one JSON object in an index: a product, an article, a support ticket. ZeroIndex does not need a schema. Every document needs a unique primary key, and every other field is up to you.
+
+```json
+{
+  "id": 1042,
+  "name": "Wireless headphones",
+  "brand": "Vesterlund",
+  "category": "Audio",
+  "price": 129,
+  "in_stock": true,
+  "tags": ["bluetooth", "noise cancelling"]
+}
+```
+
+## Field types
+
+ZeroIndex searches strings and arrays of strings. Numbers, booleans and dates can be filtered and sorted once you mark them in the index settings. Nested objects are flattened, so `dimensions.width` becomes its own field.
+
+<Callout type="tip" title="Dates">
+  Store dates as Unix timestamps in seconds. They sort and filter as plain numbers.
+</Callout>
+
+## Adding and replacing
+
+Send documents in an array. If a document with the same primary key already exists, it is replaced in full.
+
+<CodeGroup labels={["cURL", "JavaScript", "Python"]}>
+
+```bash
+curl https://api.zeroindex.test/v1/indexes/products/documents \
+  -H "Authorization: Bearer $ZEROINDEX_KEY" \
+  -d '[{ "id": 1042, "name": "Wireless headphones", "price": 129 }]'
+```
+
+```js
+await client.index("products").addDocuments([
+  { id: 1042, name: "Wireless headphones", price: 129 },
+]);
+```
+
+```python
+client.index("products").add_documents([
+    {"id": 1042, "name": "Wireless headphones", "price": 129},
+])
+```
+
+</CodeGroup>
+
+## Updating some fields
+
+To change only some fields, use `updateDocuments`. Fields you leave out keep their current value.
+
+```js
+await client.index("products").updateDocuments([{ id: 1042, price: 99 }]);
+```
+
+## Tasks
+
+Writes are asynchronous. Every add, update or delete returns a task straight away, and the change is searchable once the task succeeds, usually in under a second.
+
+```json
+{
+  "taskUid": 8812,
+  "indexUid": "products",
+  "status": "enqueued",
+  "type": "documentAdditionOrUpdate",
+  "enqueuedAt": "2026-10-11T09:14:02Z"
+}
+```
+
+Wait for a task when the next step depends on it, for example in a test:
+
+```js
+const task = await client.index("products").addDocuments(documents);
+await client.waitForTask(task.taskUid);
+```
+
+## Batches
+
+Send up to 1,000 documents or 10 MB per request, whichever comes first. For larger imports, split the documents into batches and send them one after another. Tasks on the same index run in order.
+
+## Deleting
+
+```js
+await client.index("products").deleteDocument(1042);
+await client.index("products").deleteDocuments({ filter: "in_stock = false" });
+```
+
+<Callout type="danger">
+  A delete by filter removes every matching document. Run the same filter as a search first to see what it matches.
+</Callout>

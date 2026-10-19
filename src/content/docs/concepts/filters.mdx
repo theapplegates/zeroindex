@@ -1,0 +1,68 @@
+---
+title: Filters
+description: Narrow results by any field you mark as filterable, with a short expression language that reads like SQL.
+category: concepts
+order: 4
+lastUpdated: 2026-10-14
+---
+
+A filter limits a search to documents that match a condition, like a category or a price range. Filters do not change the ranking. They only decide which documents are in the results.
+
+## Making a field filterable
+
+List the field in `filterableAttributes` first. Filtering on any other field returns an `invalid_filter` error.
+
+```js
+await client.index("products").updateSettings({
+  filterableAttributes: ["category", "brand", "price", "in_stock"],
+});
+```
+
+## Writing a filter
+
+<CodeGroup labels={["cURL", "JavaScript", "Python"]}>
+
+```bash
+curl https://api.zeroindex.test/v1/indexes/products/search \
+  -H "Authorization: Bearer $ZEROINDEX_KEY" \
+  -d '{ "q": "headphones", "filter": "category = Audio AND price < 150" }'
+```
+
+```js
+await client.index("products").search("headphones", {
+  filter: "category = Audio AND price < 150",
+});
+```
+
+```python
+client.index("products").search("headphones", {
+    "filter": "category = Audio AND price < 150",
+})
+```
+
+</CodeGroup>
+
+## Operators
+
+| Operator | Example |
+| --- | --- |
+| `=` and `!=` | `brand = Vesterlund` |
+| `>`, `>=`, `<` and `<=` | `price >= 50` |
+| `TO` | `price 50 TO 150` |
+| `IN` | `category IN [Audio, Lighting]` |
+| `EXISTS` | `discount EXISTS` |
+| `AND`, `OR` and `NOT` | `in_stock = true AND NOT brand = Vesterlund` |
+
+Use parentheses to group conditions, and quotes around values with spaces: `brand = "Casa Bruna"`.
+
+## Filtering arrays
+
+When a field holds an array, a condition matches if any value in it matches. `tags = bluetooth` finds every document whose `tags` contain `bluetooth`.
+
+<Callout type="note">
+  Filters run before ranking and add almost no time to a search, even on millions of documents.
+</Callout>
+
+## Filters on the server
+
+To make sure a user only ever sees their own documents, do not trust a filter sent from the browser. Put it in a scoped key instead, as shown in [Authentication](/docs/getting-started/authentication).

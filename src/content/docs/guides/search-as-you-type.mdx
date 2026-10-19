@@ -1,0 +1,73 @@
+---
+title: Search as you type
+description: Show results on every keystroke from the browser, with a search key, cancelled stale requests and highlighted matches.
+category: guides
+order: 1
+lastUpdated: 2026-10-15
+---
+
+ZeroIndex answers fast enough to search on every keystroke. This guide builds a search box in plain JavaScript that calls the API straight from the browser. The same steps apply in React, Vue or Svelte.
+
+<Steps>
+  <Step title="Create a search key">
+    Never use an admin key in the browser. Create a search key in the dashboard, or a scoped key on your server if each user should only see their own documents.
+  </Step>
+  <Step title="Add the markup">
+
+```html
+<input type="search" placeholder="Search products" data-search />
+<ul data-results></ul>
+```
+
+  </Step>
+  <Step title="Search on input">
+    Cancel the previous request whenever a new one starts, so a slow answer never overwrites a newer one.
+
+```js
+import { ZeroIndex } from "@zeroindex/client";
+
+const client = new ZeroIndex("zi_search_7b1e04d6a3");
+const index = client.index("products");
+const input = document.querySelector("[data-search]");
+const list = document.querySelector("[data-results]");
+let controller;
+
+input.addEventListener("input", async () => {
+  controller?.abort();
+  controller = new AbortController();
+
+  const { hits } = await index.search(input.value, {
+    limit: 8,
+    attributesToHighlight: ["name"],
+    signal: controller.signal,
+  });
+
+  list.innerHTML = hits.map((hit) => `<li>${hit._formatted.name}</li>`).join("");
+});
+```
+
+  </Step>
+  <Step title="Style the highlights">
+    Matching words come back wrapped in `<mark>` tags. Style them to fit your design.
+
+```css
+[data-results] mark {
+  background: none;
+  font-weight: 600;
+}
+```
+
+  </Step>
+</Steps>
+
+## Debouncing
+
+You do not need to debounce: requests are cheap and usually answer in under 50 ms. If you search a very large index on slow connections, wait about 100 ms after the last keystroke before sending.
+
+<Callout type="warning" title="Escape your data">
+  `_formatted` only adds `<mark>` tags. If your documents can contain HTML written by users, escape it before you insert it into the page.
+</Callout>
+
+## Empty queries
+
+An empty query returns the first documents by ranking. Show them as suggestions when the box gets focus, or clear the list instead.

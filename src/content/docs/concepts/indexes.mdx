@@ -1,0 +1,83 @@
+---
+title: Indexes
+description: An index holds one kind of document, like products or articles, along with the settings that decide how it is searched.
+category: concepts
+order: 1
+lastUpdated: 2026-10-10
+---
+
+An index is a collection of documents that you search together. Most apps have one index per kind of thing people look for: `products`, `articles`, `customers`. Each index has its own documents, its own settings and its own search endpoint.
+
+## Creating an index
+
+You do not have to create an index before using it. The first time you add documents to a name that does not exist, ZeroIndex creates the index for you with the default settings. Create one explicitly when you want to choose the primary key or apply settings before any documents arrive.
+
+<CodeGroup labels={["cURL", "JavaScript", "Python"]}>
+
+```bash
+curl https://api.zeroindex.test/v1/indexes \
+  -H "Authorization: Bearer $ZEROINDEX_KEY" \
+  -d '{ "uid": "products", "primaryKey": "id" }'
+```
+
+```js
+await client.createIndex("products", { primaryKey: "id" });
+```
+
+```python
+client.create_index("products", primary_key="id")
+```
+
+</CodeGroup>
+
+<ParamField name="uid" type="string" required>
+  The name of the index. Use lowercase letters, numbers, hyphens and underscores, up to 64 characters.
+</ParamField>
+<ParamField name="primaryKey" type="string" default="id">
+  The field that uniquely identifies each document. It cannot be changed once the index has documents.
+</ParamField>
+
+## Settings
+
+Settings control what is searchable, what can be filtered and how results are ranked. They apply to the whole index, and changing them rebuilds it in the background.
+
+```js
+await client.index("products").updateSettings({
+  searchableAttributes: ["name", "brand", "description"],
+  filterableAttributes: ["category", "price", "in_stock"],
+  sortableAttributes: ["price", "created_at"],
+});
+```
+
+<ResponseField name="searchableAttributes" type="string[]">
+  The fields that queries match against, most important first. Defaults to every field.
+</ResponseField>
+<ResponseField name="filterableAttributes" type="string[]">
+  The fields you can use in filters and facets. Empty by default.
+</ResponseField>
+<ResponseField name="sortableAttributes" type="string[]">
+  The fields you can sort results by. Empty by default.
+</ResponseField>
+
+<Callout type="warning">
+  Rebuilding a large index can take a few minutes. Searches keep working on the old settings until the new ones are ready.
+</Callout>
+
+## Limits
+
+| | Free | Pro |
+| --- | --- | --- |
+| Indexes | 10 | Unlimited |
+| Documents per index | 100,000 | 50 million |
+| Size of one document | 100 KB | 1 MB |
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Documents" icon="database" href="/docs/concepts/documents">
+    What a document looks like and how to keep it up to date.
+  </Card>
+  <Card title="Ranking" icon="layers" href="/docs/concepts/ranking">
+    How ZeroIndex decides which result comes first.
+  </Card>
+</CardGroup>

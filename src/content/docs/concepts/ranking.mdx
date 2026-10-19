@@ -1,0 +1,65 @@
+---
+title: Ranking
+description: Results are ordered by a list of rules, applied one after another. Change the order or add your own to fit your content.
+category: concepts
+order: 3
+lastUpdated: 2026-10-13
+---
+
+When a query matches many documents, ZeroIndex sorts them with a list of ranking rules. The first rule sorts everything. Each next rule only breaks ties left by the ones before it.
+
+## Default rules
+
+<Steps>
+  <Step title="Words">
+    Documents that match more of the query words come first.
+  </Step>
+  <Step title="Typo">
+    Documents with fewer typos come first. `headphones` beats `hedphones`.
+  </Step>
+  <Step title="Proximity">
+    Documents where the query words sit closer together come first.
+  </Step>
+  <Step title="Attribute">
+    Matches in more important fields come first, in the order of `searchableAttributes`.
+  </Step>
+  <Step title="Exactness">
+    Documents that match the query exactly come before those that only match a prefix.
+  </Step>
+</Steps>
+
+## Custom rules
+
+Add a rule that sorts by a number to push popular or recent documents up. The field must be listed in `sortableAttributes`.
+
+```js
+await client.index("products").updateSettings({
+  rankingRules: ["words", "typo", "proximity", "attribute", "exactness", "sales_count:desc"],
+});
+```
+
+<Callout type="tip">
+  Put custom rules last. If they come first, a best seller that barely matches the query can beat a product that matches it exactly.
+</Callout>
+
+## Typo tolerance
+
+ZeroIndex allows one typo in words of five letters or more, and two typos in words of nine letters or more. You can change both thresholds, or turn typos off for fields like product codes.
+
+```js
+await client.index("products").updateSettings({
+  typoTolerance: {
+    minWordSizeForTypos: { oneTypo: 4, twoTypos: 8 },
+    disableOnAttributes: ["sku"],
+  },
+});
+```
+
+## Seeing why a result ranks where it does
+
+Pass `showRankingScore` to get a score between 0 and 1 for every hit. It is useful while tuning, but do not show it to users.
+
+```js
+const { hits } = await client.index("products").search("wireless", { showRankingScore: true });
+// hits[0]._rankingScore === 0.97
+```
