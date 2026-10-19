@@ -18,39 +18,6 @@
   }
 }
 
-/* Buttons: an edge in the fill colour, a lit top, a shaded bottom and a soft drop */
-@theme inline {
-  --shadow-button-primary:
-    0 0 0 1px var(--foreground),
-    inset 0 1px 0 0 rgb(255 255 255 / var(--button-shine)),
-    inset 0 -1px 0 0 rgb(0 0 0 / 0.25),
-    0 1px 2px 0 rgb(0 0 0 / 0.12),
-    0 2px 3px -1px rgb(0 0 0 / 0.12),
-    0 4px 6px -3px rgb(0 0 0 / 0.12);
-  --shadow-button-accent:
-    0 0 0 1px var(--accent),
-    inset 0 1px 0 0 rgb(255 255 255 / 0.3),
-    inset 0 -1px 0 0 rgb(0 0 0 / 0.15),
-    0 1px 2px 0 color-mix(in srgb, var(--accent) 20%, transparent),
-    0 2px 3px -1px color-mix(in srgb, var(--accent) 30%, transparent),
-    0 4px 6px -3px color-mix(in srgb, var(--accent) 30%, transparent);
-  --shadow-button-muted:
-    0 0 0 1px color-mix(in srgb, var(--foreground) 10%, transparent),
-    inset 0 1px 0 0 rgb(255 255 255 / var(--button-shine)),
-    inset 0 -1px 0 0 color-mix(in srgb, var(--foreground) 6%, transparent),
-    0 1px 2px 0 rgb(0 0 0 / 0.05),
-    0 2px 3px -1px rgb(0 0 0 / 0.06),
-    0 4px 6px -3px rgb(0 0 0 / 0.06);
-}
-
-:root {
-  --button-shine: 0.7;
-}
-
-.dark {
-  --button-shine: 0.08;
-}
-
 /* Code colours, read by Shiki's css-variables theme */
 :root {
   --astro-code-foreground: var(--foreground);
