@@ -1,0 +1,65 @@
+---
+title: Introduction
+description: ZeroIndex is a search API. Send it your content and get fast, typo tolerant search back in a single request.
+category: getting-started
+order: 1
+lastUpdated: 2026-10-12
+---
+
+ZeroIndex takes the content you already have, like products, articles or support tickets, and turns it into a search index you can query in milliseconds. There are no servers to run and no ranking rules to write before your first result.
+
+<Callout type="tip" title="New here?">
+  The [quickstart](/docs/getting-started/quickstart) takes about five minutes and ends with a working search box.
+</Callout>
+
+## How it works
+
+You create an **index**, add **documents** to it as JSON and send **queries**. ZeroIndex handles typos, synonyms and ranking, and returns the best matches with the matching words highlighted.
+
+<CodeGroup labels={["cURL", "JavaScript", "Python"]}>
+
+```bash
+curl https://api.zeroindex.test/v1/indexes/products/search \
+  -H "Authorization: Bearer $ZEROINDEX_KEY" \
+  -d '{ "q": "wireless hedphones" }'
+```
+
+```js
+import { ZeroIndex } from "@zeroindex/client";
+
+const client = new ZeroIndex(process.env.ZEROINDEX_KEY);
+const results = await client.index("products").search("wireless hedphones");
+```
+
+```python
+import os
+from zeroindex import ZeroIndex
+
+client = ZeroIndex(os.environ["ZEROINDEX_KEY"])
+results = client.index("products").search("wireless hedphones")
+```
+
+</CodeGroup>
+
+The query above has a typo on purpose. ZeroIndex still puts wireless headphones first.
+
+## What you get
+
+- **Results in under 50 ms**, from a region close to your users.
+- **Typo tolerance** that works out of the box, in every language.
+- **Filters and facets** for price ranges, categories and anything else in your documents.
+- **Keys you can scope** to one index, one action or one customer.
+
+## Where to go next
+
+<CardGroup cols={3}>
+  <Card title="Quickstart" icon="rocket" href="/docs/getting-started/quickstart">
+    Create an index, add documents and run your first search.
+  </Card>
+  <Card title="Authentication" icon="key" href="/docs/getting-started/authentication">
+    Create API keys and choose what each one can do.
+  </Card>
+  <Card title="Components" icon="layers" href="/docs/writing/components">
+    Every block you can use when writing pages like this one.
+  </Card>
+</CardGroup>

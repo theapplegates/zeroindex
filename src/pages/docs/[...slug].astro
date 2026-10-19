@@ -1,0 +1,29 @@
+---
+import { render } from "astro:content";
+import DocsLayout from "@/layouts/DocsLayout.astro";
+import { docsComponents } from "@/components/docs";
+import { getDocs, docHref } from "@/lib/docs";
+
+export async function getStaticPaths() {
+  const docs = await getDocs();
+  return docs.map((doc, index) => ({
+    params: { slug: doc.id },
+    props: { doc, previous: docs[index - 1], next: docs[index + 1] },
+  }));
+}
+
+const { doc, previous, next } = Astro.props;
+const { Content, headings } = await render(doc);
+const link = (entry?: typeof doc) => (entry ? { title: entry.data.title, href: docHref(entry.id) } : undefined);
+---
+
+<DocsLayout
+  frontmatter={doc.data}
+  headings={headings}
+  markdown={`# ${doc.data.title}\n\n${doc.data.description}\n\n${doc.body ?? ""}`}
+  markdownHref={`${docHref(doc.id)}.md`}
+  previous={link(previous)}
+  next={link(next)}
+>
+  <Content components={docsComponents} />
+</DocsLayout>

@@ -1,0 +1,37 @@
+---
+// Content
+import { getDocGroups, docHref } from "@/lib/docs";
+
+const groups = await getDocGroups();
+const current = Astro.url.pathname.replace(/\/$/, "");
+---
+
+<nav class="flex flex-col gap-6" aria-label="Docs">
+  {
+    groups.map((group) => (
+      <div class="flex flex-col gap-1">
+        <p class="px-3 pb-1 text-sm font-medium text-foreground">{group.label}</p>
+        <ul class="flex flex-col gap-0.5">
+          {group.docs.map((doc) => {
+            const href = docHref(doc.id);
+            const active = current === href;
+            return (
+              <li>
+                <a
+                  href={href}
+                  aria-current={active ? "page" : undefined}
+                  class:list={[
+                    "block rounded-lg px-3 py-1.5 text-sm transition-colors duration-200",
+                    active ? "bg-accent/15 font-medium text-foreground" : "text-muted-foreground hover:text-foreground",
+                  ]}
+                >
+                  {doc.data.title}
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    ))
+  }
+</nav>

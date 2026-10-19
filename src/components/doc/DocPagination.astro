@@ -1,0 +1,45 @@
+---
+// Icons
+import ChevronLeft from "@/components/fundations/icons/ChevronLeft.astro";
+import ChevronRight from "@/components/fundations/icons/ChevronRight.astro";
+
+interface Link {
+  title: string;
+  href: string;
+}
+
+interface Props {
+  previous?: Link;
+  next?: Link;
+}
+
+const { previous, next } = Astro.props;
+const cardClass = "flex flex-col gap-1 rounded-xl border border-muted p-4 transition-colors duration-200 hover:border-muted-foreground/40";
+---
+
+<nav class="grid grid-cols-1 gap-4 sm:grid-cols-2" aria-label="Previous and next">
+  {
+    previous ? (
+      <a href={previous.href} class={cardClass}>
+        <span class="flex items-center gap-1 text-xs text-muted-foreground">
+          <ChevronLeft size="xs" />
+          Previous
+        </span>
+        <span class="text-sm font-medium text-foreground">{previous.title}</span>
+      </a>
+    ) : (
+      <span />
+    )
+  }
+  {
+    next && (
+      <a href={next.href} class:list={[cardClass, "sm:items-end"]}>
+        <span class="flex items-center gap-1 text-xs text-muted-foreground">
+          Next
+          <ChevronRight size="xs" />
+        </span>
+        <span class="text-sm font-medium text-foreground">{next.title}</span>
+      </a>
+    )
+  }
+</nav>

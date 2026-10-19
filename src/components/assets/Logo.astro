@@ -2,4 +2,10 @@
 const { class: className = "", ...rest } = Astro.props;
 ---
 
-<span class={className} {...rest}> Template </span>
+<span class:list={["flex items-center gap-2 text-base font-semibold tracking-tight text-foreground", className]} {...rest}>
+  <svg viewBox="0 0 24 24" class="size-6" aria-hidden="true">
+    <rect width="24" height="24" rx="6" class="fill-foreground"></rect>
+    <circle cx="12" cy="12" r="5" fill="none" stroke-width="2.5" class="stroke-accent"></circle>
+  </svg>
+  ZeroIndex
+</span>

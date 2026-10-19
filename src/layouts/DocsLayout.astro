@@ -1,0 +1,51 @@
+---
+import type { MarkdownHeading } from "astro";
+// Fundations
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Components
+import Sidebar from "@/components/global/Sidebar.astro";
+import MobileMenu from "@/components/global/MobileMenu.astro";
+import SearchDialog from "@/components/global/SearchDialog.astro";
+import DocHeader from "@/components/doc/DocHeader.astro";
+import DocToc from "@/components/doc/DocToc.astro";
+import DocFooter from "@/components/doc/DocFooter.astro";
+
+interface Link {
+  title: string;
+  href: string;
+}
+
+interface Props {
+  frontmatter: { title: string; description: string; lastUpdated: Date };
+  headings: MarkdownHeading[];
+  markdown: string;
+  markdownHref: string;
+  previous?: Link;
+  next?: Link;
+}
+
+const { frontmatter, headings, markdown, markdownHref, previous, next } = Astro.props;
+---
+
+<BaseLayout hideFooter={true} app={true}>
+  <div class="flex grow lg:min-h-0">
+    <Sidebar />
+    <div class="min-w-0 grow lg:pr-2 lg:pb-2">
+      <div class="bg-surface lg:h-full lg:overflow-y-auto lg:rounded-2xl lg:border lg:border-muted" data-scroll-wrapper>
+        <div class="flex justify-center gap-16 px-4 py-10 sm:px-8 lg:px-12 lg:py-14">
+          <article class="w-full max-w-2xl min-w-0">
+            <DocHeader title={frontmatter.title} description={frontmatter.description} markdown={markdown} markdownHref={markdownHref} />
+            <Wrapper variant="prose">
+              <slot />
+            </Wrapper>
+            <DocFooter lastUpdated={frontmatter.lastUpdated} previous={previous} next={next} />
+          </article>
+          <DocToc headings={headings} />
+        </div>
+      </div>
+    </div>
+  </div>
+  <SearchDialog />
+  <MobileMenu />
+</BaseLayout>

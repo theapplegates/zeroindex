@@ -1,0 +1,69 @@
+---
+title: Quickstart
+description: Create an index, add a few documents and run your first search in about five minutes.
+category: getting-started
+order: 2
+lastUpdated: 2026-10-12
+---
+
+This guide uses the JavaScript client, but every step works the same with cURL or Python. You need a ZeroIndex account and Node.js 20 or later.
+
+<Steps>
+  <Step title="Create an API key">
+    In the dashboard, open **Settings**, then **API keys**, and create an admin key. Save it as an environment variable called `ZEROINDEX_KEY`.
+
+    <Callout type="warning">
+      Admin keys can delete indexes. Keep them on your server and never ship them to a browser.
+    </Callout>
+  </Step>
+  <Step title="Install the client">
+
+<CodeGroup labels={["npm", "pnpm", "yarn"]}>
+
+```bash
+npm install @zeroindex/client
+```
+
+```bash
+pnpm add @zeroindex/client
+```
+
+```bash
+yarn add @zeroindex/client
+```
+
+</CodeGroup>
+
+  </Step>
+  <Step title="Add documents">
+    Every document needs a unique `id`. Everything else is up to you. The index is created the first time you add to it.
+
+```js
+import { ZeroIndex } from "@zeroindex/client";
+
+const client = new ZeroIndex(process.env.ZEROINDEX_KEY);
+
+await client.index("products").addDocuments([
+  { id: 1, name: "Wireless headphones", category: "Audio", price: 129 },
+  { id: 2, name: "Desk lamp", category: "Lighting", price: 59 },
+  { id: 3, name: "Wireless charger", category: "Audio", price: 39 },
+]);
+```
+
+  </Step>
+  <Step title="Search">
+    Send a query and print the titles of the matches.
+
+```js
+const { hits } = await client.index("products").search("wirless");
+
+console.log(hits.map((hit) => hit.name));
+// ["Wireless headphones", "Wireless charger"]
+```
+
+  </Step>
+</Steps>
+
+## Next steps
+
+You now have a working index. Before you put search in front of users, create a search key that can only read, as described in [Authentication](/docs/getting-started/authentication).

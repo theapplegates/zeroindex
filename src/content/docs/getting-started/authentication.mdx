@@ -1,0 +1,56 @@
+---
+title: Authentication
+description: Every request needs an API key. Use admin keys on your server and search keys everywhere else.
+category: getting-started
+order: 3
+lastUpdated: 2026-10-08
+---
+
+ZeroIndex uses bearer tokens. Send your key in the `Authorization` header of every request.
+
+```bash
+curl https://api.zeroindex.test/v1/indexes \
+  -H "Authorization: Bearer zi_admin_4f8a2c91e7"
+```
+
+## Header
+
+<ParamField name="Authorization" type="string" required>
+  The word `Bearer`, a space and your API key.
+</ParamField>
+
+## Kinds of keys
+
+There are two kinds of keys. You can create as many of each as you need.
+
+- **Admin keys** start with `zi_admin_`. They can create and delete indexes, change settings and add documents.
+- **Search keys** start with `zi_search_`. They can only search, so they are safe to use in a browser or a mobile app.
+
+<Callout type="danger" title="Keep admin keys secret">
+  Anyone with an admin key can delete your indexes. If one leaks, revoke it in the dashboard straight away and create a new one.
+</Callout>
+
+## Scoped search keys
+
+A scoped key limits a search key to some indexes or adds a filter to every query. Use one to make sure each customer only sees their own documents.
+
+```js
+const key = client.keys.createScoped({
+  parent: process.env.ZEROINDEX_SEARCH_KEY,
+  indexes: ["tickets"],
+  filter: "account_id = 4821",
+  expiresIn: "1h",
+});
+```
+
+## Questions
+
+<Accordion title="How many keys can I create?">
+  As many as you like. Most teams use one admin key per server and one search key per app.
+</Accordion>
+<Accordion title="Can I rotate a key without downtime?">
+  Yes. Create the new key, deploy it, then revoke the old one. Both work until you revoke.
+</Accordion>
+<Accordion title="Do keys expire?">
+  Admin and search keys never expire. Scoped keys expire after the time you set, up to 30 days.
+</Accordion>

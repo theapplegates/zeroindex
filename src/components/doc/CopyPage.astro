@@ -1,0 +1,90 @@
+---
+// Icons
+import Copy from "@/components/fundations/icons/Copy.astro";
+import Check from "@/components/fundations/icons/Check.astro";
+import ChevronDown from "@/components/fundations/icons/ChevronDown.astro";
+import File from "@/components/fundations/icons/File.astro";
+import ChatGpt from "@/components/fundations/icons/ChatGpt.astro";
+import Claude from "@/components/fundations/icons/Claude.astro";
+
+interface Props {
+  markdown: string;
+  markdownHref: string;
+}
+
+const { markdown, markdownHref } = Astro.props;
+const itemClass = "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm text-foreground transition-colors duration-200 hover:bg-muted";
+---
+
+<div class="relative flex shrink-0 items-center rounded-lg border border-muted bg-surface text-sm font-medium text-foreground" data-copy-page>
+  <button type="button" class="flex h-8 items-center gap-2 pr-2.5 pl-3 transition-colors duration-200 hover:text-muted-foreground" data-copy-page-button>
+    <Copy size="sm" data-copy-idle />
+    <Check size="sm" class="hidden" data-copy-done />
+    Copy page
+  </button>
+  <details class="group border-l border-muted" data-copy-page-menu>
+    <summary class="flex h-8 cursor-pointer list-none items-center px-2 text-muted-foreground hover:text-foreground" aria-label="More ways to use this page">
+      <ChevronDown size="sm" class="transition-transform duration-200 group-open:rotate-180" />
+    </summary>
+    <div class="absolute top-full right-0 z-20 flex w-64 flex-col gap-0.5 rounded-xl border border-muted bg-surface p-1 shadow-lg mt-2">
+      <button type="button" class={itemClass} data-copy-page-button>
+        <Copy size="sm" class="text-muted-foreground" />
+        <span class="flex flex-col"><span>Copy page</span><span class="text-xs text-muted-foreground">Markdown for AI tools</span></span>
+      </button>
+      <a href={markdownHref} class={itemClass}>
+        <File size="sm" class="text-muted-foreground" />
+        <span class="flex flex-col"><span>View as Markdown</span><span class="text-xs text-muted-foreground">The page as plain text</span></span>
+      </a>
+      <button type="button" class={itemClass} data-open-in="chatgpt">
+        <ChatGpt size="sm" class="text-muted-foreground" />
+        <span class="flex flex-col"><span>Open in ChatGPT</span><span class="text-xs text-muted-foreground">Ask questions about this page</span></span>
+      </button>
+      <button type="button" class={itemClass} data-open-in="claude">
+        <Claude size="sm" class="text-muted-foreground" />
+        <span class="flex flex-col"><span>Open in Claude</span><span class="text-xs text-muted-foreground">Ask questions about this page</span></span>
+      </button>
+    </div>
+  </details>
+  <template data-copy-page-markdown set:text={markdown} />
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>("[data-copy-page]");
+  const menu = root?.querySelector<HTMLDetailsElement>("[data-copy-page-menu]");
+  const markdown = root?.querySelector<HTMLTemplateElement>("[data-copy-page-markdown]")?.innerHTML ?? "";
+  const decode = (html: string) => {
+    const area = document.createElement("textarea");
+    area.innerHTML = html;
+    return area.value;
+  };
+
+  root?.querySelectorAll<HTMLButtonElement>("[data-copy-page-button]").forEach((button) => {
+    button.addEventListener("click", async () => {
+      await navigator.clipboard.writeText(decode(markdown));
+      const main = root.querySelector("[data-copy-page-button]");
+      main?.querySelector("[data-copy-idle]")?.classList.add("hidden");
+      main?.querySelector("[data-copy-done]")?.classList.remove("hidden");
+      if (menu) menu.open = false;
+      setTimeout(() => {
+        main?.querySelector("[data-copy-idle]")?.classList.remove("hidden");
+        main?.querySelector("[data-copy-done]")?.classList.add("hidden");
+      }, 1500);
+    });
+  });
+
+  const prompt = () => encodeURIComponent(`Read ${location.href} so I can ask questions about it.`);
+  const targets: Record<string, () => string> = {
+    chatgpt: () => `https://chatgpt.com/?hints=search&q=${prompt()}`,
+    claude: () => `https://claude.ai/new?q=${prompt()}`,
+  };
+  root?.querySelectorAll<HTMLButtonElement>("[data-open-in]").forEach((button) => {
+    button.addEventListener("click", () => {
+      window.open(targets[button.dataset.openIn ?? ""]?.(), "_blank", "noopener");
+      if (menu) menu.open = false;
+    });
+  });
+
+  document.addEventListener("click", (event) => {
+    if (menu?.open && !menu.contains(event.target as Node)) menu.open = false;
+  });
+</script>

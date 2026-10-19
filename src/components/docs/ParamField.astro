@@ -1,0 +1,22 @@
+---
+interface Props {
+  name: string;
+  type: string;
+  required?: boolean;
+  default?: string;
+}
+
+const { name, type, required = false, default: defaultValue } = Astro.props;
+---
+
+<div class="border-b border-muted py-4 prose-p:my-0">
+  <div class="not-prose flex flex-wrap items-center gap-2 font-mono text-xs">
+    <span class="text-sm font-medium text-foreground">{name}</span>
+    <span class="text-muted-foreground">{type}</span>
+    {required && <span class="rounded-md bg-danger/10 px-1.5 py-0.5 text-danger">required</span>}
+    {defaultValue && <span class="text-muted-foreground">default: {defaultValue}</span>}
+  </div>
+  <div class="pt-2 text-sm/6 text-muted-foreground">
+    <slot />
+  </div>
+</div>

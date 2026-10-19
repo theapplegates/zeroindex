@@ -1,0 +1,37 @@
+---
+// Icons
+import Copy from "@/components/fundations/icons/Copy.astro";
+import Check from "@/components/fundations/icons/Check.astro";
+
+const props = Astro.props;
+---
+
+<div class="group relative my-6" data-code-block>
+  <pre {...props}><slot /></pre>
+  <button
+    type="button"
+    class="absolute top-2 right-2 flex size-8 items-center justify-center rounded-lg bg-background text-muted-foreground opacity-0 transition duration-200 group-hover:opacity-100 hover:text-foreground focus-visible:opacity-100"
+    aria-label="Copy code"
+    data-code-copy
+  >
+    <Copy size="sm" data-copy-idle />
+    <Check size="sm" class="hidden" data-copy-done />
+  </button>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>("[data-code-copy]").forEach((button) => {
+    button.addEventListener("click", async () => {
+      const code = button.parentElement?.querySelector("pre")?.innerText ?? "";
+      await navigator.clipboard.writeText(code);
+      const idle = button.querySelector("[data-copy-idle]");
+      const done = button.querySelector("[data-copy-done]");
+      idle?.classList.add("hidden");
+      done?.classList.remove("hidden");
+      setTimeout(() => {
+        idle?.classList.remove("hidden");
+        done?.classList.add("hidden");
+      }, 1500);
+    });
+  });
+</script>

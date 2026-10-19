@@ -1,0 +1,38 @@
+---
+// Icons
+import Rocket from "@/components/fundations/icons/Rocket.astro";
+import Key from "@/components/fundations/icons/Key.astro";
+import Database from "@/components/fundations/icons/Database.astro";
+import Code from "@/components/fundations/icons/Code.astro";
+import Book from "@/components/fundations/icons/Book.astro";
+import Flash from "@/components/fundations/icons/Flash.astro";
+import Search from "@/components/fundations/icons/Search.astro";
+import Filter from "@/components/fundations/icons/Filter.astro";
+import Layers from "@/components/fundations/icons/Layers.astro";
+
+const icons = { rocket: Rocket, key: Key, database: Database, code: Code, book: Book, flash: Flash, search: Search, filter: Filter, layers: Layers };
+
+interface Props {
+  title: string;
+  icon?: keyof typeof icons;
+  href?: string;
+}
+
+const { title, icon, href } = Astro.props;
+const Icon = icon ? icons[icon] : null;
+const Tag = href ? "a" : "div";
+---
+
+<Tag
+  href={href}
+  class:list={[
+    "not-prose flex flex-col gap-3 rounded-xl border border-muted bg-surface p-5",
+    href && "transition-colors duration-200 hover:border-muted-foreground/40",
+  ]}
+>
+  {Icon && <Icon size="base" class="text-accent" />}
+  <div class="flex flex-col gap-1">
+    <p class="text-sm font-medium text-foreground">{title}</p>
+    <div class="text-sm/6 text-muted-foreground"><slot /></div>
+  </div>
+</Tag>

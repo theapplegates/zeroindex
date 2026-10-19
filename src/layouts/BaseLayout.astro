@@ -1,21 +1,42 @@
 ---
 // Fundations
 import "@/styles/global.css";
+import "lenis/dist/lenis.css";
 import BaseHead from "@/components/fundations/head/BaseHead.astro";
 // Components
 import Footer from "@/components/global/Footer.astro";
 import Navigation from "@/components/global/Navigation.astro";
-// Hides the  navigation, or footer on selected screens by passing props:
+// Hides the navigation or footer on selected screens by passing props:
 // <BaseLayout hideNavigation={true} hideFooter={true}>
-const {  hideNavigation = false, hideFooter = false } = Astro.props;
+// `app` pins the page to the viewport on desktop so only the docs panel scrolls.
+const { hideNavigation = false, hideFooter = false, app = false } = Astro.props;
 ---
-<html lang="en" class="scroll-smooth">
+
+<html lang="en">
   <head>
     <BaseHead />
+    <script is:inline>
+      const theme = localStorage.getItem("theme");
+      if (theme === "dark" || (!theme && matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+    </script>
   </head>
-  <body class="flex flex-col bg-background min-h-svh">
+  <body class:list={["flex min-h-svh flex-col bg-background font-sans text-foreground antialiased", app && "lg:h-svh lg:overflow-hidden"]}>
     {!hideNavigation && <Navigation />}
-    <main class="grow"><slot /></main>
+    <main class:list={["grow", app && "flex flex-col lg:min-h-0"]}><slot /></main>
     {!hideFooter && <Footer />}
   </body>
 </html>
+
+<script>
+  import Lenis from "lenis";
+
+  const wrapper = document.querySelector<HTMLElement>("[data-scroll-wrapper]");
+  const panelScrolls = wrapper && getComputedStyle(wrapper).overflowY === "auto";
+  new Lenis(
+    panelScrolls && wrapper.firstElementChild
+      ? { wrapper, content: wrapper.firstElementChild as HTMLElement, autoRaf: true, anchors: true }
+      : { autoRaf: true, anchors: true },
+  );
+</script>

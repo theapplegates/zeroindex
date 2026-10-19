@@ -1,0 +1,14 @@
+---
+// Icons
+import Search from "@/components/fundations/icons/Search.astro";
+---
+
+<button
+  type="button"
+  class="flex h-9 w-full items-center gap-2 rounded-lg border border-muted bg-surface px-3 text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground"
+  data-search-open
+>
+  <Search size="sm" />
+  <span class="grow text-left">Search</span>
+  <kbd class="font-sans text-xs">⌘K</kbd>
+</button>

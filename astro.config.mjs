@@ -15,6 +15,9 @@ export default defineConfig({
       wrap: true,
     },
   },
+  redirects: {
+    "/docs": "/docs/getting-started/introduction",
+  },
   site: "https://yourwebsite.com",
   integrations: [sitemap(), mdx()],
 });

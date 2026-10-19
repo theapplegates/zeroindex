@@ -1,0 +1,45 @@
+---
+// Icons
+import Computer from "@/components/fundations/icons/Computer.astro";
+import Sun from "@/components/fundations/icons/Sun.astro";
+import Moon from "@/components/fundations/icons/Moon.astro";
+
+const options = [
+  { value: "system", label: "System theme", icon: Computer },
+  { value: "light", label: "Light theme", icon: Sun },
+  { value: "dark", label: "Dark theme", icon: Moon },
+];
+---
+
+<div class="flex w-fit items-center gap-0.5 rounded-lg border border-muted p-0.5" role="group" aria-label="Theme" data-theme-toggle>
+  {
+    options.map(({ value, label, icon: Icon }) => (
+      <button
+        type="button"
+        class="flex size-7 items-center justify-center rounded-md text-muted-foreground transition-colors duration-200 hover:text-foreground aria-pressed:bg-muted aria-pressed:text-foreground"
+        aria-label={label}
+        aria-pressed="false"
+        data-theme-value={value}
+      >
+        <Icon size="sm" />
+      </button>
+    ))
+  }
+</div>
+
+<script>
+  const apply = (value: string) => {
+    if (value === "system") localStorage.removeItem("theme");
+    else localStorage.setItem("theme", value);
+    const dark = value === "dark" || (value === "system" && matchMedia("(prefers-color-scheme: dark)").matches);
+    document.documentElement.classList.toggle("dark", dark);
+    document.querySelectorAll<HTMLButtonElement>("[data-theme-value]").forEach((button) => {
+      button.setAttribute("aria-pressed", String(button.dataset.themeValue === value));
+    });
+  };
+
+  document.querySelectorAll<HTMLButtonElement>("[data-theme-value]").forEach((button) => {
+    button.addEventListener("click", () => apply(button.dataset.themeValue ?? "system"));
+  });
+  apply(localStorage.getItem("theme") ?? "system");
+</script>

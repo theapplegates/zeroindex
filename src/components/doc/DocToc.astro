@@ -1,0 +1,56 @@
+---
+import type { MarkdownHeading } from "astro";
+
+interface Props {
+  headings: MarkdownHeading[];
+}
+
+const headings = Astro.props.headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
+---
+
+{
+  headings.length > 0 && (
+    <aside class="hidden w-52 shrink-0 xl:block">
+      <nav class="sticky top-0 flex flex-col gap-3" aria-label="On this page">
+        <p class="text-sm font-medium text-foreground">On this page</p>
+        <ul class="flex flex-col border-l border-muted">
+          {headings.map((heading) => (
+            <li>
+              <a
+                href={`#${heading.slug}`}
+                class:list={[
+                  "relative right-px block border-l border-transparent py-1 text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground data-active:border-accent data-active:text-foreground",
+                  heading.depth === 3 ? "pl-6" : "pl-3",
+                ]}
+                data-toc-link={heading.slug}
+              >
+                {heading.text}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </aside>
+  )
+}
+
+<script>
+  const links = document.querySelectorAll<HTMLAnchorElement>("[data-toc-link]");
+  const wrapper = document.querySelector<HTMLElement>("[data-scroll-wrapper]");
+  const root = wrapper && getComputedStyle(wrapper).overflowY === "auto" ? wrapper : null;
+  const headings = [...links].map((link) => document.getElementById(link.dataset.tocLink ?? "")).filter(Boolean) as HTMLElement[];
+
+  const setActive = (id: string) => {
+    links.forEach((link) => link.toggleAttribute("data-active", link.dataset.tocLink === id));
+  };
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      const visible = entries.filter((entry) => entry.isIntersecting);
+      if (visible.length) setActive(visible[0].target.id);
+    },
+    { root, rootMargin: "0px 0px -70% 0px" },
+  );
+  headings.forEach((heading) => observer.observe(heading));
+  if (headings[0]) setActive(headings[0].id);
+</script>

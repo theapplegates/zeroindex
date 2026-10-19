@@ -1,19 +1,34 @@
 ---
 // Fundations
 import Logo from "@/components/assets/Logo.astro";
-import Text from "@/components/fundations/elements/Text.astro";
-import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+// Icons
+import Search from "@/components/fundations/icons/Search.astro";
+import Menu from "@/components/fundations/icons/Menu.astro";
+
+const links = [
+  { label: "Guides", href: "/docs/getting-started/introduction" },
+  { label: "Overview", href: "/system/overview" },
+];
+const linkClass = "text-sm font-medium text-muted-foreground transition-colors duration-200 hover:text-foreground";
 ---
 
-<header>
-  <Wrapper variant="standard">
-    <nav class="flex items-center justify-between py-4">
-      <a href="/" aria-label="Home"><Logo /></a>
-      <div class="flex items-center gap-6">
-        <Text tag="a" href="/blog" variant="textSM">Blog</Text>
-        <Text tag="a" href="/team" variant="textSM">Team</Text>
-        <Text tag="a" href="/system/overview" variant="textSM">Overview</Text>
-      </div>
+<header class="sticky top-0 z-30 bg-background">
+  <div class="flex h-14 items-center justify-between gap-4 px-4 lg:px-6">
+    <a href="/" aria-label="ZeroIndex home"><Logo /></a>
+    <nav class="hidden items-center gap-6 lg:flex" aria-label="Main">
+      {links.map((link) => <a href={link.href} class={linkClass}>{link.label}</a>)}
+      <Button isLink={true} href="https://lexingtonthemes.com/templates/zeroindex" size="xs" variant="primary">
+        Buy ZeroIndex
+      </Button>
     </nav>
-  </Wrapper>
+    <div class="flex items-center gap-1 lg:hidden">
+      <button type="button" class="flex size-9 items-center justify-center rounded-lg text-muted-foreground hover:text-foreground" aria-label="Search" data-search-open>
+        <Search size="base" />
+      </button>
+      <button type="button" class="flex size-9 items-center justify-center rounded-lg text-muted-foreground hover:text-foreground" aria-label="Open menu" data-menu-open>
+        <Menu size="base" />
+      </button>
+    </div>
+  </div>
 </header>

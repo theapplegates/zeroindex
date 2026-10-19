@@ -1,0 +1,104 @@
+---
+// Content
+import { render } from "astro:content";
+import { getDocs, docHref, categories } from "@/lib/docs";
+// Icons
+import Search from "@/components/fundations/icons/Search.astro";
+
+const docs = await getDocs();
+const index = await Promise.all(
+  docs.map(async (doc) => {
+    const { headings } = await render(doc);
+    return {
+      title: doc.data.title,
+      description: doc.data.description,
+      category: categories.find((category) => category.id === doc.data.category)?.label ?? "",
+      href: docHref(doc.id),
+      headings: headings.filter((heading) => heading.depth <= 3).map((heading) => heading.text),
+    };
+  }),
+);
+---
+
+<dialog
+  class="mx-auto mt-24 w-full max-w-xl overflow-hidden rounded-2xl border border-muted bg-surface p-0 text-foreground shadow-xl backdrop:bg-foreground/20"
+  aria-label="Search the docs"
+  data-search-dialog
+>
+  <div class="flex items-center gap-3 border-b border-muted px-4">
+    <Search size="sm" class="text-muted-foreground" />
+    <input
+      type="search"
+      placeholder="Search the docs"
+      class="h-12 grow border-0 bg-transparent p-0 text-sm text-foreground placeholder:text-muted-foreground focus:ring-0"
+      autocomplete="off"
+      data-search-input
+    />
+    <kbd class="font-sans text-xs text-muted-foreground">Esc</kbd>
+  </div>
+  <ul class="max-h-96 overflow-y-auto p-2" data-search-results></ul>
+  <p class="hidden px-4 py-8 text-center text-sm text-muted-foreground" data-search-empty>No results</p>
+</dialog>
+
+<script type="application/json" data-search-index set:html={JSON.stringify(index)} />
+
+<script>
+  type Entry = { title: string; description: string; category: string; href: string; headings: string[] };
+
+  const dialog = document.querySelector<HTMLDialogElement>("[data-search-dialog]");
+  const input = document.querySelector<HTMLInputElement>("[data-search-input]");
+  const results = document.querySelector<HTMLUListElement>("[data-search-results]");
+  const empty = document.querySelector<HTMLElement>("[data-search-empty]");
+  const entries: Entry[] = JSON.parse(document.querySelector("[data-search-index]")?.textContent ?? "[]");
+
+  const search = (query: string) => {
+    const terms = query.toLowerCase().split(/\s+/).filter(Boolean);
+    const matches = entries.filter((entry) => {
+      const text = [entry.title, entry.description, entry.category, ...entry.headings].join(" ").toLowerCase();
+      return terms.every((term) => text.includes(term));
+    });
+    if (!results || !empty) return;
+    results.replaceChildren(
+      ...matches.map((entry) => {
+        const item = document.createElement("li");
+        const link = document.createElement("a");
+        link.href = entry.href;
+        link.className = "flex flex-col gap-0.5 rounded-lg px-3 py-2.5 hover:bg-muted focus:bg-muted focus:outline-none";
+        const title = document.createElement("span");
+        title.className = "text-sm font-medium text-foreground";
+        title.textContent = entry.title;
+        const meta = document.createElement("span");
+        meta.className = "text-xs text-muted-foreground";
+        meta.textContent = `${entry.category}, ${entry.description}`;
+        link.append(title, meta);
+        item.append(link);
+        return item;
+      }),
+    );
+    empty.classList.toggle("hidden", matches.length > 0);
+  };
+
+  const open = () => {
+    if (!dialog || !input) return;
+    input.value = "";
+    search("");
+    dialog.showModal();
+    input.focus();
+  };
+
+  document.querySelectorAll("[data-search-open]").forEach((button) => button.addEventListener("click", open));
+  input?.addEventListener("input", () => search(input.value));
+  input?.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") results?.querySelector("a")?.click();
+  });
+  dialog?.addEventListener("click", (event) => {
+    if (event.target === dialog) dialog.close();
+  });
+  document.addEventListener("keydown", (event) => {
+    if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+      event.preventDefault();
+      if (dialog?.open) dialog.close();
+      else open();
+    }
+  });
+</script>

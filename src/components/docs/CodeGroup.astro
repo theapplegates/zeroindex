@@ -1,0 +1,32 @@
+---
+interface Props {
+  labels: string[];
+}
+
+const { labels } = Astro.props;
+---
+
+<div class="my-6 overflow-hidden rounded-xl border border-muted bg-background" data-tabs data-code-group>
+  <div role="tablist" class="not-prose flex gap-5 border-b border-muted px-4">
+    {
+      labels.map((label, index) => (
+        <button
+          type="button"
+          role="tab"
+          aria-selected={index === 0 ? "true" : "false"}
+          class="relative top-px border-b border-transparent py-2.5 text-xs font-medium text-muted-foreground transition-colors duration-200 hover:text-foreground aria-selected:border-foreground aria-selected:text-foreground"
+          data-tab-button
+        >
+          {label}
+        </button>
+      ))
+    }
+  </div>
+  <div data-tab-panels>
+    <slot />
+  </div>
+</div>
+
+<script>
+  import "@/scripts/tabs";
+</script>

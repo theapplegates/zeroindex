@@ -4,16 +4,13 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import Text from "@/components/fundations/elements/Text.astro";
 import Wrapper from "@/components/fundations/containers/Wrapper.astro";
 const colors = [
-  { name: "Background", token: "--color-background", class: "bg-background ring-1 ring-border" },
+  { name: "Background", token: "--color-background", class: "bg-background ring-1 ring-muted" },
+  { name: "Surface", token: "--color-surface", class: "bg-surface ring-1 ring-muted" },
   { name: "Foreground", token: "--color-foreground", class: "bg-foreground" },
   { name: "Muted", token: "--color-muted", class: "bg-muted" },
   { name: "Muted foreground", token: "--color-muted-foreground", class: "bg-muted-foreground" },
-  { name: "Primary", token: "--color-primary", class: "bg-primary" },
-  { name: "Primary foreground", token: "--color-primary-foreground", class: "bg-primary-foreground ring-1 ring-border" },
   { name: "Accent", token: "--color-accent", class: "bg-accent" },
-  { name: "Accent foreground", token: "--color-accent-foreground", class: "bg-accent-foreground ring-1 ring-border" },
-  { name: "Border", token: "--color-border", class: "bg-border" },
-  { name: "Ring", token: "--color-ring", class: "bg-ring" },
+  { name: "Danger", token: "--color-danger", class: "bg-danger" },
 ];
 ---
 
