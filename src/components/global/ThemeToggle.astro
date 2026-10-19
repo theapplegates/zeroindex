@@ -42,4 +42,8 @@ const options = [
     button.addEventListener("click", () => apply(button.dataset.themeValue ?? "system"));
   });
   apply(localStorage.getItem("theme") ?? "system");
+
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+    if (!localStorage.getItem("theme")) apply("system");
+  });
 </script>
