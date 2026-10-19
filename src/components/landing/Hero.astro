@@ -5,6 +5,7 @@ import Wrapper from "@/components/fundations/containers/Wrapper.astro";
 // Components
 import Card from "@/components/docs/Card.astro";
 import HeroShader from "@/components/landing/HeroShader.astro";
+import HeroPrompt from "@/components/landing/HeroPrompt.astro";
 
 const cards = [
   {
@@ -44,6 +45,9 @@ const cards = [
       <Text tag="p" variant="textLG" class="mt-4 text-balance text-muted-foreground">
         Guides, API reference and SDKs for ZeroIndex, the search API that answers in milliseconds.
       </Text>
+    </div>
+    <div class="mt-8">
+      <HeroPrompt />
     </div>
     <div class="mt-24 grid gap-4 sm:grid-cols-2 lg:mt-40 xl:grid-cols-4">
       {

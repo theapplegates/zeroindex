@@ -1,0 +1,46 @@
+---
+// Icons
+import Claude from "@/components/fundations/icons/Claude.astro";
+import ChatGpt from "@/components/fundations/icons/ChatGpt.astro";
+import Copy from "@/components/fundations/icons/Copy.astro";
+import Check from "@/components/fundations/icons/Check.astro";
+
+const prompt = "Add ZeroIndex search to my app: zeroindex.test/SKILL.md";
+const agents = [Claude, ChatGpt];
+---
+
+<div class="flex w-fit max-w-full items-center gap-3 rounded-full border border-muted bg-surface p-1.5" data-hero-prompt>
+  <div class="flex shrink-0 -space-x-2" aria-hidden="true">
+    {
+      agents.map((Icon) => (
+        <span class="flex size-8 items-center justify-center rounded-full border-2 border-surface bg-foreground text-surface">
+          <Icon size="sm" />
+        </span>
+      ))
+    }
+  </div>
+  <code class="truncate font-mono text-sm text-foreground" data-hero-prompt-text>{prompt}</code>
+  <button
+    type="button"
+    class="flex size-8 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors duration-200 hover:bg-muted hover:text-foreground"
+    aria-label="Copy prompt"
+    data-hero-prompt-copy
+  >
+    <Copy size="sm" data-copy-idle />
+    <Check size="sm" class="hidden" data-copy-done />
+  </button>
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>("[data-hero-prompt]");
+  const button = root?.querySelector<HTMLButtonElement>("[data-hero-prompt-copy]");
+  button?.addEventListener("click", async () => {
+    await navigator.clipboard.writeText(root?.querySelector("[data-hero-prompt-text]")?.textContent ?? "");
+    button.querySelector("[data-copy-idle]")?.classList.add("hidden");
+    button.querySelector("[data-copy-done]")?.classList.remove("hidden");
+    setTimeout(() => {
+      button.querySelector("[data-copy-idle]")?.classList.remove("hidden");
+      button.querySelector("[data-copy-done]")?.classList.add("hidden");
+    }, 1600);
+  });
+</script>
