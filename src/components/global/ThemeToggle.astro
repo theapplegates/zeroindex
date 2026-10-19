@@ -28,22 +28,5 @@ const options = [
 </div>
 
 <script>
-  const apply = (value: string) => {
-    if (value === "system") localStorage.removeItem("theme");
-    else localStorage.setItem("theme", value);
-    const dark = value === "dark" || (value === "system" && matchMedia("(prefers-color-scheme: dark)").matches);
-    document.documentElement.classList.toggle("dark", dark);
-    document.querySelectorAll<HTMLButtonElement>("[data-theme-value]").forEach((button) => {
-      button.setAttribute("aria-pressed", String(button.dataset.themeValue === value));
-    });
-  };
-
-  document.querySelectorAll<HTMLButtonElement>("[data-theme-value]").forEach((button) => {
-    button.addEventListener("click", () => apply(button.dataset.themeValue ?? "system"));
-  });
-  apply(localStorage.getItem("theme") ?? "system");
-
-  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
-    if (!localStorage.getItem("theme")) apply("system");
-  });
+  import "@/scripts/theme";
 </script>

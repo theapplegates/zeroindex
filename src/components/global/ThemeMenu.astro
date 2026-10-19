@@ -1,0 +1,55 @@
+---
+// Icons
+import Computer from "@/components/fundations/icons/Computer.astro";
+import Sun from "@/components/fundations/icons/Sun.astro";
+import Moon from "@/components/fundations/icons/Moon.astro";
+
+const options = [
+  { value: "system", label: "System", icon: Computer },
+  { value: "light", label: "Light", icon: Sun },
+  { value: "dark", label: "Dark", icon: Moon },
+];
+---
+
+<details class="relative" data-theme-menu>
+  <summary
+    class="flex size-8 cursor-pointer list-none items-center justify-center rounded-lg text-muted-foreground transition-colors duration-200 hover:text-foreground"
+    aria-label="Theme"
+  >
+    {
+      options.map(({ value, icon: Icon }) => (
+        <span class="hidden" data-theme-icon={value}>
+          <Icon size="sm" />
+        </span>
+      ))
+    }
+  </summary>
+  <div class="absolute top-full right-0 z-20 mt-2 flex w-36 flex-col gap-0.5 rounded-xl border border-muted bg-surface p-1 shadow-lg">
+    {
+      options.map(({ value, label, icon: Icon }) => (
+        <button
+          type="button"
+          class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors duration-200 hover:bg-muted hover:text-foreground aria-pressed:text-foreground"
+          aria-pressed="false"
+          data-theme-value={value}
+        >
+          <Icon size="sm" />
+          {label}
+        </button>
+      ))
+    }
+  </div>
+</details>
+
+<script>
+  import "@/scripts/theme";
+
+  const menu = document.querySelector<HTMLDetailsElement>("[data-theme-menu]");
+  menu?.querySelectorAll("[data-theme-value]").forEach((button) => button.addEventListener("click", () => menu.removeAttribute("open")));
+  document.addEventListener("click", (event) => {
+    if (menu?.open && !menu.contains(event.target as Node)) menu.removeAttribute("open");
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && menu?.open) menu.removeAttribute("open");
+  });
+</script>
