@@ -12,8 +12,8 @@ interface Props {
 
 const { type = "note", title } = Astro.props;
 const styles = {
-  note: { icon: Info, box: "border-muted bg-background", iconClass: "text-muted-foreground" },
-  tip: { icon: Idea, box: "border-muted bg-background", iconClass: "text-muted-foreground" },
+  note: { icon: Info, box: "border-info/30 bg-info/10", iconClass: "text-info" },
+  tip: { icon: Idea, box: "border-success/30 bg-success/10", iconClass: "text-success" },
   warning: { icon: Warning, box: "border-accent/40 bg-accent/10", iconClass: "text-accent" },
   danger: { icon: Danger, box: "border-danger/30 bg-danger/5", iconClass: "text-danger" },
 };
