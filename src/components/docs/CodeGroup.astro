@@ -7,7 +7,7 @@ interface Props {
 const { labels, class: className = "my-6" } = Astro.props;
 ---
 
-<div class:list={["overflow-hidden rounded-xl border border-muted bg-background/50", className]} data-tabs data-code-group>
+<div class:list={["overflow-hidden rounded-xl border border-muted", className]} data-tabs data-code-group>
   <div role="tablist" class="not-prose flex gap-5 border-b border-muted px-4">
     {
       labels.map((label, index) => (

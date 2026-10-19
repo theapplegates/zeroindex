@@ -34,6 +34,7 @@
 }
 
 .dark {
+  --astro-code-background: var(--surface);
   --astro-code-token-keyword: oklch(0.78 0.1 262);
   --astro-code-token-function: oklch(0.8 0.11 160);
   --astro-code-token-string: oklch(0.82 0.11 75);
@@ -113,6 +114,10 @@ summary::-webkit-details-marker {
 
 [data-step-number]::before {
   content: counter(step);
+}
+
+[data-code-group] {
+  background-color: var(--astro-code-background);
 }
 
 [data-code-group] [data-code-block] {
