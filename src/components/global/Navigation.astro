@@ -30,7 +30,7 @@ const links = [
 const linkClass = "text-sm font-medium text-muted-foreground transition-colors duration-200 hover:text-foreground";
 ---
 
-<header class="sticky top-0 z-30 bg-background">
+<header class:list={["sticky top-0 z-30", sidebar ? "bg-background" : "bg-surface"]}>
   <div class:list={["flex h-14 items-center justify-between gap-4", sidebar ? "px-4 lg:px-6" : "mx-auto w-full max-w-340 px-4 lg:px-24 2xl:max-w-380"]}>
     <div class="flex items-center gap-8">
       <a href="/" aria-label="ZeroIndex home"><Logo /></a>

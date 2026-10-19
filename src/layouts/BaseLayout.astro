@@ -22,7 +22,7 @@ const { hideNavigation = false, hideFooter = false, app = false } = Astro.props;
       }
     </script>
   </head>
-  <body class:list={["flex min-h-svh flex-col bg-background font-sans text-foreground antialiased", app && "lg:h-svh lg:overflow-hidden"]}>
+  <body class:list={["flex min-h-svh flex-col font-sans text-foreground antialiased", app ? "bg-background lg:h-svh lg:overflow-hidden" : "bg-surface"]}>
     {!hideNavigation && <Navigation sidebar={app} />}
     <main class:list={["grow", app && "flex flex-col lg:min-h-0"]}><slot /></main>
     {!hideFooter && <Footer />}
