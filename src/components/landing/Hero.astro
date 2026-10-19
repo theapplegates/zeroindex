@@ -3,10 +3,39 @@
 import Text from "@/components/fundations/elements/Text.astro";
 import Button from "@/components/fundations/elements/Button.astro";
 import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Components
+import Card from "@/components/docs/Card.astro";
+
+const cards = [
+  {
+    title: "Introduction",
+    icon: "book",
+    href: "/docs/getting-started/introduction",
+    text: "What ZeroIndex does, how indexes and documents fit together, and where to go next.",
+  },
+  {
+    title: "Quickstart",
+    icon: "rocket",
+    href: "/docs/getting-started/quickstart",
+    text: "Create an index, add a few documents and run your first search in about five minutes.",
+  },
+  {
+    title: "Authentication",
+    icon: "key",
+    href: "/docs/getting-started/authentication",
+    text: "Admin keys for your server, search keys for the browser, and how to rotate both.",
+  },
+  {
+    title: "Writing docs",
+    icon: "layers",
+    href: "/docs/writing/components",
+    text: "Callouts, code groups, steps, tabs and every other component these pages are built from.",
+  },
+] as const;
 ---
 
 <section>
-  <Wrapper variant="standard" class="pt-40">
+  <Wrapper variant="standard" class="pt-40 pb-24">
     <div class="mx-auto flex max-w-2xl flex-col items-center text-center">
       <Text tag="h1" variant="displayLG" class="font-semibold tracking-tight text-pretty lg:text-balance">
         Add fast, typo tolerant search to your product
@@ -17,6 +46,15 @@ import Wrapper from "@/components/fundations/containers/Wrapper.astro";
       <Button isLink={true} href="/docs/getting-started/quickstart" size="base" variant="muted" class="mt-10">
         Start with the quickstart
       </Button>
+    </div>
+    <div class="mt-24 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        cards.map((card) => (
+          <Card title={card.title} icon={card.icon} href={card.href}>
+            {card.text}
+          </Card>
+        ))
+      }
     </div>
   </Wrapper>
 </section>
