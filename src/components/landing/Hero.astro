@@ -1,7 +1,6 @@
 ---
 // Fundations
 import Text from "@/components/fundations/elements/Text.astro";
-import Button from "@/components/fundations/elements/Button.astro";
 import Wrapper from "@/components/fundations/containers/Wrapper.astro";
 // Components
 import Card from "@/components/docs/Card.astro";
@@ -36,18 +35,15 @@ const cards = [
 
 <section>
   <Wrapper variant="panel" class="pt-32 pb-24">
-    <div class="mx-auto flex max-w-2xl flex-col items-center text-center">
+    <div class="flex max-w-2xl flex-col">
       <Text tag="h1" variant="displayLG" class="font-semibold tracking-tight text-pretty lg:text-balance">
         Add fast, typo tolerant search to your product
       </Text>
       <Text tag="p" variant="textLG" class="mt-4 text-balance text-muted-foreground">
         Guides, API reference and SDKs for ZeroIndex, the search API that answers in milliseconds.
       </Text>
-      <Button isLink={true} href="/docs/getting-started/quickstart" size="base" variant="muted" class="mt-10">
-        Start with the quickstart
-      </Button>
     </div>
-    <div class="mt-24 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+    <div class="mt-16 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
       {
         cards.map((card) => (
           <Card title={card.title} icon={card.icon} href={card.href}>
