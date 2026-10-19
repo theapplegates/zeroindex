@@ -1,14 +1,27 @@
 ---
 // Icons
 import Search from "@/components/fundations/icons/Search.astro";
+
+interface Props {
+  size?: "sm" | "lg";
+}
+
+const { size = "sm" } = Astro.props;
+const sizes = {
+  sm: "h-9 rounded-lg px-3 text-sm",
+  lg: "h-12 rounded-xl px-4 text-base",
+};
 ---
 
 <button
   type="button"
-  class="flex h-9 w-full items-center gap-2 rounded-lg border border-muted bg-surface px-3 text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground"
+  class:list={[
+    "flex w-full items-center gap-2 border border-muted bg-surface text-muted-foreground transition-colors duration-200 hover:text-foreground",
+    sizes[size],
+  ]}
   data-search-open
 >
-  <Search size="sm" />
-  <span class="grow text-left">Search</span>
+  <Search size={size === "lg" ? "base" : "sm"} />
+  <span class="grow text-left">{size === "lg" ? "Search guides, endpoints and SDKs" : "Search"}</span>
   <kbd class="font-sans text-xs">⌘K</kbd>
 </button>

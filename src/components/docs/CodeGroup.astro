@@ -1,12 +1,13 @@
 ---
 interface Props {
   labels: string[];
+  class?: string;
 }
 
-const { labels } = Astro.props;
+const { labels, class: className = "my-6" } = Astro.props;
 ---
 
-<div class="my-6 overflow-hidden rounded-xl border border-muted bg-background" data-tabs data-code-group>
+<div class:list={["overflow-hidden rounded-xl border border-muted bg-background", className]} data-tabs data-code-group>
   <div role="tablist" class="not-prose flex gap-5 border-b border-muted px-4">
     {
       labels.map((label, index) => (

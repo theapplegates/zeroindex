@@ -2,10 +2,21 @@
 // Fundations
 import Logo from "@/components/assets/Logo.astro";
 import Button from "@/components/fundations/elements/Button.astro";
+// Components
+import SearchButton from "@/components/global/SearchButton.astro";
+import SearchDialog from "@/components/global/SearchDialog.astro";
+import ThemeToggle from "@/components/global/ThemeToggle.astro";
+import MobileMenu from "@/components/global/MobileMenu.astro";
 // Icons
 import Search from "@/components/fundations/icons/Search.astro";
 import Menu from "@/components/fundations/icons/Menu.astro";
 
+interface Props {
+  // Docs pages carry search and the theme toggle in their sidebar.
+  sidebar?: boolean;
+}
+
+const { sidebar = false } = Astro.props;
 const links = [
   { label: "Guides", href: "/docs/getting-started/introduction" },
   { label: "Overview", href: "/system/overview" },
@@ -15,9 +26,19 @@ const linkClass = "text-sm font-medium text-muted-foreground transition-colors d
 
 <header class="sticky top-0 z-30 bg-background">
   <div class="flex h-14 items-center justify-between gap-4 px-4 lg:px-6">
-    <a href="/" aria-label="ZeroIndex home"><Logo /></a>
+    <div class="flex items-center gap-8">
+      <a href="/" aria-label="ZeroIndex home"><Logo /></a>
+      {
+        !sidebar && (
+          <div class="hidden w-64 lg:block">
+            <SearchButton />
+          </div>
+        )
+      }
+    </div>
     <nav class="hidden items-center gap-6 lg:flex" aria-label="Main">
       {links.map((link) => <a href={link.href} class={linkClass}>{link.label}</a>)}
+      {!sidebar && <ThemeToggle />}
       <Button isLink={true} href="https://lexingtonthemes.com/templates/zeroindex" size="xs" variant="primary">
         Buy ZeroIndex
       </Button>
@@ -32,3 +53,5 @@ const linkClass = "text-sm font-medium text-muted-foreground transition-colors d
     </div>
   </div>
 </header>
+<SearchDialog />
+<MobileMenu />

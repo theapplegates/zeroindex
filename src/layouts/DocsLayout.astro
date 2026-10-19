@@ -5,8 +5,6 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import Wrapper from "@/components/fundations/containers/Wrapper.astro";
 // Components
 import Sidebar from "@/components/global/Sidebar.astro";
-import MobileMenu from "@/components/global/MobileMenu.astro";
-import SearchDialog from "@/components/global/SearchDialog.astro";
 import DocHeader from "@/components/doc/DocHeader.astro";
 import DocToc from "@/components/doc/DocToc.astro";
 import DocFooter from "@/components/doc/DocFooter.astro";
@@ -46,6 +44,4 @@ const { frontmatter, headings, markdown, markdownHref, previous, next } = Astro.
       </div>
     </div>
   </div>
-  <SearchDialog />
-  <MobileMenu />
 </BaseLayout>
