@@ -11,21 +11,24 @@ const {
 } = Astro.props;
 const primaryClass = [
   "text-surface",
-  "bg-foreground",
-  "hover:bg-foreground/85",
+  "bg-linear-to-b from-foreground/80 to-foreground",
+  "shadow-button-primary",
+  "hover:brightness-125",
   "focus-visible:outline-foreground",
 ];
 const accentClass = [
   "text-surface",
   "dark:text-foreground",
-  "bg-accent",
-  "hover:bg-accent/85",
+  "bg-linear-to-b from-accent/80 to-accent",
+  "shadow-button-accent",
+  "hover:brightness-110",
   "focus-visible:outline-accent",
 ];
 const mutedClass = [
   "text-foreground",
-  "bg-muted",
-  "hover:bg-muted/70",
+  "bg-linear-to-b from-muted/40 to-muted",
+  "shadow-button-muted",
+  "hover:brightness-97",
   "focus-visible:outline-foreground",
 ];
 
@@ -67,7 +70,8 @@ const baseClass = [
   "items-center",
   "duration-200",
   "ease-out",
-  "transition-colors",
+  "transition",
+  "active:scale-98",
   "focus-visible:outline-2",
   "focus-visible:outline-offset-4",
 ];
