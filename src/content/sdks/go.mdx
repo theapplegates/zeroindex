@@ -1,0 +1,77 @@
+---
+title: Go
+description: The official Go module. Context aware, no dependencies outside the standard library.
+order: 3
+lastUpdated: 2026-10-10
+package: zeroindex.test/go
+version: "1.6.0"
+requires: Go 1.22 or later
+install: go get zeroindex.test/go
+---
+
+The Go module takes a `context.Context` on every call, so timeouts and cancellation work the way you expect. It only depends on the standard library.
+
+## Install
+
+```bash
+go get zeroindex.test/go
+```
+
+## Set up the client
+
+```go
+package main
+
+import (
+	"os"
+
+	zeroindex "zeroindex.test/go"
+)
+
+func main() {
+	client := zeroindex.New(os.Getenv("ZEROINDEX_KEY"),
+		zeroindex.WithHost("https://api.zeroindex.test"),
+	)
+	_ = client
+}
+```
+
+## Add documents and search
+
+```go
+type Product struct {
+	ID    int     `json:"id"`
+	Name  string  `json:"name"`
+	Price float64 `json:"price"`
+}
+
+ctx := context.Background()
+products := client.Index("products")
+
+task, err := products.AddDocuments(ctx, []Product{
+	{ID: 1, Name: "Wireless headphones", Price: 129},
+	{ID: 2, Name: "Desk lamp", Price: 59},
+})
+if err != nil {
+	log.Fatal(err)
+}
+client.WaitForTask(ctx, task.TaskUID)
+
+var hits []Product
+_, err = products.Search(ctx, "wirless", &zeroindex.SearchParams{Limit: 5}, &hits)
+```
+
+## Errors
+
+Errors from the API are a `*zeroindex.Error` with the `Code` from the [error table](/api/errors).
+
+```go
+var apiErr *zeroindex.Error
+if errors.As(err, &apiErr) && apiErr.Code == "index_not_found" {
+	// Create the index, then retry.
+}
+```
+
+<Callout type="tip">
+  The client is safe to share between goroutines. Create it once at startup.
+</Callout>

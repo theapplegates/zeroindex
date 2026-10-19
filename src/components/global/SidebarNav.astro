@@ -2,6 +2,7 @@
 // Content
 import { getDocGroups, docHref } from "@/lib/docs";
 import { getEndpointGroups, apiHref } from "@/lib/api";
+import { getSdks, sdkHref } from "@/lib/sdks";
 
 interface Item {
   title: string;
@@ -9,19 +10,31 @@ interface Item {
 }
 
 const current = Astro.url.pathname.replace(/\/$/, "");
-const isApi = current.startsWith("/api");
-const groups: { label: string; items: Item[] }[] = isApi
-  ? (await getEndpointGroups()).map((group) => ({
+const section = current.startsWith("/api") ? "api" : current.startsWith("/sdks") ? "sdks" : "docs";
+const labels = { api: "API reference", sdks: "SDKs", docs: "Docs" };
+
+const loaders = {
+  api: async () =>
+    (await getEndpointGroups()).map((group) => ({
       label: group.label,
       items: group.endpoints.map((entry) => ({ title: entry.data.title, href: apiHref(entry.id) })),
-    }))
-  : (await getDocGroups()).map((group) => ({
+    })),
+  sdks: async () => [
+    {
+      label: "SDKs",
+      items: [{ title: "All SDKs", href: "/sdks" }, ...(await getSdks()).map((sdk) => ({ title: sdk.data.title, href: sdkHref(sdk.id) }))],
+    },
+  ],
+  docs: async () =>
+    (await getDocGroups()).map((group) => ({
       label: group.label,
       items: group.docs.map((doc) => ({ title: doc.data.title, href: docHref(doc.id) })),
-    }));
+    })),
+};
+const groups: { label: string; items: Item[] }[] = await loaders[section]();
 ---
 
-<nav class="flex flex-col gap-6" aria-label={isApi ? "API reference" : "Docs"}>
+<nav class="flex flex-col gap-6" aria-label={labels[section]}>
   {
     groups.map((group) => (
       <div class="flex flex-col gap-1">

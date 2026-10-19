@@ -1,0 +1,86 @@
+---
+title: Ruby
+description: The official Ruby gem, with a Rails integration that keeps your models in sync.
+order: 4
+lastUpdated: 2026-10-09
+package: zeroindex
+version: "1.3.2"
+requires: Ruby 3.1 or later
+install: bundle add zeroindex
+---
+
+The Ruby gem wraps the REST API in plain Ruby objects. In Rails, include one module in a model and its records are indexed every time they are saved.
+
+## Install
+
+<CodeGroup labels={["Bundler", "gem"]}>
+
+```bash
+bundle add zeroindex
+```
+
+```bash
+gem install zeroindex
+```
+
+</CodeGroup>
+
+## Set up the client
+
+```ruby
+require "zeroindex"
+
+client = ZeroIndex::Client.new(
+  ENV.fetch("ZEROINDEX_KEY"),
+  host: "https://api.zeroindex.test"
+)
+```
+
+## Add documents and search
+
+```ruby
+products = client.index("products")
+
+task = products.add_documents([
+  { id: 1, name: "Wireless headphones", price: 129 },
+  { id: 2, name: "Desk lamp", price: 59 }
+])
+client.wait_for_task(task.task_uid)
+
+products.search("wirless", limit: 5).hits.each do |hit|
+  puts hit["name"]
+end
+```
+
+## Rails
+
+Include `ZeroIndex::Model` and list the fields to send. Saves and deletes are synced in a background job.
+
+```ruby
+class Product < ApplicationRecord
+  include ZeroIndex::Model
+
+  zeroindex do
+    attributes :name, :brand, :category, :price
+    filterable :category, :price
+  end
+end
+
+Product.search("wirless")
+```
+
+<Callout type="note">
+  Run `Product.reindex!` once after adding the module to import the records you already have.
+</Callout>
+
+## Errors
+
+Failed requests raise `ZeroIndex::Error` with the `code` from the [error table](/api/errors).
+
+```ruby
+begin
+  products.search("lamp", filter: "colour = red")
+rescue ZeroIndex::Error => error
+  warn error.message if error.code == "invalid_filter"
+end
+```

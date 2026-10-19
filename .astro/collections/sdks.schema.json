@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "order": {
+      "type": "number"
+    },
+    "lastUpdated": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "package": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "requires": {
+      "type": "string"
+    },
+    "install": {
+      "type": "string"
+    },
+    "$schema": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title",
+    "description",
+    "order",
+    "lastUpdated",
+    "package",
+    "version",
+    "requires",
+    "install"
+  ]
+}

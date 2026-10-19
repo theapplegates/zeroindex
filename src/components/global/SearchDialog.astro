@@ -3,11 +3,13 @@
 import { render } from "astro:content";
 import { getDocs, docHref, categories } from "@/lib/docs";
 import { getEndpoints, apiHref, groups } from "@/lib/api";
+import { getSdks, sdkHref } from "@/lib/sdks";
 // Icons
 import Search from "@/components/fundations/icons/Search.astro";
 
 const docs = await getDocs();
 const endpoints = await getEndpoints();
+const sdks = await getSdks();
 const headingsOf = async (entry: Parameters<typeof render>[0]) =>
   (await render(entry)).headings.filter((heading) => heading.depth <= 3).map((heading) => heading.text);
 const index = [
@@ -27,6 +29,15 @@ const index = [
       category: `API ${groups.find((group) => group.id === entry.data.group)?.label.toLowerCase() ?? ""}`,
       href: apiHref(entry.id),
       headings: await headingsOf(entry),
+    })),
+  )),
+  ...(await Promise.all(
+    sdks.map(async (sdk) => ({
+      title: `${sdk.data.title} SDK`,
+      description: sdk.data.description,
+      category: "SDKs",
+      href: sdkHref(sdk.id),
+      headings: await headingsOf(sdk),
     })),
   )),
 ];

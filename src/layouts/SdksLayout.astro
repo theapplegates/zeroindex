@@ -1,0 +1,47 @@
+---
+import type { MarkdownHeading } from "astro";
+import type { CollectionEntry } from "astro:content";
+// Fundations
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Components
+import DocShell from "@/components/doc/DocShell.astro";
+import DocHeader from "@/components/doc/DocHeader.astro";
+import DocToc from "@/components/doc/DocToc.astro";
+import DocFooter from "@/components/doc/DocFooter.astro";
+import Badge from "@/components/docs/Badge.astro";
+
+interface Link {
+  title: string;
+  href: string;
+}
+
+interface Props {
+  frontmatter: CollectionEntry<"sdks">["data"];
+  headings: MarkdownHeading[];
+  markdown: string;
+  markdownHref: string;
+  previous?: Link;
+  next?: Link;
+}
+
+const { frontmatter, headings, markdown, markdownHref, previous, next } = Astro.props;
+---
+
+<DocShell>
+  <div class="flex justify-center gap-16 px-4 py-10 sm:px-8 lg:px-12 lg:py-14">
+    <article class="w-full max-w-2xl min-w-0">
+      <DocHeader title={frontmatter.title} description={frontmatter.description} markdown={markdown} markdownHref={markdownHref}>
+        <div class="mt-2 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+          <code class="font-mono text-foreground">{frontmatter.package}</code>
+          <Badge variant="outline">v{frontmatter.version}</Badge>
+          <span>{frontmatter.requires}</span>
+        </div>
+      </DocHeader>
+      <Wrapper variant="prose">
+        <slot />
+      </Wrapper>
+      <DocFooter lastUpdated={frontmatter.lastUpdated} previous={previous} next={next} />
+    </article>
+    <DocToc headings={headings} />
+  </div>
+</DocShell>

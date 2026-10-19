@@ -1,0 +1,29 @@
+---
+import { render } from "astro:content";
+import SdksLayout from "@/layouts/SdksLayout.astro";
+import { docsComponents } from "@/components/docs";
+import { getSdks, sdkHref } from "@/lib/sdks";
+
+export async function getStaticPaths() {
+  const sdks = await getSdks();
+  return sdks.map((sdk, index) => ({
+    params: { slug: sdk.id },
+    props: { sdk, previous: sdks[index - 1], next: sdks[index + 1] },
+  }));
+}
+
+const { sdk, previous, next } = Astro.props;
+const { Content, headings } = await render(sdk);
+const link = (entry?: typeof sdk) => (entry ? { title: entry.data.title, href: sdkHref(entry.id) } : undefined);
+---
+
+<SdksLayout
+  frontmatter={sdk.data}
+  headings={headings}
+  markdown={`# ${sdk.data.title} SDK\n\n${sdk.data.description}\n\n${sdk.body ?? ""}`}
+  markdownHref={`${sdkHref(sdk.id)}.md`}
+  previous={previous ? link(previous) : { title: "All SDKs", href: "/sdks" }}
+  next={link(next)}
+>
+  <Content components={docsComponents} />
+</SdksLayout>

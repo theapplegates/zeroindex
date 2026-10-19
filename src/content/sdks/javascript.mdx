@@ -1,0 +1,95 @@
+---
+title: JavaScript
+description: The official client for Node.js, Bun, Deno and the browser, with full TypeScript types.
+order: 1
+lastUpdated: 2026-10-16
+package: "@zeroindex/client"
+version: "3.4.0"
+requires: Node.js 20 or later
+install: npm install @zeroindex/client
+---
+
+The JavaScript client works on the server and in the browser. It is written in TypeScript, so every method, parameter and response is typed.
+
+## Install
+
+<CodeGroup labels={["npm", "pnpm", "yarn", "bun"]}>
+
+```bash
+npm install @zeroindex/client
+```
+
+```bash
+pnpm add @zeroindex/client
+```
+
+```bash
+yarn add @zeroindex/client
+```
+
+```bash
+bun add @zeroindex/client
+```
+
+</CodeGroup>
+
+## Set up the client
+
+Create one client and reuse it. On the server, use an admin key from an environment variable. In the browser, use a search key.
+
+```js
+import { ZeroIndex } from "@zeroindex/client";
+
+const client = new ZeroIndex(process.env.ZEROINDEX_KEY, {
+  host: "https://api.zeroindex.test",
+  timeout: 5000,
+});
+```
+
+<ParamField name="host" type="string" default='"https://api.zeroindex.test"'>
+  Your project's URL, from the dashboard.
+</ParamField>
+<ParamField name="timeout" type="number" default="10000">
+  How long to wait for a response, in milliseconds.
+</ParamField>
+
+## Add documents and search
+
+```js
+const products = client.index("products");
+
+const task = await products.addDocuments([
+  { id: 1, name: "Wireless headphones", price: 129 },
+  { id: 2, name: "Desk lamp", price: 59 },
+]);
+await client.waitForTask(task.taskUid);
+
+const { hits } = await products.search("wirless", { limit: 5 });
+```
+
+## Types
+
+Pass your document type to `index` and every hit is typed for you.
+
+```ts
+type Product = { id: number; name: string; price: number };
+
+const { hits } = await client.index<Product>("products").search("lamp");
+hits[0].price; // number
+```
+
+## Errors
+
+Failed requests throw a `ZeroIndexError` with the `code` from the [error table](/api/errors).
+
+```js
+import { ZeroIndexError } from "@zeroindex/client";
+
+try {
+  await client.index("products").search("lamp", { filter: "colour = red" });
+} catch (error) {
+  if (error instanceof ZeroIndexError && error.code === "invalid_filter") {
+    console.warn(error.message);
+  }
+}
+```

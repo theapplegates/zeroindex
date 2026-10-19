@@ -29,7 +29,22 @@ const api = defineCollection({
   }),
 });
 
+const sdks = defineCollection({
+  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/sdks" }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    order: z.number(),
+    lastUpdated: z.date(),
+    package: z.string(),
+    version: z.string(),
+    requires: z.string(),
+    install: z.string(),
+  }),
+});
+
 export const collections = {
   docs,
   api,
+  sdks,
 };

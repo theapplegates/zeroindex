@@ -1,0 +1,93 @@
+---
+title: Python
+description: The official Python client, with a sync and an async API and type hints throughout.
+order: 2
+lastUpdated: 2026-10-14
+package: zeroindex
+version: "2.8.1"
+requires: Python 3.9 or later
+install: pip install zeroindex
+---
+
+The Python client has the same methods as the REST API, named in snake case. Use `ZeroIndex` in scripts and Django or Flask apps, and `AsyncZeroIndex` with asyncio or FastAPI.
+
+## Install
+
+<CodeGroup labels={["pip", "uv", "poetry"]}>
+
+```bash
+pip install zeroindex
+```
+
+```bash
+uv add zeroindex
+```
+
+```bash
+poetry add zeroindex
+```
+
+</CodeGroup>
+
+## Set up the client
+
+```python
+import os
+from zeroindex import ZeroIndex
+
+client = ZeroIndex(
+    os.environ["ZEROINDEX_KEY"],
+    host="https://api.zeroindex.test",
+    timeout=5,
+)
+```
+
+<ParamField name="host" type="str" default='"https://api.zeroindex.test"'>
+  Your project's URL, from the dashboard.
+</ParamField>
+<ParamField name="timeout" type="float" default="10">
+  How long to wait for a response, in seconds.
+</ParamField>
+
+## Add documents and search
+
+```python
+products = client.index("products")
+
+task = products.add_documents([
+    {"id": 1, "name": "Wireless headphones", "price": 129},
+    {"id": 2, "name": "Desk lamp", "price": 59},
+])
+client.wait_for_task(task.task_uid)
+
+results = products.search("wirless", {"limit": 5})
+for hit in results.hits:
+    print(hit["name"])
+```
+
+## Async
+
+Every method has an async version with the same name.
+
+```python
+from zeroindex import AsyncZeroIndex
+
+client = AsyncZeroIndex(os.environ["ZEROINDEX_KEY"])
+
+async def search(query: str):
+    return await client.index("products").search(query)
+```
+
+## Errors
+
+Failed requests raise `ZeroIndexError` with the `code` from the [error table](/api/errors).
+
+```python
+from zeroindex import ZeroIndexError
+
+try:
+    client.index("products").search("lamp", {"filter": "colour = red"})
+except ZeroIndexError as error:
+    if error.code == "invalid_filter":
+        print(error.message)
+```

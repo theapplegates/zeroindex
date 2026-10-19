@@ -1,0 +1,46 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+// Components
+import Badge from "@/components/docs/Badge.astro";
+// Content
+import { getSdks, sdkHref } from "@/lib/sdks";
+
+const sdks = await getSdks();
+---
+
+<div class="px-4 py-10 sm:px-8 lg:px-12 lg:py-14">
+  <div class="mx-auto w-full max-w-4xl">
+    <header class="flex flex-col gap-3 pb-10">
+      <Text tag="h1" variant="displaySM" class="font-semibold tracking-tight text-pretty">SDKs</Text>
+      <Text tag="p" variant="textLG" class="text-pretty text-muted-foreground">
+        Official clients for the ZeroIndex API. Each one covers every endpoint, retries for you and is kept in step with the API.
+      </Text>
+    </header>
+    <ul role="list" class="grid gap-4 sm:grid-cols-2">
+      {
+        sdks.map((sdk) => (
+          <li>
+            <a
+              href={sdkHref(sdk.id)}
+              class="flex h-full flex-col gap-6 rounded-2xl border border-muted bg-background p-6 transition-colors duration-200 hover:border-muted-foreground/40"
+            >
+              <div class="flex flex-col gap-2">
+                <div class="flex items-center justify-between gap-3">
+                  <Text tag="h2" variant="textLG" class="font-medium">{sdk.data.title}</Text>
+                  <Badge variant="outline">v{sdk.data.version}</Badge>
+                </div>
+                <Text tag="p" variant="textSM" class="text-pretty text-muted-foreground">{sdk.data.description}</Text>
+              </div>
+              <code class="mt-auto truncate rounded-lg border border-muted bg-surface px-3 py-2 font-mono text-sm text-foreground">{sdk.data.install}</code>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <Text tag="p" variant="textSM" class="mt-10 text-pretty text-muted-foreground">
+      Using another language? Every SDK is a thin layer over the REST API, so anything that can send HTTP works. Start with the
+      <a href="/api/introduction" class="font-medium text-foreground transition-colors duration-200 hover:text-muted-foreground">API reference</a>.
+    </Text>
+  </div>
+</div>
