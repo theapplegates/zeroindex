@@ -27,7 +27,7 @@ const embed = youtube
           src={src}
           poster={poster}
           title={title}
-          class="aspect-video w-full rounded-xl bg-muted object-cover"
+          class="aspect-video w-full rounded-xl border border-muted bg-muted object-cover"
           preload={autoplay ? "auto" : "none"}
           controls={!autoplay}
           autoplay={autoplay}
@@ -41,7 +41,7 @@ const embed = youtube
       embed && (
         <button
           type="button"
-          class="group relative flex aspect-video w-full items-center justify-center overflow-hidden rounded-xl bg-muted"
+          class="group relative flex aspect-video w-full items-center justify-center overflow-hidden rounded-xl border border-muted bg-muted"
           aria-label={`Play ${title}`}
           data-video-embed={embed}
           data-video-title={title}
@@ -64,7 +64,7 @@ const embed = youtube
       iframe.title = button.dataset.videoTitle ?? "";
       iframe.allow = "autoplay; fullscreen; picture-in-picture; encrypted-media";
       iframe.allowFullscreen = true;
-      iframe.className = "aspect-video w-full rounded-xl";
+      iframe.className = "aspect-video w-full rounded-xl border border-muted";
       button.replaceWith(iframe);
     });
   });
