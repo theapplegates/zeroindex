@@ -1,0 +1,39 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Components
+import StatusDot from "@/components/status/StatusDot.astro";
+
+const regions = [
+  { name: "EU West", city: "Frankfurt", latency: "23 ms" },
+  { name: "US East", city: "Virginia", latency: "19 ms" },
+  { name: "US West", city: "Oregon", latency: "21 ms" },
+  { name: "Asia Pacific", city: "Singapore", latency: "31 ms" },
+];
+---
+
+<section>
+  <Wrapper variant="standard" class="pb-24">
+    <div class="mx-auto max-w-3xl">
+      <Text tag="h2" variant="displaySM" class="font-semibold tracking-tight">Regions</Text>
+      <Text tag="p" variant="textBase" class="mt-2 text-muted-foreground">Median search response time over the last hour.</Text>
+      <ul role="list" class="mt-8 grid gap-4 sm:grid-cols-2">
+        {
+          regions.map((region) => (
+            <li class="flex items-center justify-between gap-4 rounded-2xl border border-muted bg-surface p-5">
+              <div class="flex items-center gap-3">
+                <StatusDot state="operational" />
+                <div class="flex flex-col gap-0.5">
+                  <Text tag="p" variant="textSM" class="font-medium">{region.name}</Text>
+                  <Text tag="p" variant="textSM" class="text-muted-foreground">{region.city}</Text>
+                </div>
+              </div>
+              <Text tag="span" variant="textSM" class="font-mono text-muted-foreground tabular-nums">{region.latency}</Text>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </Wrapper>
+</section>

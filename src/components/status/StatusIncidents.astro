@@ -1,0 +1,69 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Components
+import Badge from "@/components/docs/Badge.astro";
+
+const incidents = [
+  {
+    title: "Delayed webhook deliveries",
+    date: "19 October 2026",
+    resolved: false,
+    updates: [
+      { time: "14:05 UTC", text: "We found a backlog in one delivery queue in EU West and are adding workers to clear it." },
+      { time: "13:40 UTC", text: "Some webhooks in EU West arrive up to four minutes late. Search and indexing are not affected." },
+    ],
+  },
+  {
+    title: "Slow indexing in US East",
+    date: "2 October 2026",
+    resolved: true,
+    updates: [
+      { time: "09:48 UTC", text: "A storage node was replaced and indexing is back to normal speed. No documents were lost." },
+      { time: "09:12 UTC", text: "Documents added in US East take up to 30 seconds to become searchable." },
+    ],
+  },
+  {
+    title: "Dashboard sign in errors",
+    date: "21 September 2026",
+    resolved: true,
+    updates: [
+      { time: "16:41 UTC", text: "We rolled back a faulty release and sign in works again. API traffic was never affected." },
+      { time: "16:20 UTC", text: "Some users see an error when signing in to the dashboard." },
+    ],
+  },
+];
+---
+
+<section>
+  <Wrapper variant="standard" class="pb-24">
+    <div class="mx-auto max-w-3xl">
+      <Text tag="h2" variant="displaySM" class="font-semibold tracking-tight">Recent incidents</Text>
+      <Text tag="p" variant="textBase" class="mt-2 text-muted-foreground">Everything from the last 30 days, newest first.</Text>
+      <div class="mt-8 flex flex-col gap-4">
+        {
+          incidents.map((incident) => (
+            <article class="rounded-2xl border border-muted bg-surface p-6">
+              <div class="flex flex-wrap items-center justify-between gap-3">
+                <div class="flex flex-col gap-0.5">
+                  <Text tag="h3" variant="textBase" class="font-medium">{incident.title}</Text>
+                  <Text tag="p" variant="textSM" class="text-muted-foreground">{incident.date}</Text>
+                </div>
+                <Badge variant={incident.resolved ? "outline" : "accent"}>{incident.resolved ? "Resolved" : "Investigating"}</Badge>
+              </div>
+              <ol role="list" class="mt-6 flex flex-col gap-4 border-t border-muted pt-6">
+                {incident.updates.map((update) => (
+                  <li class="grid gap-1 sm:grid-cols-4 sm:gap-6">
+                    <Text tag="span" variant="textSM" class="font-mono text-muted-foreground tabular-nums">{update.time}</Text>
+                    <Text tag="p" variant="textSM" class="text-pretty sm:col-span-3">{update.text}</Text>
+                  </li>
+                ))}
+              </ol>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </Wrapper>
+</section>

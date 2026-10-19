@@ -1,0 +1,44 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Components
+import StatusDot, { type State } from "@/components/status/StatusDot.astro";
+
+const labels = { operational: "Operational", degraded: "Degraded", outage: "Outage" };
+const services: { name: string; description: string; uptime: string; state: State }[] = [
+  { name: "Search API", description: "Queries, filters and facets", uptime: "99.99%", state: "operational" },
+  { name: "Indexing", description: "Adding, updating and deleting documents", uptime: "99.98%", state: "operational" },
+  { name: "Webhooks", description: "Index and task events", uptime: "99.91%", state: "degraded" },
+  { name: "Key management", description: "Creating and rotating API keys", uptime: "100%", state: "operational" },
+  { name: "Dashboard", description: "Settings, usage and billing", uptime: "100%", state: "operational" },
+];
+---
+
+<section>
+  <Wrapper variant="standard" class="pb-24">
+    <div class="mx-auto max-w-3xl">
+      <Text tag="h2" variant="displaySM" class="font-semibold tracking-tight">Services</Text>
+      <Text tag="p" variant="textBase" class="mt-2 text-muted-foreground">Uptime over the last 90 days.</Text>
+      <ul role="list" class="mt-8 divide-y divide-muted rounded-2xl border border-muted bg-surface">
+        {
+          services.map((service) => (
+            <li class="flex items-center justify-between gap-6 p-5">
+              <div class="flex flex-col gap-0.5">
+                <Text tag="p" variant="textSM" class="font-medium">{service.name}</Text>
+                <Text tag="p" variant="textSM" class="text-muted-foreground">{service.description}</Text>
+              </div>
+              <div class="flex shrink-0 items-center gap-6">
+                <Text tag="span" variant="textSM" class="hidden font-mono text-muted-foreground tabular-nums sm:block">{service.uptime}</Text>
+                <div class="flex w-28 items-center gap-2">
+                  <StatusDot state={service.state} />
+                  <Text tag="span" variant="textSM">{labels[service.state]}</Text>
+                </div>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </Wrapper>
+</section>

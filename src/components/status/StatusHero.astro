@@ -1,0 +1,27 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Components
+import StatusDot from "@/components/status/StatusDot.astro";
+---
+
+<section>
+  <Wrapper variant="standard" class="py-24">
+    <div class="mx-auto max-w-3xl">
+      <Text tag="h1" variant="displayLG" class="font-semibold tracking-tight text-pretty lg:text-balance">Status</Text>
+      <Text tag="p" variant="textLG" class="mt-4 text-pretty text-muted-foreground">
+        The live state of the ZeroIndex API, dashboard and webhooks in every region.
+      </Text>
+      <div class="mt-10 flex flex-col gap-2 rounded-2xl border border-muted bg-surface p-6">
+        <div class="flex items-center gap-3">
+          <StatusDot state="degraded" />
+          <Text tag="h2" variant="textLG" class="font-medium">Webhook deliveries are delayed</Text>
+        </div>
+        <Text tag="p" variant="textSM" class="text-pretty text-muted-foreground">
+          Search, indexing and the dashboard are working normally. Updated 19 October 2026 at 14:05 UTC.
+        </Text>
+      </div>
+    </div>
+  </Wrapper>
+</section>

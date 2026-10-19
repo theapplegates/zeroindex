@@ -1,0 +1,16 @@
+---
+export type State = "operational" | "degraded" | "outage";
+
+interface Props {
+  state: State;
+}
+
+const { state } = Astro.props;
+const colors = {
+  operational: "bg-success",
+  degraded: "bg-accent",
+  outage: "bg-danger",
+};
+---
+
+<span class:list={["size-2 shrink-0 rounded-full", colors[state]]} aria-hidden="true"></span>
