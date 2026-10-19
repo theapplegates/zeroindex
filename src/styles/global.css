@@ -107,3 +107,11 @@ summary::-webkit-details-marker {
   scroll-margin-top: 2rem;
   letter-spacing: -0.02em;
 }
+[data-sidebar-scroll] {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+[data-sidebar-scroll]:hover {
+  scrollbar-color: var(--muted) transparent;
+}

@@ -6,7 +6,6 @@ import { getEndpointGroups, apiHref } from "@/lib/api";
 interface Item {
   title: string;
   href: string;
-  method?: string;
 }
 
 const current = Astro.url.pathname.replace(/\/$/, "");
@@ -14,7 +13,7 @@ const isApi = current.startsWith("/api");
 const groups: { label: string; items: Item[] }[] = isApi
   ? (await getEndpointGroups()).map((group) => ({
       label: group.label,
-      items: group.endpoints.map((entry) => ({ title: entry.data.title, href: apiHref(entry.id), method: entry.data.method })),
+      items: group.endpoints.map((entry) => ({ title: entry.data.title, href: apiHref(entry.id) })),
     }))
   : (await getDocGroups()).map((group) => ({
       label: group.label,
@@ -36,11 +35,10 @@ const groups: { label: string; items: Item[] }[] = isApi
                   href={item.href}
                   aria-current={active ? "page" : undefined}
                   class:list={[
-                    "flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm transition-colors duration-200",
+                    "block rounded-lg px-3 py-1.5 text-sm transition-colors duration-200",
                     active ? "bg-accent/15 font-medium text-foreground" : "text-muted-foreground hover:text-foreground",
                   ]}
                 >
-                  {item.method && <span class="w-12 shrink-0 font-mono text-xs text-muted-foreground">{item.method}</span>}
                   {item.title}
                 </a>
               </li>
