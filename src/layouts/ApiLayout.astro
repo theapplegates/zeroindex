@@ -1,0 +1,71 @@
+---
+import type { MarkdownHeading } from "astro";
+import type { CollectionEntry } from "astro:content";
+// Fundations
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Components
+import DocShell from "@/components/doc/DocShell.astro";
+import DocHeader from "@/components/doc/DocHeader.astro";
+import DocToc from "@/components/doc/DocToc.astro";
+import DocFooter from "@/components/doc/DocFooter.astro";
+import MethodBadge from "@/components/api/MethodBadge.astro";
+import ApiExamples from "@/components/api/ApiExamples.astro";
+
+interface Link {
+  title: string;
+  href: string;
+}
+
+interface Props {
+  frontmatter: CollectionEntry<"api">["data"];
+  headings: MarkdownHeading[];
+  markdown: string;
+  markdownHref: string;
+  previous?: Link;
+  next?: Link;
+}
+
+const { frontmatter, headings, markdown, markdownHref, previous, next } = Astro.props;
+const { title, description, method, path, request, response, status, lastUpdated } = frontmatter;
+---
+
+<DocShell>
+  {
+    method && path ? (
+      <div class="px-4 py-10 sm:px-8 lg:px-12 lg:py-14">
+        <div class="mx-auto w-full max-w-6xl">
+          <DocHeader title={title} description={description} markdown={markdown} markdownHref={markdownHref}>
+            <div class="mt-2 flex min-w-0 items-center gap-3 rounded-xl border border-muted bg-background p-2 pr-4">
+              <MethodBadge method={method} />
+              <code class="truncate font-mono text-sm text-foreground">{path}</code>
+            </div>
+          </DocHeader>
+          <div class="grid gap-12 xl:grid-cols-12">
+            <div class="min-w-0 xl:col-span-7">
+              <Wrapper variant="prose">
+                <slot />
+              </Wrapper>
+            </div>
+            <div class="min-w-0 xl:col-span-5">
+              <div class="xl:sticky xl:top-8">
+                <ApiExamples request={request} response={response} status={status} />
+              </div>
+            </div>
+          </div>
+          <DocFooter lastUpdated={lastUpdated} previous={previous} next={next} />
+        </div>
+      </div>
+    ) : (
+      <div class="flex justify-center gap-16 px-4 py-10 sm:px-8 lg:px-12 lg:py-14">
+        <article class="w-full max-w-2xl min-w-0">
+          <DocHeader title={title} description={description} markdown={markdown} markdownHref={markdownHref} />
+          <Wrapper variant="prose">
+            <slot />
+          </Wrapper>
+          <DocFooter lastUpdated={lastUpdated} previous={previous} next={next} />
+        </article>
+        <DocToc headings={headings} />
+      </div>
+    )
+  }
+</DocShell>

@@ -1,0 +1,50 @@
+---
+title: Create a key
+description: Create an admin or search key, limited to some indexes if you like. The full key is only shown once.
+group: keys
+order: 2
+lastUpdated: 2026-10-08
+method: POST
+path: /v1/keys
+status: 201
+request:
+  curl: |
+    curl https://api.zeroindex.test/v1/keys \
+      -H "Authorization: Bearer $ZEROINDEX_KEY" \
+      -d '{ "name": "Storefront search", "kind": "search", "indexes": ["products"] }'
+  javascript: |
+    const key = await client.keys.create({
+      name: "Storefront search",
+      kind: "search",
+      indexes: ["products"],
+    });
+  python: |
+    key = client.keys.create(name="Storefront search", kind="search", indexes=["products"])
+response: |
+  {
+    "uid": "b3f1c9a2",
+    "name": "Storefront search",
+    "kind": "search",
+    "key": "zi_search_7b1e04d6a3",
+    "indexes": ["products"],
+    "createdAt": "2026-10-08T09:30:11Z"
+  }
+---
+
+Requires an admin key.
+
+<Callout type="warning" title="Save the key now">
+  The response is the only time you see the full key. Store it in your secrets manager before you close the page.
+</Callout>
+
+## Body
+
+<ParamField name="name" type="string" required>
+  A label to recognise the key in the dashboard, like the app that uses it.
+</ParamField>
+<ParamField name="kind" type="admin | search" required>
+  Admin keys can call every endpoint. Search keys can only search.
+</ParamField>
+<ParamField name="indexes" type="string[]" default='["*"]'>
+  The indexes the key can reach.
+</ParamField>

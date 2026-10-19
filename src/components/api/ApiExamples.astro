@@ -1,0 +1,42 @@
+---
+// Components
+import CodeGroup from "@/components/docs/CodeGroup.astro";
+import Badge from "@/components/docs/Badge.astro";
+import CodeSnippet from "@/components/api/CodeSnippet.astro";
+
+interface Props {
+  request?: { curl: string; javascript: string; python: string };
+  response?: string;
+  status: number;
+}
+
+const { request, response, status } = Astro.props;
+---
+
+<div class="flex flex-col gap-6">
+  {
+    request && (
+      <div class="flex flex-col gap-3">
+        <p class="text-sm font-medium text-foreground">Request</p>
+        <CodeGroup labels={["cURL", "JavaScript", "Python"]} class="">
+          <div><CodeSnippet code={request.curl} lang="bash" /></div>
+          <div><CodeSnippet code={request.javascript} lang="js" /></div>
+          <div><CodeSnippet code={request.python} lang="python" /></div>
+        </CodeGroup>
+      </div>
+    )
+  }
+  {
+    response && (
+      <div class="flex flex-col gap-3">
+        <div class="flex items-center gap-2">
+          <p class="text-sm font-medium text-foreground">Response</p>
+          <Badge variant={status < 300 ? "success" : "danger"}>{status}</Badge>
+        </div>
+        <div class="overflow-hidden rounded-xl border border-muted">
+          <CodeSnippet code={response} lang="json" />
+        </div>
+      </div>
+    )
+  }
+</div>

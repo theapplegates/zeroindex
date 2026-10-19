@@ -20,18 +20,5 @@ const props = Astro.props;
 </div>
 
 <script>
-  document.querySelectorAll<HTMLButtonElement>("[data-code-copy]").forEach((button) => {
-    button.addEventListener("click", async () => {
-      const code = button.parentElement?.querySelector("pre")?.innerText ?? "";
-      await navigator.clipboard.writeText(code);
-      const idle = button.querySelector("[data-copy-idle]");
-      const done = button.querySelector("[data-copy-done]");
-      idle?.classList.add("hidden");
-      done?.classList.remove("hidden");
-      setTimeout(() => {
-        idle?.classList.remove("hidden");
-        done?.classList.add("hidden");
-      }, 1500);
-    });
-  });
+  import "@/scripts/copy-code";
 </script>

@@ -1,0 +1,47 @@
+---
+title: Create an index
+description: Create an empty index and choose its primary key before any documents arrive.
+group: indexes
+order: 2
+lastUpdated: 2026-10-12
+method: POST
+path: /v1/indexes
+status: 202
+request:
+  curl: |
+    curl https://api.zeroindex.test/v1/indexes \
+      -H "Authorization: Bearer $ZEROINDEX_KEY" \
+      -d '{ "uid": "products", "primaryKey": "id" }'
+  javascript: |
+    const task = await client.createIndex("products", { primaryKey: "id" });
+  python: |
+    task = client.create_index("products", primary_key="id")
+response: |
+  {
+    "taskUid": 8790,
+    "indexUid": "products",
+    "status": "enqueued",
+    "type": "indexCreation",
+    "enqueuedAt": "2026-10-12T08:01:12Z"
+  }
+---
+
+You only need this endpoint to set the primary key up front. Adding documents to an index that does not exist creates it for you. Requires an admin key.
+
+## Body
+
+<ParamField name="uid" type="string" required>
+  The name of the index. Lowercase letters, numbers, hyphens and underscores, up to 64 characters.
+</ParamField>
+<ParamField name="primaryKey" type="string" default="id">
+  The field that uniquely identifies each document. It cannot be changed once the index has documents.
+</ParamField>
+
+## Errors
+
+<ResponseField name="index_already_exists" type="409">
+  An index with this uid already exists.
+</ResponseField>
+<ResponseField name="invalid_request" type="400">
+  The uid has characters that are not allowed.
+</ResponseField>

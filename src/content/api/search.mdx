@@ -1,0 +1,97 @@
+---
+title: Search
+description: Search an index and get ranked, typo tolerant results, with optional filters, facets and highlights.
+group: search
+order: 1
+lastUpdated: 2026-10-16
+method: POST
+path: /v1/indexes/{uid}/search
+request:
+  curl: |
+    curl https://api.zeroindex.test/v1/indexes/products/search \
+      -H "Authorization: Bearer $ZEROINDEX_KEY" \
+      -d '{
+        "q": "wireless hedphones",
+        "filter": "in_stock = true",
+        "limit": 2
+      }'
+  javascript: |
+    const results = await client.index("products").search("wireless hedphones", {
+      filter: "in_stock = true",
+      limit: 2,
+    });
+  python: |
+    results = client.index("products").search("wireless hedphones", {
+        "filter": "in_stock = true",
+        "limit": 2,
+    })
+response: |
+  {
+    "hits": [
+      {
+        "id": 1042,
+        "name": "Wireless headphones",
+        "price": 99,
+        "_formatted": { "name": "<mark>Wireless</mark> <mark>headphones</mark>" }
+      },
+      {
+        "id": 1187,
+        "name": "Wireless earbuds",
+        "price": 79,
+        "_formatted": { "name": "<mark>Wireless</mark> earbuds" }
+      }
+    ],
+    "query": "wireless hedphones",
+    "estimatedTotalHits": 24,
+    "limit": 2,
+    "offset": 0,
+    "processingTimeMs": 4
+  }
+---
+
+Works with admin keys and search keys. A scoped search key adds its own filter to every query.
+
+## Path parameters
+
+<ParamField name="uid" type="string" required>
+  The name of the index.
+</ParamField>
+
+## Body
+
+<ParamField name="q" type="string" default='""'>
+  The query. An empty query returns every document, ranked.
+</ParamField>
+<ParamField name="filter" type="string">
+  Only return documents that match. See [Filters](/docs/concepts/filters).
+</ParamField>
+<ParamField name="sort" type="string[]">
+  Sort by fields instead of relevance, like `["price:asc"]`.
+</ParamField>
+<ParamField name="facets" type="string[]">
+  Fields to count values for. See [Faceted search](/docs/guides/faceted-search).
+</ParamField>
+<ParamField name="limit" type="integer" default="20">
+  How many hits to return, up to 1,000.
+</ParamField>
+<ParamField name="offset" type="integer" default="0">
+  How many hits to skip.
+</ParamField>
+<ParamField name="attributesToHighlight" type="string[]">
+  Fields to return in `_formatted` with matching words wrapped in `<mark>`.
+</ParamField>
+
+## Response
+
+<ResponseField name="hits" type="object[]">
+  The matching documents, best first.
+</ResponseField>
+<ResponseField name="estimatedTotalHits" type="integer">
+  About how many documents match. Exact up to 1,000.
+</ResponseField>
+<ResponseField name="facetDistribution" type="object">
+  Counts for each facet value, when you ask for facets.
+</ResponseField>
+<ResponseField name="processingTimeMs" type="integer">
+  How long the search took on the server.
+</ResponseField>

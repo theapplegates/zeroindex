@@ -1,0 +1,64 @@
+---
+title: Add or replace documents
+description: Add documents to an index. Documents with an existing primary key are replaced in full.
+group: documents
+order: 1
+lastUpdated: 2026-10-14
+method: POST
+path: /v1/indexes/{uid}/documents
+status: 202
+request:
+  curl: |
+    curl https://api.zeroindex.test/v1/indexes/products/documents \
+      -H "Authorization: Bearer $ZEROINDEX_KEY" \
+      -d '[
+        { "id": 1042, "name": "Wireless headphones", "price": 129 },
+        { "id": 1043, "name": "Desk lamp", "price": 59 }
+      ]'
+  javascript: |
+    const task = await client.index("products").addDocuments([
+      { id: 1042, name: "Wireless headphones", price: 129 },
+      { id: 1043, name: "Desk lamp", price: 59 },
+    ]);
+  python: |
+    task = client.index("products").add_documents([
+        {"id": 1042, "name": "Wireless headphones", "price": 129},
+        {"id": 1043, "name": "Desk lamp", "price": 59},
+    ])
+response: |
+  {
+    "taskUid": 8812,
+    "indexUid": "products",
+    "status": "enqueued",
+    "type": "documentAdditionOrUpdate",
+    "enqueuedAt": "2026-10-14T09:14:02Z"
+  }
+---
+
+If the index does not exist, it is created with the default settings. Requires an admin key.
+
+## Path parameters
+
+<ParamField name="uid" type="string" required>
+  The name of the index.
+</ParamField>
+
+## Body
+
+An array of documents, up to 1,000 documents or 10 MB per request.
+
+<ParamField name="[].id" type="string | integer" required>
+  The primary key. Use the field name you chose for the index if it is not `id`.
+</ParamField>
+<ParamField name="[].*" type="any">
+  Any other fields. Nested objects are flattened, so `dimensions.width` becomes its own field.
+</ParamField>
+
+## Errors
+
+<ResponseField name="payload_too_large" type="413">
+  The request is over 10 MB. Split the documents into smaller batches.
+</ResponseField>
+<ResponseField name="invalid_request" type="400">
+  The body is not an array, or a document has no primary key.
+</ResponseField>

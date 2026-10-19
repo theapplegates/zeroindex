@@ -13,6 +13,23 @@ const docs = defineCollection({
   }),
 });
 
+const api = defineCollection({
+  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/api" }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    group: z.enum(["overview", "indexes", "documents", "search", "keys"]),
+    order: z.number(),
+    lastUpdated: z.date(),
+    method: z.enum(["GET", "POST", "PATCH", "DELETE"]).optional(),
+    path: z.string().optional(),
+    request: z.object({ curl: z.string(), javascript: z.string(), python: z.string() }).optional(),
+    response: z.string().optional(),
+    status: z.number().default(200),
+  }),
+});
+
 export const collections = {
   docs,
+  api,
 };

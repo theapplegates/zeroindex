@@ -24,4 +24,5 @@ const { title, description, markdown, markdownHref } = Astro.props;
   <Text tag="p" variant="textLG" class="text-pretty text-muted-foreground">
     {description}
   </Text>
+  <slot />
 </header>

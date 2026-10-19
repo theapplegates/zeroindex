@@ -1,0 +1,30 @@
+---
+title: Delete a key
+description: Revoke a key. Requests made with it fail straight away.
+group: keys
+order: 3
+lastUpdated: 2026-10-08
+method: DELETE
+path: /v1/keys/{uid}
+status: 204
+request:
+  curl: |
+    curl -X DELETE https://api.zeroindex.test/v1/keys/b3f1c9a2 \
+      -H "Authorization: Bearer $ZEROINDEX_KEY"
+  javascript: |
+    await client.keys.delete("b3f1c9a2");
+  python: |
+    client.keys.delete("b3f1c9a2")
+---
+
+Returns `204 No Content`. Requires an admin key.
+
+## Path parameters
+
+<ParamField name="uid" type="string" required>
+  The id of the key, from [List keys](/api/list-keys). Not the key itself.
+</ParamField>
+
+<Callout type="tip" title="Rotating without downtime">
+  Create the new key, deploy it everywhere, check that `lastUsedAt` on the old key stops moving, then delete the old one.
+</Callout>

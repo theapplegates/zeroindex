@@ -1,6 +1,6 @@
 ---
 interface Props {
-  variant?: "muted" | "accent" | "danger" | "outline";
+  variant?: "muted" | "accent" | "success" | "danger" | "outline";
   class?: string;
 }
 
@@ -8,6 +8,7 @@ const { variant = "muted", class: className } = Astro.props;
 const variants = {
   muted: "bg-muted text-foreground",
   accent: "bg-accent/20 text-foreground",
+  success: "bg-success/15 text-foreground",
   danger: "bg-danger/10 text-danger",
   outline: "border border-muted text-muted-foreground",
 };

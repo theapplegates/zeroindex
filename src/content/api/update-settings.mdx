@@ -1,0 +1,65 @@
+---
+title: Update settings
+description: Change what is searchable, filterable and sortable in an index, and how results are ranked.
+group: indexes
+order: 3
+lastUpdated: 2026-10-13
+method: PATCH
+path: /v1/indexes/{uid}/settings
+status: 202
+request:
+  curl: |
+    curl -X PATCH https://api.zeroindex.test/v1/indexes/products/settings \
+      -H "Authorization: Bearer $ZEROINDEX_KEY" \
+      -d '{
+        "searchableAttributes": ["name", "brand", "description"],
+        "filterableAttributes": ["category", "price", "in_stock"]
+      }'
+  javascript: |
+    const task = await client.index("products").updateSettings({
+      searchableAttributes: ["name", "brand", "description"],
+      filterableAttributes: ["category", "price", "in_stock"],
+    });
+  python: |
+    task = client.index("products").update_settings({
+        "searchableAttributes": ["name", "brand", "description"],
+        "filterableAttributes": ["category", "price", "in_stock"],
+    })
+response: |
+  {
+    "taskUid": 8801,
+    "indexUid": "products",
+    "status": "enqueued",
+    "type": "settingsUpdate",
+    "enqueuedAt": "2026-10-13T11:42:57Z"
+  }
+---
+
+Only the settings you send change. The index is rebuilt in the background, and searches use the old settings until the new ones are ready. Requires an admin key.
+
+## Path parameters
+
+<ParamField name="uid" type="string" required>
+  The name of the index.
+</ParamField>
+
+## Body
+
+<ParamField name="searchableAttributes" type="string[]">
+  The fields queries match against, most important first. Send `["*"]` to search every field.
+</ParamField>
+<ParamField name="filterableAttributes" type="string[]">
+  The fields you can use in filters and facets.
+</ParamField>
+<ParamField name="sortableAttributes" type="string[]">
+  The fields you can sort results by.
+</ParamField>
+<ParamField name="rankingRules" type="string[]">
+  The order of the ranking rules. See [Ranking](/docs/concepts/ranking).
+</ParamField>
+<ParamField name="synonyms" type="object">
+  Words that should match each other, like `{ "phone": ["mobile", "cell"] }`.
+</ParamField>
+<ParamField name="typoTolerance" type="object">
+  Word lengths for one and two typos, and fields where typos are turned off.
+</ParamField>

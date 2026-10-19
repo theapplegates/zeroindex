@@ -1,31 +1,47 @@
 ---
 // Content
 import { getDocGroups, docHref } from "@/lib/docs";
+import { getEndpointGroups, apiHref } from "@/lib/api";
 
-const groups = await getDocGroups();
+interface Item {
+  title: string;
+  href: string;
+  method?: string;
+}
+
 const current = Astro.url.pathname.replace(/\/$/, "");
+const isApi = current.startsWith("/api");
+const groups: { label: string; items: Item[] }[] = isApi
+  ? (await getEndpointGroups()).map((group) => ({
+      label: group.label,
+      items: group.endpoints.map((entry) => ({ title: entry.data.title, href: apiHref(entry.id), method: entry.data.method })),
+    }))
+  : (await getDocGroups()).map((group) => ({
+      label: group.label,
+      items: group.docs.map((doc) => ({ title: doc.data.title, href: docHref(doc.id) })),
+    }));
 ---
 
-<nav class="flex flex-col gap-6" aria-label="Docs">
+<nav class="flex flex-col gap-6" aria-label={isApi ? "API reference" : "Docs"}>
   {
     groups.map((group) => (
       <div class="flex flex-col gap-1">
         <p class="px-3 pb-1 text-sm font-medium text-foreground">{group.label}</p>
         <ul class="flex flex-col gap-0.5">
-          {group.docs.map((doc) => {
-            const href = docHref(doc.id);
-            const active = current === href;
+          {group.items.map((item) => {
+            const active = current === item.href;
             return (
               <li>
                 <a
-                  href={href}
+                  href={item.href}
                   aria-current={active ? "page" : undefined}
                   class:list={[
-                    "block rounded-lg px-3 py-1.5 text-sm transition-colors duration-200",
+                    "flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm transition-colors duration-200",
                     active ? "bg-accent/15 font-medium text-foreground" : "text-muted-foreground hover:text-foreground",
                   ]}
                 >
-                  {doc.data.title}
+                  {item.method && <span class="w-12 shrink-0 font-mono text-xs text-muted-foreground">{item.method}</span>}
+                  {item.title}
                 </a>
               </li>
             );

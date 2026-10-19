@@ -1,0 +1,69 @@
+---
+title: Introduction
+description: The ZeroIndex REST API. Every endpoint takes and returns JSON, and every request is authenticated with a key.
+group: overview
+order: 1
+lastUpdated: 2026-10-15
+---
+
+Use the API directly from any language, or through one of the official SDKs, which wrap the same endpoints. Every example in this reference shows cURL, JavaScript and Python.
+
+## Base URL
+
+```bash
+https://api.zeroindex.test/v1
+```
+
+Requests go to the region your project lives in. You can find your project's URL in the dashboard under **Settings**.
+
+## Authentication
+
+Send an API key as a bearer token in the `Authorization` header. Admin keys can call every endpoint. Search keys can only call the search endpoints. Read more in [Authentication](/docs/getting-started/authentication).
+
+```bash
+curl https://api.zeroindex.test/v1/indexes \
+  -H "Authorization: Bearer $ZEROINDEX_KEY"
+```
+
+## Asynchronous writes
+
+Endpoints that change data return `202 Accepted` with a task instead of waiting for the change to finish. The change is searchable once the task succeeds, usually in under a second.
+
+```json
+{
+  "taskUid": 8812,
+  "indexUid": "products",
+  "status": "enqueued",
+  "type": "documentAdditionOrUpdate",
+  "enqueuedAt": "2026-10-15T09:14:02Z"
+}
+```
+
+## Pagination
+
+List endpoints take `limit` and `offset` query parameters and return the total alongside the results.
+
+<ParamField name="limit" type="integer" default="20">
+  How many results to return, from 1 to 100.
+</ParamField>
+<ParamField name="offset" type="integer" default="0">
+  How many results to skip.
+</ParamField>
+
+## Rate limits
+
+| Key | Limit |
+| --- | --- |
+| Search key | 1,000 requests per second |
+| Admin key | 100 requests per second |
+
+When you go over a limit, the API answers with `429` and a `Retry-After` header that says how many seconds to wait.
+
+<CardGroup cols={2}>
+  <Card title="Errors" icon="flash" href="/api/errors">
+    Every error code and what to do about it.
+  </Card>
+  <Card title="Search" icon="search" href="/api/search">
+    The endpoint you will call most.
+  </Card>
+</CardGroup>

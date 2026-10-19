@@ -1,0 +1,41 @@
+---
+title: Delete a document
+description: Remove one document from an index by its primary key.
+group: documents
+order: 4
+lastUpdated: 2026-10-14
+method: DELETE
+path: /v1/indexes/{uid}/documents/{id}
+status: 202
+request:
+  curl: |
+    curl -X DELETE https://api.zeroindex.test/v1/indexes/products/documents/1042 \
+      -H "Authorization: Bearer $ZEROINDEX_KEY"
+  javascript: |
+    const task = await client.index("products").deleteDocument(1042);
+  python: |
+    task = client.index("products").delete_document(1042)
+response: |
+  {
+    "taskUid": 8820,
+    "indexUid": "products",
+    "status": "enqueued",
+    "type": "documentDeletion",
+    "enqueuedAt": "2026-10-14T10:02:18Z"
+  }
+---
+
+Deleting a document that does not exist still succeeds, so you can safely retry. Requires an admin key.
+
+## Path parameters
+
+<ParamField name="uid" type="string" required>
+  The name of the index.
+</ParamField>
+<ParamField name="id" type="string | integer" required>
+  The primary key of the document to delete.
+</ParamField>
+
+<Callout type="note">
+  To delete many documents at once, send `POST /v1/indexes/{uid}/documents/delete` with a list of ids or a filter.
+</Callout>

@@ -17,6 +17,7 @@ export default defineConfig({
   },
   redirects: {
     "/docs": "/docs/getting-started/introduction",
+    "/api": "/api/introduction",
   },
   site: "https://yourwebsite.com",
   integrations: [sitemap(), mdx()],

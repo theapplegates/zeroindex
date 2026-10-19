@@ -1,0 +1,50 @@
+---
+title: Get a document
+description: Return one document by its primary key, exactly as it is stored in the index.
+group: documents
+order: 3
+lastUpdated: 2026-10-14
+method: GET
+path: /v1/indexes/{uid}/documents/{id}
+request:
+  curl: |
+    curl https://api.zeroindex.test/v1/indexes/products/documents/1042 \
+      -H "Authorization: Bearer $ZEROINDEX_KEY"
+  javascript: |
+    const product = await client.index("products").getDocument(1042);
+  python: |
+    product = client.index("products").get_document(1042)
+response: |
+  {
+    "id": 1042,
+    "name": "Wireless headphones",
+    "brand": "Vesterlund",
+    "category": "Audio",
+    "price": 99,
+    "in_stock": true,
+    "tags": ["bluetooth", "noise cancelling"]
+  }
+---
+
+Useful to check what the index holds after a sync. Requires an admin key.
+
+## Path parameters
+
+<ParamField name="uid" type="string" required>
+  The name of the index.
+</ParamField>
+<ParamField name="id" type="string | integer" required>
+  The primary key of the document.
+</ParamField>
+
+## Query parameters
+
+<ParamField name="fields" type="string">
+  A comma separated list of fields to return, like `name,price`. Returns every field by default.
+</ParamField>
+
+## Errors
+
+<ResponseField name="document_not_found" type="404">
+  No document in the index has this primary key.
+</ResponseField>

@@ -1,0 +1,58 @@
+---
+title: List keys
+description: Return every API key in the project, with what each one can do and when it was last used.
+group: keys
+order: 1
+lastUpdated: 2026-10-08
+method: GET
+path: /v1/keys
+request:
+  curl: |
+    curl https://api.zeroindex.test/v1/keys \
+      -H "Authorization: Bearer $ZEROINDEX_KEY"
+  javascript: |
+    const { results } = await client.keys.list();
+  python: |
+    keys = client.keys.list()
+response: |
+  {
+    "results": [
+      {
+        "uid": "b3f1c9a2",
+        "name": "Storefront search",
+        "kind": "search",
+        "key": "zi_search_7b1e…",
+        "indexes": ["products"],
+        "lastUsedAt": "2026-10-08T21:13:40Z",
+        "createdAt": "2026-08-02T10:25:00Z"
+      },
+      {
+        "uid": "4e07d6b8",
+        "name": "Sync worker",
+        "kind": "admin",
+        "key": "zi_admin_4f8a…",
+        "indexes": ["*"],
+        "lastUsedAt": "2026-10-08T21:14:02Z",
+        "createdAt": "2026-08-02T10:24:12Z"
+      }
+    ],
+    "total": 2
+  }
+---
+
+Keys are shown shortened. The full key is only returned once, when you create it. Requires an admin key.
+
+## Response
+
+<ResponseField name="results[].uid" type="string">
+  The id of the key, used to delete it.
+</ResponseField>
+<ResponseField name="results[].kind" type="admin | search">
+  What the key can do.
+</ResponseField>
+<ResponseField name="results[].indexes" type="string[]">
+  The indexes the key can reach. `*` means every index.
+</ResponseField>
+<ResponseField name="results[].lastUsedAt" type="string | null">
+  When the key last made a request. Useful to find keys that are safe to revoke.
+</ResponseField>

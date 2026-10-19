@@ -1,0 +1,13 @@
+---
+// Components
+import Badge from "@/components/docs/Badge.astro";
+
+interface Props {
+  method: "GET" | "POST" | "PATCH" | "DELETE";
+}
+
+const { method } = Astro.props;
+const variants = { GET: "success", POST: "accent", PATCH: "muted", DELETE: "danger" } as const;
+---
+
+<Badge variant={variants[method]} class="font-mono">{method}</Badge>

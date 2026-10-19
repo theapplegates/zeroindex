@@ -1,0 +1,39 @@
+---
+title: Swap indexes
+description: Swap the documents and settings of two indexes in one step, to replace a live index without downtime.
+group: indexes
+order: 5
+lastUpdated: 2026-10-17
+method: POST
+path: /v1/swap-indexes
+status: 202
+request:
+  curl: |
+    curl https://api.zeroindex.test/v1/swap-indexes \
+      -H "Authorization: Bearer $ZEROINDEX_KEY" \
+      -d '[{ "indexes": ["products", "products_new"] }]'
+  javascript: |
+    const task = await client.swapIndexes([{ indexes: ["products", "products_new"] }]);
+  python: |
+    task = client.swap_indexes([{"indexes": ["products", "products_new"]}])
+response: |
+  {
+    "taskUid": 8840,
+    "indexUid": null,
+    "status": "enqueued",
+    "type": "indexSwap",
+    "enqueuedAt": "2026-10-17T07:58:30Z"
+  }
+---
+
+Build the new version in a separate index, then swap. Searches move over in one step, so users never see empty or half imported results. See [Syncing a database](/docs/guides/syncing-a-database). Requires an admin key.
+
+## Body
+
+<ParamField name="[].indexes" type="string[2]" required>
+  The two indexes to swap. Send several pairs to swap them all in one task.
+</ParamField>
+
+<Callout type="note">
+  Both indexes must exist. After the swap, the second index holds the old documents, so you can swap back if something is wrong.
+</Callout>

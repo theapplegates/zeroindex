@@ -2,22 +2,34 @@
 // Content
 import { render } from "astro:content";
 import { getDocs, docHref, categories } from "@/lib/docs";
+import { getEndpoints, apiHref, groups } from "@/lib/api";
 // Icons
 import Search from "@/components/fundations/icons/Search.astro";
 
 const docs = await getDocs();
-const index = await Promise.all(
-  docs.map(async (doc) => {
-    const { headings } = await render(doc);
-    return {
+const endpoints = await getEndpoints();
+const headingsOf = async (entry: Parameters<typeof render>[0]) =>
+  (await render(entry)).headings.filter((heading) => heading.depth <= 3).map((heading) => heading.text);
+const index = [
+  ...(await Promise.all(
+    docs.map(async (doc) => ({
       title: doc.data.title,
       description: doc.data.description,
       category: categories.find((category) => category.id === doc.data.category)?.label ?? "",
       href: docHref(doc.id),
-      headings: headings.filter((heading) => heading.depth <= 3).map((heading) => heading.text),
-    };
-  }),
-);
+      headings: await headingsOf(doc),
+    })),
+  )),
+  ...(await Promise.all(
+    endpoints.map(async (entry) => ({
+      title: entry.data.title,
+      description: entry.data.method ? `${entry.data.method} ${entry.data.path}` : entry.data.description,
+      category: `API ${groups.find((group) => group.id === entry.data.group)?.label.toLowerCase() ?? ""}`,
+      href: apiHref(entry.id),
+      headings: await headingsOf(entry),
+    })),
+  )),
+];
 ---
 
 <dialog

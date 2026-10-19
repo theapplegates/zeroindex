@@ -1,0 +1,48 @@
+---
+title: Update documents
+description: Change some fields of existing documents. Fields you leave out keep their current value.
+group: documents
+order: 2
+lastUpdated: 2026-10-14
+method: PATCH
+path: /v1/indexes/{uid}/documents
+status: 202
+request:
+  curl: |
+    curl -X PATCH https://api.zeroindex.test/v1/indexes/products/documents \
+      -H "Authorization: Bearer $ZEROINDEX_KEY" \
+      -d '[{ "id": 1042, "price": 99 }]'
+  javascript: |
+    const task = await client.index("products").updateDocuments([{ id: 1042, price: 99 }]);
+  python: |
+    task = client.index("products").update_documents([{"id": 1042, "price": 99}])
+response: |
+  {
+    "taskUid": 8813,
+    "indexUid": "products",
+    "status": "enqueued",
+    "type": "documentAdditionOrUpdate",
+    "enqueuedAt": "2026-10-14T09:15:40Z"
+  }
+---
+
+A document whose primary key does not exist yet is added as sent. Requires an admin key.
+
+## Path parameters
+
+<ParamField name="uid" type="string" required>
+  The name of the index.
+</ParamField>
+
+## Body
+
+<ParamField name="[].id" type="string | integer" required>
+  The primary key of the document to update.
+</ParamField>
+<ParamField name="[].*" type="any">
+  The fields to change. Send `null` to remove a field.
+</ParamField>
+
+<Callout type="tip">
+  Updating a price or a stock count is the most common write in a shop. Send only those fields, and the request stays small even for thousands of products.
+</Callout>

@@ -1,0 +1,66 @@
+---
+title: Multi search
+description: Run several searches in one request, across one index or many, and get every result set back together.
+group: search
+order: 2
+lastUpdated: 2026-10-16
+method: POST
+path: /v1/multi-search
+request:
+  curl: |
+    curl https://api.zeroindex.test/v1/multi-search \
+      -H "Authorization: Bearer $ZEROINDEX_KEY" \
+      -d '{
+        "queries": [
+          { "indexUid": "products", "q": "lamp", "limit": 3 },
+          { "indexUid": "articles", "q": "lamp", "limit": 2 }
+        ]
+      }'
+  javascript: |
+    const { results } = await client.multiSearch({
+      queries: [
+        { indexUid: "products", q: "lamp", limit: 3 },
+        { indexUid: "articles", q: "lamp", limit: 2 },
+      ],
+    });
+  python: |
+    results = client.multi_search([
+        {"indexUid": "products", "q": "lamp", "limit": 3},
+        {"indexUid": "articles", "q": "lamp", "limit": 2},
+    ])
+response: |
+  {
+    "results": [
+      {
+        "indexUid": "products",
+        "hits": [{ "id": 1043, "name": "Desk lamp" }],
+        "estimatedTotalHits": 9,
+        "processingTimeMs": 3
+      },
+      {
+        "indexUid": "articles",
+        "hits": [{ "slug": "lighting-a-small-office", "title": "Lighting a small office" }],
+        "estimatedTotalHits": 2,
+        "processingTimeMs": 2
+      }
+    ]
+  }
+---
+
+Use it for a search page that shows products and articles side by side, or to count facets with and without a filter in one round trip. Works with admin keys and search keys.
+
+## Body
+
+<ParamField name="queries" type="object[]" required>
+  Up to 10 searches. Each takes `indexUid` plus any parameter from [Search](/api/search).
+</ParamField>
+
+## Response
+
+<ResponseField name="results" type="object[]">
+  One result set per query, in the order you sent them.
+</ResponseField>
+
+<Callout type="note">
+  If one query fails, the whole request fails with that query's error, so you never show half a page.
+</Callout>

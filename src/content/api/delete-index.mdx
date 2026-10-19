@@ -1,0 +1,44 @@
+---
+title: Delete an index
+description: Delete an index with all of its documents and settings.
+group: indexes
+order: 4
+lastUpdated: 2026-10-12
+method: DELETE
+path: /v1/indexes/{uid}
+status: 202
+request:
+  curl: |
+    curl -X DELETE https://api.zeroindex.test/v1/indexes/products_old \
+      -H "Authorization: Bearer $ZEROINDEX_KEY"
+  javascript: |
+    const task = await client.deleteIndex("products_old");
+  python: |
+    task = client.delete_index("products_old")
+response: |
+  {
+    "taskUid": 8815,
+    "indexUid": "products_old",
+    "status": "enqueued",
+    "type": "indexDeletion",
+    "enqueuedAt": "2026-10-12T14:20:05Z"
+  }
+---
+
+Requires an admin key.
+
+<Callout type="danger" title="This cannot be undone">
+  The documents are gone once the task succeeds. Export them first if you might need them again.
+</Callout>
+
+## Path parameters
+
+<ParamField name="uid" type="string" required>
+  The name of the index to delete.
+</ParamField>
+
+## Errors
+
+<ResponseField name="index_not_found" type="404">
+  No index has this uid.
+</ResponseField>

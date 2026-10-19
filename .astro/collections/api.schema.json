@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "group": {
+      "type": "string",
+      "enum": [
+        "overview",
+        "indexes",
+        "documents",
+        "search",
+        "keys"
+      ]
+    },
+    "order": {
+      "type": "number"
+    },
+    "lastUpdated": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "method": {
+      "type": "string",
+      "enum": [
+        "GET",
+        "POST",
+        "PATCH",
+        "DELETE"
+      ]
+    },
+    "path": {
+      "type": "string"
+    },
+    "request": {
+      "type": "object",
+      "properties": {
+        "curl": {
+          "type": "string"
+        },
+        "javascript": {
+          "type": "string"
+        },
+        "python": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "curl",
+        "javascript",
+        "python"
+      ]
+    },
+    "response": {
+      "type": "string"
+    },
+    "status": {
+      "default": 200,
+      "type": "number"
+    },
+    "$schema": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title",
+    "description",
+    "group",
+    "order",
+    "lastUpdated"
+  ]
+}

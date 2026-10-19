@@ -1,0 +1,17 @@
+---
+// Fundations
+import BaseLayout from "@/layouts/BaseLayout.astro";
+// Components
+import Sidebar from "@/components/global/Sidebar.astro";
+---
+
+<BaseLayout hideFooter={true} app={true}>
+  <div class="flex grow lg:min-h-0">
+    <Sidebar />
+    <div class="min-w-0 grow lg:pr-2 lg:pb-2">
+      <div class="bg-surface lg:h-full lg:overflow-y-auto lg:rounded-2xl lg:border lg:border-muted" data-scroll-wrapper>
+        <slot />
+      </div>
+    </div>
+  </div>
+</BaseLayout>

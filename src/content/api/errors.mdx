@@ -1,0 +1,52 @@
+---
+title: Errors
+description: Every error has an HTTP status, a stable code you can check in your app and a message written for people.
+group: overview
+order: 2
+lastUpdated: 2026-10-15
+---
+
+When a request fails, the API answers with a status of `400` or above and a JSON body. Check `code` in your app, because it never changes. The `message` may be reworded over time.
+
+```json
+{
+  "status": 400,
+  "code": "invalid_filter",
+  "message": "Attribute `colour` is not filterable. Add it to filterableAttributes first.",
+  "link": "https://api.zeroindex.test/docs/errors#invalid_filter"
+}
+```
+
+<ResponseField name="status" type="integer">
+  The HTTP status, repeated in the body.
+</ResponseField>
+<ResponseField name="code" type="string">
+  A stable error code from the table below.
+</ResponseField>
+<ResponseField name="message" type="string">
+  What went wrong, and how to fix it when there is a fix.
+</ResponseField>
+<ResponseField name="link" type="string">
+  A link to this page, anchored to the code.
+</ResponseField>
+
+## Error codes
+
+| Status | Code | Meaning |
+| --- | --- | --- |
+| 400 | `invalid_request` | The body is not valid JSON, or a field has the wrong type. |
+| 400 | `invalid_filter` | The filter has a syntax error or uses a field that is not filterable. |
+| 400 | `invalid_sort` | The sort uses a field that is not in `sortableAttributes`. |
+| 401 | `missing_key` | The `Authorization` header is missing. |
+| 403 | `invalid_key` | The key does not exist, has been revoked or has expired. |
+| 403 | `key_not_allowed` | The key cannot call this endpoint, for example a search key adding documents. |
+| 404 | `index_not_found` | No index has this uid. |
+| 404 | `document_not_found` | No document in the index has this primary key. |
+| 409 | `index_already_exists` | An index with this uid already exists. |
+| 413 | `payload_too_large` | The request is over 10 MB. Split it into smaller batches. |
+| 429 | `rate_limited` | Too many requests. Wait for the seconds in `Retry-After`. |
+| 500 | `internal_error` | Something broke on our side. Retry with backoff, and check the [status page](/status). |
+
+<Callout type="tip" title="Retrying">
+  Retry `429` and `500` errors with exponential backoff. Never retry `4xx` errors other than `429`: the same request will fail the same way.
+</Callout>
