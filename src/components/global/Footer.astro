@@ -2,6 +2,8 @@
 // Fundations
 import Text from "@/components/fundations/elements/Text.astro";
 import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Components
+import ThemeToggle from "@/components/global/ThemeToggle.astro";
 
 const links = [
   { label: "License", href: "https://lexingtonthemes.com/legal/license" },
@@ -13,14 +15,17 @@ const links = [
   <Wrapper variant="standard" class="py-12">
     <div class="flex flex-wrap items-center justify-between gap-4 border-t border-muted pt-6">
       <Text tag="p" variant="textSM" class="text-muted-foreground">© {new Date().getFullYear()} ZeroIndex</Text>
-      <div class="flex gap-4">
-        {
+      <div class="flex items-center gap-6">
+        <div class="flex gap-4">
+          {
           links.map((link) => (
             <Text tag="a" href={link.href} variant="textSM" class="text-muted-foreground transition-colors duration-200 hover:text-foreground">
               {link.label}
             </Text>
           ))
-        }
+          }
+        </div>
+        <ThemeToggle />
       </div>
     </div>
   </Wrapper>
