@@ -1,19 +1,10 @@
 ---
 // Fundations
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import Text from "@/components/fundations/elements/Text.astro";
-import Button from "@/components/fundations/elements/Button.astro";
-import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Components
+import NotFound from "@/components/notfound/NotFound.astro";
 ---
-<BaseLayout hideNavigation={true} hideFooter={true}>
-  <section>
-    <Wrapper variant="standard">
-      <Text tag="h1" variant="textLG">
-        404
-      </Text>
-      <Button isLink={true} href="/" size="xs" variant="muted">
-        Go back gome
-      </Button>
-    </Wrapper>
-  </section>
+
+<BaseLayout>
+  <NotFound />
 </BaseLayout>
