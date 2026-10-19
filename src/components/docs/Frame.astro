@@ -10,7 +10,7 @@ const { src, alt, darkSrc, caption } = Astro.props;
 ---
 
 <figure class="not-prose my-6">
-    <img src={src} alt={alt} loading="lazy" decoding="async" class:list={["w-full rounded-xl border border-muted", darkSrc && "dark:hidden"]} />
-    {darkSrc && <img src={darkSrc} alt={alt} loading="lazy" decoding="async" class="hidden w-full rounded-xl border border-muted dark:block" />}
+  <img src={src} alt={alt} loading="lazy" decoding="async" class:list={["w-full rounded-xl border border-muted", darkSrc && "dark:hidden"]} />
+  {darkSrc && <img src={darkSrc} alt={alt} loading="lazy" decoding="async" class="hidden w-full rounded-xl border border-muted dark:block" />}
   {caption && <figcaption class="mt-3 text-center text-sm text-muted-foreground">{caption}</figcaption>}
 </figure>
