@@ -3,45 +3,20 @@
 import ClaudeLogo from "@/components/fundations/icons/ClaudeLogo.astro";
 import CursorLogo from "@/components/fundations/icons/CursorLogo.astro";
 import CodexLogo from "@/components/fundations/icons/CodexLogo.astro";
-import Copy from "@/components/fundations/icons/Copy.astro";
-import Check from "@/components/fundations/icons/Check.astro";
 
 const prompt = "Add ZeroIndex search to my app: zeroindex.test/SKILL.md";
 const agents = [ClaudeLogo, CursorLogo, CodexLogo];
 ---
 
-<div class="flex w-fit max-w-full items-center gap-3 rounded-xl border border-muted bg-surface p-1.5" data-hero-prompt>
-  <div class="flex shrink-0 gap-1" aria-hidden="true">
+<div class="flex w-fit max-w-full items-center gap-3 rounded-lg border border-muted bg-surface p-1 pr-4">
+  <div class="flex shrink-0 -space-x-1.5" aria-hidden="true">
     {
       agents.map((Icon) => (
-        <span class="flex size-8 items-center justify-center rounded-md bg-background text-foreground">
-          <Icon size="sm" />
+        <span class="flex size-7 items-center justify-center rounded-sm border-2 border-surface bg-background text-foreground">
+          <Icon size="xs" />
         </span>
       ))
     }
   </div>
-  <code class="truncate font-mono text-sm text-foreground" data-hero-prompt-text>{prompt}</code>
-  <button
-    type="button"
-    class="flex size-8 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors duration-200 hover:bg-muted hover:text-foreground"
-    aria-label="Copy prompt"
-    data-hero-prompt-copy
-  >
-    <Copy size="sm" data-copy-idle />
-    <Check size="sm" class="hidden" data-copy-done />
-  </button>
+  <code class="truncate font-mono text-sm text-foreground">{prompt}</code>
 </div>
-
-<script>
-  const root = document.querySelector<HTMLElement>("[data-hero-prompt]");
-  const button = root?.querySelector<HTMLButtonElement>("[data-hero-prompt-copy]");
-  button?.addEventListener("click", async () => {
-    await navigator.clipboard.writeText(root?.querySelector("[data-hero-prompt-text]")?.textContent ?? "");
-    button.querySelector("[data-copy-idle]")?.classList.add("hidden");
-    button.querySelector("[data-copy-done]")?.classList.remove("hidden");
-    setTimeout(() => {
-      button.querySelector("[data-copy-idle]")?.classList.remove("hidden");
-      button.querySelector("[data-copy-done]")?.classList.add("hidden");
-    }, 1600);
-  });
-</script>
