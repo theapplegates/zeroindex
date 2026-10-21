@@ -1,0 +1,36 @@
+---
+title: Responsive JXL, AVIF and WebP images with Cloudinary
+description: Serve JPEG XL first, with AVIF and WebP fallbacks, using a reusable Astro picture component.
+date: 2024-12-15
+tags: ["cloudinary", "performance", "astro"]
+cover: images/blog/Gulfstream-G800
+coverAlt: A Gulfstream G800 in flight
+---
+
+This template asks Cloudinary for three explicit image formats. The browser chooses the first format it supports, in this order: **JXL, then AVIF, then WebP**.
+
+## Format selection with picture
+
+Each `CloudinaryImage` component renders a `<picture>` containing `image/jxl`, `image/avif` and `image/webp` sources. Every source has its own responsive `srcset` and the same `sizes` hint. The final `<img>` uses WebP for both `src` and `srcset`.
+
+A browser that supports JPEG XL selects the first source. Otherwise it tries AVIF, then WebP. This is format capability selection. An HTTP error at a selected source does not automatically retry the next format.
+
+<PostImage publicId="images/blog/ernesto-samaniego-86yrou4EYco-unsplash" alt="A cold drink on a bright day" caption="The same photograph, one request, three possible formats" />
+
+## Quality and crop
+
+Each URL uses an explicit `f_jxl`, `f_avif` or `f_webp`, alongside `q_auto` for quality. Actual file sizes depend on the photograph, dimensions and encoder output.
+
+The component scales the crop height with each candidate width. A 16:9 cover remains 16:9 at every size instead of downloading a differently shaped crop.
+
+## Upload once, save the breakpoints
+
+The upload command requests Cloudinary's responsive breakpoint analysis separately for all three formats. It saves the returned widths, image dimensions, cloud name and version in `src/data/cloudinary-images.json`.
+
+```bash
+npm run cloudinary:breakpoints -- "src/images/blog/photo.jpg" --alt="Describe your photo"
+```
+
+Paste the printed image tag into a Markdown post. The build consumes the saved JSON without needing private API credentials.
+
+<PostImage publicId="images/blog/vadim-sadovski-OxHm0L9_6ng-unsplash" alt="A portrait shaped photograph of a drink" />

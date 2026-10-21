@@ -1,0 +1,33 @@
+---
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+import ChevronLeft from "@/components/fundations/icons/ChevronLeft.astro";
+import { tagLabel } from "@/lib/posts";
+
+interface Props {
+  tag: string;
+  count: number;
+}
+
+const { tag, count } = Astro.props;
+---
+
+<section>
+  <Wrapper variant="panel" class="pt-24 pb-10">
+    <a
+      href="/topics"
+      class="flex w-fit items-center gap-1 text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground"
+    >
+      <ChevronLeft size="sm" />
+      All topics
+    </a>
+    <div class="mt-8 max-w-2xl">
+      <Text tag="h1" variant="displayLG" class="font-semibold tracking-tight text-pretty lg:text-balance">
+        Posts about {tagLabel(tag)}
+      </Text>
+      <Text tag="p" variant="textSM" class="mt-4 text-muted-foreground">
+        {`${count} ${count === 1 ? "post" : "posts"}.`}
+      </Text>
+    </div>
+  </Wrapper>
+</section>

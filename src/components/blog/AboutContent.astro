@@ -1,0 +1,59 @@
+---
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+import { site } from "@/lib/site";
+
+const elsewhere = [
+  { label: "GitHub", href: site.github, note: "Code and small experiments" },
+  { label: "Email", href: `mailto:${site.email}`, note: "Say hello" },
+  { label: "RSS feed", href: "/rss.xml", note: "Every new post" },
+  { label: "All posts", href: "/posts", note: "The archive" },
+];
+---
+
+<section>
+  <Wrapper variant="panel" class="pt-28 pb-24">
+    <article class="max-w-2xl">
+      <Text tag="h1" variant="displayLG" class="font-semibold tracking-tight text-pretty lg:text-balance">About</Text>
+      <Text tag="p" variant="textLG" class="mt-4 text-pretty text-muted-foreground">
+        I am Paul Applegate. I build for the web, take photographs and collect questions that are more interesting than their answers.
+      </Text>
+
+      <Wrapper variant="prose" class="mt-10">
+        <p>
+          This site is a cabinet of curiosities with a search box. Most of the notes are about web performance, responsive images and the
+          tools that make a page feel quick. Some of them are about the things I notice while looking closer: a game show in 1979, a
+          coastline, the way light behaves at a particular time of day.
+        </p>
+        <p>
+          I have been building for the web long enough to remember when a page could be finished. The fun now is in the details: a
+          smaller image, a clearer sentence, a component that does one thing well.
+        </p>
+
+        <h2>What I write about</h2>
+        <p>
+          Astro and static sites, Cloudinary and image formats, performance budgets, and the occasional personal note.
+          The <a href="/topics">topics page</a> is the best way to browse sideways.
+        </p>
+
+        <h2>Elsewhere</h2>
+      </Wrapper>
+
+      <ul role="list" class="mt-6 grid gap-3 sm:grid-cols-2">
+        {
+          elsewhere.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class="flex flex-col gap-1 rounded-xl border border-muted bg-surface p-4 transition-colors duration-200 hover:border-muted-foreground/20"
+              >
+                <span class="text-sm font-medium text-foreground">{link.label}</span>
+                <span class="text-sm text-muted-foreground">{link.note}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </article>
+  </Wrapper>
+</section>

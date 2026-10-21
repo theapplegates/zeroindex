@@ -1,0 +1,26 @@
+---
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+import { site } from "@/lib/site";
+---
+
+<section>
+  <Wrapper variant="panel" class="pt-28 pb-16">
+    <div class="flex max-w-2xl flex-col">
+      <Text tag="h1" variant="displayLG" class="font-semibold tracking-tight text-pretty lg:text-balance">
+        Stay curious. Look closer.
+      </Text>
+      <Text tag="p" variant="textLG" class="mt-4 text-pretty text-muted-foreground">
+        {site.description}
+      </Text>
+    </div>
+    <div class="mt-8 flex flex-wrap items-center gap-3">
+      <Button isLink={true} href="/posts" size="base" variant="primary">Read the posts</Button>
+      <Button isLink={true} href="/about" size="base" variant="muted">About me</Button>
+    </div>
+    <p class="mt-6 text-sm text-muted-foreground">
+      Written by {site.author}. <a href="/rss.xml" class="font-medium text-foreground transition-colors duration-200 hover:text-muted-foreground">RSS feed</a>.
+    </p>
+  </Wrapper>
+</section>

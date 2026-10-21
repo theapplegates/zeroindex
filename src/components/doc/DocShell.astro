@@ -3,9 +3,31 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 // Components
 import Sidebar from "@/components/global/Sidebar.astro";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: "website" | "article";
+  publishedTime?: Date;
+  updatedTime?: Date;
+  noindex?: boolean;
+}
+
+const { title, description, image, type, publishedTime, updatedTime, noindex } = Astro.props;
 ---
 
-<BaseLayout hideFooter={true} app={true}>
+<BaseLayout
+  hideFooter={true}
+  app={true}
+  title={title}
+  description={description}
+  image={image}
+  type={type}
+  publishedTime={publishedTime}
+  updatedTime={updatedTime}
+  noindex={noindex}
+>
   <div class="flex grow lg:min-h-0">
     <Sidebar />
     <div class="min-w-0 grow lg:pr-2 lg:pb-2">

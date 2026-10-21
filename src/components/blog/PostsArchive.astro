@@ -1,0 +1,26 @@
+---
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+import PostList from "@/components/blog/PostList.astro";
+import type { Post } from "@/lib/posts";
+
+interface Props {
+  posts: Post[];
+}
+
+const { posts } = Astro.props;
+---
+
+<section>
+  <Wrapper variant="panel" class="pb-24">
+    {
+      posts.length > 0 ? (
+        <PostList posts={posts} />
+      ) : (
+        <Text tag="p" variant="textBase" class="text-muted-foreground">
+          No posts yet. The first one is on its way.
+        </Text>
+      )
+    }
+  </Wrapper>
+</section>

@@ -1,0 +1,37 @@
+---
+import DocPagination from "@/components/doc/DocPagination.astro";
+import PageFeedback from "@/components/doc/PageFeedback.astro";
+import { config } from "@/config";
+import { site } from "@/lib/site";
+import { formatPostDate, type Post } from "@/lib/posts";
+
+interface Link {
+  title: string;
+  href: string;
+  description?: string;
+}
+
+interface Props {
+  post: Post;
+  previous?: Link;
+  next?: Link;
+}
+
+const { post, previous, next } = Astro.props;
+const published = formatPostDate(post.data.date);
+const updated = post.data.updated ? formatPostDate(post.data.updated) : undefined;
+---
+
+<footer class="flex flex-col gap-10 pt-16">
+  <div class="flex flex-wrap items-center justify-between gap-4">
+    <p class="text-sm text-muted-foreground">
+      Published <time datetime={post.data.date.toISOString()}>{published}</time>{updated && <>. Updated <time datetime={post.data.updated!.toISOString()}>{updated}</time></>}
+    </p>
+    {config.feedback && <PageFeedback />}
+  </div>
+  <DocPagination previous={previous} next={next} />
+  <div class="flex flex-wrap items-center justify-between gap-4 border-t border-muted pt-6 text-sm text-muted-foreground">
+    <p>{`© ${new Date().getFullYear()} ${site.author}`}</p>
+    <a href="/posts" class="transition-colors duration-200 hover:text-foreground">Back to all posts</a>
+  </div>
+</footer>

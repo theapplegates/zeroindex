@@ -3,16 +3,24 @@
 import DocShell from "@/components/doc/DocShell.astro";
 // Components
 import Footer from "@/components/global/Footer.astro";
-import Hero from "@/components/landing/Hero.astro";
-import CodeSample from "@/components/landing/CodeSample.astro";
-import Sdks from "@/components/landing/Sdks.astro";
-import LatestReleases from "@/components/landing/LatestReleases.astro";
+import HomeHero from "@/components/blog/HomeHero.astro";
+import FeaturedPost from "@/components/blog/FeaturedPost.astro";
+import LatestPosts from "@/components/blog/LatestPosts.astro";
+import TopicsStrip from "@/components/blog/TopicsStrip.astro";
+// Content
+import { getPosts, getPostTags } from "@/lib/posts";
+import { site } from "@/lib/site";
+
+const posts = await getPosts();
+const tags = await getPostTags();
+const featured = posts.find((post) => post.data.featured) ?? posts[0];
+const latest = featured ? posts.filter((post) => post.id !== featured.id).slice(0, 4) : [];
 ---
 
-<DocShell>
-  <Hero />
-  <CodeSample />
-  <Sdks />
-  <LatestReleases />
+<DocShell description={site.description}>
+  <HomeHero />
+  {featured && <FeaturedPost post={featured} />}
+  <LatestPosts posts={latest} />
+  <TopicsStrip tags={tags} />
   <Footer variant="panel" />
 </DocShell>

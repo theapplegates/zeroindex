@@ -1,0 +1,53 @@
+---
+import type { MarkdownHeading } from "astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+import DocShell from "@/components/doc/DocShell.astro";
+import DocToc from "@/components/doc/DocToc.astro";
+import PostHeader from "@/components/blog/PostHeader.astro";
+import PostFooter from "@/components/blog/PostFooter.astro";
+import { getOgImageUrl } from "@/lib/cloudinary";
+import { readingTime, type Post } from "@/lib/posts";
+
+interface Link {
+  title: string;
+  href: string;
+  description?: string;
+}
+
+interface Props {
+  post: Post;
+  headings: MarkdownHeading[];
+  markdown: string;
+  markdownHref: string;
+  previous?: Link;
+  next?: Link;
+}
+
+const { post, headings, markdown, markdownHref, previous, next } = Astro.props;
+const image = post.data.cover ? getOgImageUrl(post.data.cover) : undefined;
+---
+
+<DocShell
+  title={post.data.title}
+  description={post.data.description}
+  image={image}
+  type="article"
+  publishedTime={post.data.date}
+  updatedTime={post.data.updated}
+>
+  <div class="flex justify-center gap-16 px-4 py-10 sm:px-8 lg:px-12 lg:py-14">
+    <article class="w-full max-w-2xl min-w-0">
+      <PostHeader
+        post={post}
+        markdown={markdown}
+        markdownHref={markdownHref}
+        minutes={readingTime(post.body)}
+      />
+      <Wrapper variant="prose">
+        <slot />
+      </Wrapper>
+      <PostFooter post={post} previous={previous} next={next} />
+    </article>
+    <DocToc headings={headings} />
+  </div>
+</DocShell>

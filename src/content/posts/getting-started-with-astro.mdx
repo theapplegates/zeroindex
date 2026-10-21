@@ -1,0 +1,72 @@
+---
+title: Getting started with Astro, zero JS by default
+description: Astro ships zero JavaScript to the browser by default. Here is why that matters and how to set up a first project.
+date: 2024-12-01
+tags: ["astro", "getting-started", "performance"]
+cover: images/blog/volodymyr-lymariev-N7yu3wLuuPQ-unsplash
+coverAlt: A wooden vase in soft light
+---
+
+Most modern frameworks ship a JavaScript runtime to every visitor, even pages that do not need it. Astro takes the opposite approach: HTML and CSS by default, JavaScript only when you opt in.
+
+## Why zero JS matters
+
+JavaScript is the most expensive resource on a web page. It blocks rendering, delays interactivity and drains mobile batteries. A page with 0 KB of JS parses and renders faster than any framework generated equivalent.
+
+Astro achieves this with a compile step that renders your components to static HTML at build time. The client receives plain HTML with no framework overhead.
+
+## Project structure
+
+An Astro project is intentionally flat:
+
+```text
+src/
+├── components/   # Reusable .astro components
+├── content/      # Markdown and MDX files
+├── layouts/      # Page wrappers with a slot
+├── lib/          # Plain TypeScript utilities
+├── pages/        # File based routing, one file per URL
+└── styles/       # Global CSS
+```
+
+## The .astro file format
+
+Every `.astro` file has two sections separated by `---`:
+
+```astro
+---
+// This runs at build time on the server.
+const message = "Hello from build time!";
+---
+
+<p>{message}</p>
+```
+
+The fenced script block is never sent to the browser. It runs once at build time and disappears.
+
+## Content collections
+
+Astro's content collections give you type safe access to your Markdown files. Define a schema in `src/content.config.ts`:
+
+```ts
+const blog = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/blog" }),
+  schema: z.object({
+    title: z.string(),
+    publishDate: z.coerce.date(),
+    coverImage: z.string(),
+  }),
+});
+```
+
+Then query it in any page:
+
+```ts
+const posts = await getCollection("blog");
+```
+
+TypeScript knows the shape of every post. No `any`, no surprises.
+
+## Next steps
+
+From here, adding Cloudinary image optimisation is a natural next step. Every template image uses a responsive `<picture>` with JXL first, AVIF next and WebP as the final fallback, with `q_auto` for compression. Drop a Cloudinary public ID into the frontmatter and the layout handles the rest.

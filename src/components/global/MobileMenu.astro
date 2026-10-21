@@ -9,11 +9,9 @@ import ThemeToggle from "@/components/global/ThemeToggle.astro";
 import Close from "@/components/fundations/icons/Close.astro";
 
 const links = [
-  { label: "Guides", href: "/docs/getting-started/introduction" },
-  { label: "API reference", href: "/api/introduction" },
-  { label: "SDKs", href: "/sdks" },
-  { label: "Changelog", href: "/changelog" },
-  { label: "Overview", href: "/system/overview" },
+  { label: "Posts", href: "/posts" },
+  { label: "Topics", href: "/topics" },
+  { label: "About", href: "/about" },
 ];
 ---
 
@@ -33,7 +31,7 @@ const links = [
   </div>
   <div class="flex flex-col gap-4 border-t border-muted p-4">
     {links.map((link) => <a href={link.href} class="text-sm font-medium text-muted-foreground transition-colors duration-200 hover:text-foreground">{link.label}</a>)}
-    <Button isLink={true} href="https://lexingtonthemes.com/templates/zeroindex" size="base" variant="primary">Buy ZeroIndex</Button>
+    <Button isLink={true} href="/rss.xml" size="base" variant="primary">RSS feed</Button>
     <ThemeToggle />
   </div>
 </dialog>

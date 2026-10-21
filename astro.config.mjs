@@ -2,6 +2,7 @@ import { defineConfig, svgoOptimizer } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 import sitemap from "@astrojs/sitemap";
 import mdx from "@astrojs/mdx";
+import vercel from "@astrojs/vercel";
 import rehypeCloudinaryPicture from "./src/plugins/rehype-cloudinary-picture.mjs";
 export default defineConfig({
   experimental: {
@@ -23,5 +24,13 @@ export default defineConfig({
     "/api": "/api/introduction",
   },
   site: "https://zero.paulapplegate.com",
-  integrations: [sitemap(), mdx()],
+  adapter: vercel(),
+  integrations: [
+    sitemap({
+      // The blog is the site. The old documentation, API, SDK, changelog and
+      // system pages stay reachable but are not advertised.
+      filter: (page) => !/\/(docs|api|sdks|changelog|status|system)(\/|$)/.test(new URL(page).pathname),
+    }),
+    mdx(),
+  ],
 });

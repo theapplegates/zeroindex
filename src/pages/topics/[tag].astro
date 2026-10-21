@@ -1,0 +1,25 @@
+---
+// Fundations
+import DocShell from "@/components/doc/DocShell.astro";
+// Components
+import Footer from "@/components/global/Footer.astro";
+import TagHero from "@/components/blog/TagHero.astro";
+import TagPosts from "@/components/blog/TagPosts.astro";
+// Content
+import { getPostTags, getPostsByTag, tagLabel } from "@/lib/posts";
+
+export async function getStaticPaths() {
+  const tags = await getPostTags();
+  return tags.map(({ tag, count }) => ({ params: { tag }, props: { tag, count } }));
+}
+
+const { tag, count } = Astro.props;
+const posts = await getPostsByTag(tag);
+const label = tagLabel(tag);
+---
+
+<DocShell title={`Posts about ${label}`} description={`Posts tagged ${label}.`}>
+  <TagHero tag={tag} count={count} />
+  <TagPosts posts={posts} />
+  <Footer variant="panel" />
+</DocShell>

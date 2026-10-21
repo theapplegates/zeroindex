@@ -6,8 +6,14 @@ import Shrink from "@/components/fundations/icons/Shrink.astro";
 import Close from "@/components/fundations/icons/Close.astro";
 import ArrowUp from "@/components/fundations/icons/ArrowUp.astro";
 import Code from "@/components/fundations/icons/Code.astro";
+import ChevronRight from "@/components/fundations/icons/ChevronRight.astro";
 
 const iconButton = "hidden size-8 items-center justify-center rounded-lg text-muted-foreground transition-colors duration-200 hover:text-foreground sm:flex";
+const suggestions = [
+  "What do you write about?",
+  "How do you optimise images?",
+  "What is this site built with?",
+];
 ---
 
 <aside
@@ -31,8 +37,23 @@ const iconButton = "hidden size-8 items-center justify-center rounded-lg text-mu
     </div>
   </div>
   <div class="grow overflow-y-auto p-4" data-lenis-prevent>
-    <p class="mx-auto max-w-60 text-center text-xs text-pretty text-muted-foreground">Responses are generated using AI and may contain mistakes.</p>
-    <ul class="mt-6 flex flex-col gap-4" data-assistant-messages></ul>
+    <p class="mx-auto max-w-60 text-center text-xs text-pretty text-muted-foreground">Answers come from the posts on this site. Check the sources.</p>
+    <div class="mt-6 flex flex-col gap-2" data-assistant-suggestions>
+      <p class="text-xs font-medium text-muted-foreground">Try asking</p>
+      {
+        suggestions.map((suggestion) => (
+          <button
+            type="button"
+            class="flex w-full items-center justify-between gap-3 rounded-lg border border-muted bg-surface px-3 py-2 text-left text-sm text-foreground transition-colors duration-200 hover:bg-muted"
+            data-assistant-suggestion={suggestion}
+          >
+            {suggestion}
+            <ChevronRight size="xs" class="text-muted-foreground" />
+          </button>
+        ))
+      }
+    </div>
+    <ul class="mt-6 flex flex-col gap-4" data-assistant-messages aria-live="polite"></ul>
   </div>
   <form class="m-3 flex flex-col gap-3 rounded-xl border border-muted bg-background/50 p-3 transition-colors duration-200 focus-within:border-muted-foreground/50" data-assistant-form>
     <div class="hidden flex-wrap gap-2" data-assistant-chips></div>
@@ -69,6 +90,8 @@ const iconButton = "hidden size-8 items-center justify-center rounded-lg text-mu
 
 <script>
   type Snippet = { label: string; code: string };
+  type Source = { title: string; href: string };
+  type Chunk = { id: string; title: string; href: string; heading: string; text: string; date: string; tags: string[] };
 
   const panel = document.querySelector<HTMLElement>("[data-assistant]");
   const form = panel?.querySelector<HTMLFormElement>("[data-assistant-form]");
@@ -77,14 +100,35 @@ const iconButton = "hidden size-8 items-center justify-center rounded-lg text-mu
   const chips = panel?.querySelector<HTMLElement>("[data-assistant-chips]");
   const chipTemplate = panel?.querySelector<HTMLTemplateElement>("[data-assistant-chip]");
   const messages = panel?.querySelector<HTMLUListElement>("[data-assistant-messages]");
+  const suggestionList = panel?.querySelector<HTMLElement>("[data-assistant-suggestions]");
   const expand = panel?.querySelector<HTMLButtonElement>("[data-assistant-expand]");
   let snippets: Snippet[] = [];
+  let busy = false;
+  let corpus: Chunk[] | null = null;
+  let corpusPromise: Promise<Chunk[]> | null = null;
+
+  const loadCorpus = () => {
+    corpusPromise ??= fetch("/assistant-index.json")
+      .then((response) => (response.ok ? response.json() : []))
+      .then((data: Chunk[]) => {
+        corpus = Array.isArray(data) ? data : [];
+        return corpus;
+      })
+      .catch(() => []);
+    return corpusPromise;
+  };
+
+  const hideSuggestions = () => suggestionList?.classList.add("hidden");
+  const showSuggestions = () => {
+    if ((messages?.children.length ?? 0) === 0) suggestionList?.classList.remove("hidden");
+  };
 
   const open = () => {
     if (!panel) return;
     document.querySelectorAll<HTMLDetailsElement>("[data-copy-page-menu]").forEach((menu) => (menu.open = false));
     panel.setAttribute("data-open", "");
     input?.focus({ preventScroll: true });
+    void loadCorpus();
   };
   const close = () => panel?.removeAttribute("data-open");
   const isOpen = () => panel?.hasAttribute("data-open") ?? false;
@@ -106,15 +150,153 @@ const iconButton = "hidden size-8 items-center justify-center rounded-lg text-mu
     chips.classList.toggle("flex", snippets.length > 0);
   };
 
-  const addMessage = (text: string, from: "user" | "assistant") => {
+  const addMessage = (text: string, from: "user" | "assistant", sources: Source[] = []) => {
     const item = document.createElement("li");
-    item.className = from === "user" ? "ml-auto w-fit max-w-xs rounded-2xl bg-muted px-3 py-2 text-sm" : "max-w-full text-sm/6";
-    item.textContent = text;
+    if (from === "user") {
+      item.className = "ml-auto w-fit max-w-xs rounded-2xl bg-muted px-3 py-2 text-sm";
+      item.textContent = text;
+    } else {
+      item.className = "flex flex-col gap-2 text-sm/6";
+      const answer = document.createElement("p");
+      answer.className = "whitespace-pre-wrap text-pretty";
+      answer.textContent = text;
+      item.append(answer);
+      if (sources.length > 0) {
+        const list = document.createElement("ul");
+        list.className = "flex flex-col gap-1 border-t border-muted pt-2";
+        for (const source of sources) {
+          const sourceItem = document.createElement("li");
+          const link = document.createElement("a");
+          link.href = source.href;
+          link.className = "text-xs font-medium text-muted-foreground transition-colors duration-200 hover:text-foreground";
+          link.textContent = `Read: ${source.title}`;
+          sourceItem.append(link);
+          list.append(sourceItem);
+        }
+        item.append(list);
+      }
+    }
     messages?.append(item);
     item.scrollIntoView({ block: "end" });
   };
 
-  input?.addEventListener("input", () => send && (send.disabled = !input.value.trim()));
+  const addPending = () => {
+    const item = document.createElement("li");
+    item.className = "text-sm text-muted-foreground";
+    item.setAttribute("data-assistant-pending", "");
+    item.textContent = "Searching the posts...";
+    messages?.append(item);
+    item.scrollIntoView({ block: "end" });
+    return item;
+  };
+
+  const setBusy = (next: boolean) => {
+    busy = next;
+    if (send) send.disabled = next || !input?.value.trim();
+    messages?.setAttribute("aria-busy", String(next));
+  };
+
+  const stopwords = new Set([
+    "a", "about", "an", "and", "are", "as", "at", "be", "but", "by", "can", "did", "do", "does", "for", "from",
+    "had", "has", "have", "he", "her", "his", "how", "i", "if", "in", "is", "it", "its", "me", "my", "of", "on",
+    "or", "our", "she", "so", "that", "the", "their", "them", "then", "there", "these", "they", "this", "to", "was",
+    "we", "were", "what", "when", "where", "which", "who", "why", "will", "with", "you", "your",
+  ]);
+
+  const termsOf = (question: string) =>
+    question
+      .toLowerCase()
+      .match(/[a-z0-9]+/g)
+      ?.filter((term) => term.length > 2 && !stopwords.has(term)) ?? [];
+
+  const excerpt = (text: string, terms: string[], limit = 420) => {
+    const lower = text.toLowerCase();
+    let first = -1;
+    for (const term of terms) {
+      const found = lower.indexOf(term);
+      if (found !== -1 && (first === -1 || found < first)) first = found;
+    }
+    const start = Math.max(0, first - 100);
+    const slice = text.slice(start, start + limit).trim();
+    return `${start > 0 ? "... " : ""}${slice}${start + limit < text.length ? " ..." : ""}`;
+  };
+
+  const localAnswer = async (question: string) => {
+    const chunks = corpus ?? (await loadCorpus());
+    const terms = termsOf(question);
+    const scored = chunks
+      .map((chunk) => {
+        const title = chunk.title.toLowerCase();
+        const heading = chunk.heading.toLowerCase();
+        const text = chunk.text.toLowerCase();
+        let score = 0;
+        for (const term of terms) {
+          if (title.includes(term)) score += 6;
+          if (heading.includes(term)) score += 4;
+          score += Math.min(text.split(term).length - 1, 4);
+        }
+        return { chunk, score };
+      })
+      .filter((entry) => entry.score > 0)
+      .sort((a, b) => b.score - a.score);
+
+    if (scored.length === 0) {
+      return {
+        text: "I could not find a post about that. Browse all posts with the link below, or try asking about Astro, Cloudinary or image performance.",
+        sources: [{ title: "All posts", href: "/posts" }] as Source[],
+      };
+    }
+
+    const seen = new Set<string>();
+    const top = scored.filter((entry) => {
+      if (seen.has(entry.chunk.href)) return false;
+      seen.add(entry.chunk.href);
+      return true;
+    }).slice(0, 2);
+
+    return {
+      text: top
+        .map(({ chunk }) => `From “${chunk.title}”:\n${excerpt(chunk.text, terms)}`)
+        .join("\n\n"),
+      sources: top.map(({ chunk }) => ({ title: chunk.title, href: chunk.href })),
+    };
+  };
+
+  const ask = async (question: string) => {
+    const trimmed = question.trim();
+    if (!trimmed || busy) return;
+    addMessage(trimmed, "user");
+    hideSuggestions();
+    if (input) input.value = "";
+    setBusy(true);
+    const pending = addPending();
+    const request = { question: trimmed, page: location.pathname, snippets };
+    snippets = [];
+    renderChips();
+
+    try {
+      const response = await fetch("/api/assistant", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(request),
+      });
+      if (!response.ok) throw new Error(`Assistant ${response.status}`);
+      const data = (await response.json()) as { text?: string; sources?: Source[] };
+      if (!data.text) throw new Error("The assistant returned an empty answer.");
+      pending.remove();
+      addMessage(data.text, "assistant", data.sources ?? []);
+    } catch {
+      const fallback = await localAnswer(trimmed);
+      pending.remove();
+      addMessage(fallback.text, "assistant", fallback.sources);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  input?.addEventListener("input", () => {
+    if (send) send.disabled = busy || !input.value.trim();
+  });
   input?.addEventListener("keydown", (event) => {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
@@ -124,19 +306,18 @@ const iconButton = "hidden size-8 items-center justify-center rounded-lg text-mu
 
   form?.addEventListener("submit", (event) => {
     event.preventDefault();
-    const question = input?.value.trim();
-    if (!question || !input || !send) return;
-    addMessage(question, "user");
-    window.dispatchEvent(new CustomEvent("assistant:ask", { detail: { question, snippets, page: location.pathname } }));
-    input.value = "";
-    send.disabled = true;
-    snippets = [];
-    renderChips();
+    if (input) void ask(input.value);
+  });
+
+  panel?.querySelectorAll<HTMLButtonElement>("[data-assistant-suggestion]").forEach((button) => {
+    button.addEventListener("click", () => void ask(button.dataset.assistantSuggestion ?? button.textContent ?? ""));
   });
 
   window.addEventListener("assistant:answer", (event) => {
     const { text } = (event as CustomEvent<{ text: string }>).detail;
+    panel?.querySelector("[data-assistant-pending]")?.remove();
     addMessage(text, "assistant");
+    setBusy(false);
   });
 
   expand?.addEventListener("click", () => {
@@ -167,4 +348,7 @@ const iconButton = "hidden size-8 items-center justify-center rounded-lg text-mu
     }
     if (event.key === "Escape" && isOpen() && panel?.contains(document.activeElement)) close();
   });
+
+  renderChips();
+  showSuggestions();
 </script>

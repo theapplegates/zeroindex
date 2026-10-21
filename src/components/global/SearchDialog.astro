@@ -1,54 +1,31 @@
 ---
 // Content
 import { render } from "astro:content";
-import { getDocs, docHref, categories } from "@/lib/docs";
-import { getEndpoints, apiHref, groups } from "@/lib/api";
-import { getSdks, sdkHref } from "@/lib/sdks";
-import { getReleases, releaseHref } from "@/lib/changelog";
+import { getPosts, postHref, tagLabel } from "@/lib/posts";
 // Icons
 import Search from "@/components/fundations/icons/Search.astro";
 
-const docs = await getDocs();
-const endpoints = await getEndpoints();
-const sdks = await getSdks();
-const releases = await getReleases();
+const posts = await getPosts();
 const headingsOf = async (entry: Parameters<typeof render>[0]) =>
   (await render(entry)).headings.filter((heading) => heading.depth <= 3).map((heading) => heading.text);
+
+const pages = [
+  { title: "Home", description: "The latest field notes", category: "Page", href: "/", headings: [], body: "" },
+  { title: "All posts", description: "Every post, newest first", category: "Page", href: "/posts", headings: [], body: "" },
+  { title: "Topics", description: "Browse posts by topic", category: "Page", href: "/topics", headings: [], body: "" },
+  { title: "About", description: "About Paul and Field notes", category: "Page", href: "/about", headings: [], body: "" },
+];
+
 const index = [
+  ...pages,
   ...(await Promise.all(
-    docs.map(async (doc) => ({
-      title: doc.data.title,
-      description: doc.data.description,
-      category: categories.find((category) => category.id === doc.data.category)?.label ?? "",
-      href: docHref(doc.id),
-      headings: await headingsOf(doc),
-    })),
-  )),
-  ...(await Promise.all(
-    endpoints.map(async (entry) => ({
-      title: entry.data.title,
-      description: entry.data.method ? `${entry.data.method} ${entry.data.path}` : entry.data.description,
-      category: `API ${groups.find((group) => group.id === entry.data.group)?.label.toLowerCase() ?? ""}`,
-      href: apiHref(entry.id),
-      headings: await headingsOf(entry),
-    })),
-  )),
-  ...(await Promise.all(
-    sdks.map(async (sdk) => ({
-      title: `${sdk.data.title} SDK`,
-      description: sdk.data.description,
-      category: "SDKs",
-      href: sdkHref(sdk.id),
-      headings: await headingsOf(sdk),
-    })),
-  )),
-  ...(await Promise.all(
-    releases.map(async (release) => ({
-      title: release.data.title,
-      description: release.data.summary,
-      category: `Changelog v${release.data.version}`,
-      href: releaseHref(release.id),
-      headings: await headingsOf(release),
+    posts.map(async (post) => ({
+      title: post.data.title,
+      description: post.data.description,
+      category: post.data.tags.map(tagLabel).join(", ") || "Post",
+      href: postHref(post.id),
+      headings: await headingsOf(post),
+      body: post.body ?? "",
     })),
   )),
 ];
@@ -56,14 +33,14 @@ const index = [
 
 <dialog
   class="mx-auto mt-24 w-full max-w-xl overflow-hidden rounded-2xl border border-muted bg-surface p-0 text-foreground shadow-xl backdrop:bg-foreground/20"
-  aria-label="Search the docs"
+  aria-label="Search the blog"
   data-search-dialog
 >
   <div class="flex items-center gap-3 border-b border-muted px-4">
     <Search size="sm" class="text-muted-foreground" />
     <input
       type="search"
-      placeholder="Search the docs"
+      placeholder="Search the blog"
       class="h-12 grow border-0 bg-transparent p-0 text-sm text-foreground placeholder:text-muted-foreground focus:ring-0"
       autocomplete="off"
       data-search-input
@@ -71,13 +48,13 @@ const index = [
     <kbd class="font-sans text-xs text-muted-foreground">Esc</kbd>
   </div>
   <ul class="max-h-96 overflow-y-auto p-2" data-search-results></ul>
-  <p class="hidden px-4 py-8 text-center text-sm text-muted-foreground" data-search-empty>No results</p>
+  <p class="hidden px-4 py-8 text-center text-sm text-muted-foreground" data-search-empty>No posts found</p>
 </dialog>
 
 <script type="application/json" data-search-index set:html={JSON.stringify(index)} />
 
 <script>
-  type Entry = { title: string; description: string; category: string; href: string; headings: string[] };
+  type Entry = { title: string; description: string; category: string; href: string; headings: string[]; body: string };
 
   const dialog = document.querySelector<HTMLDialogElement>("[data-search-dialog]");
   const input = document.querySelector<HTMLInputElement>("[data-search-input]");
@@ -88,7 +65,7 @@ const index = [
   const search = (query: string) => {
     const terms = query.toLowerCase().split(/\s+/).filter(Boolean);
     const matches = entries.filter((entry) => {
-      const text = [entry.title, entry.description, entry.category, ...entry.headings].join(" ").toLowerCase();
+      const text = [entry.title, entry.description, entry.category, ...entry.headings, entry.body].join(" ").toLowerCase();
       return terms.every((term) => text.includes(term));
     });
     if (!results || !empty) return;

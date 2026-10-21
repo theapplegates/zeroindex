@@ -1,17 +1,10 @@
 ---
-import { Code } from "astro:components";
 // Fundations
 import Text from "@/components/fundations/elements/Text.astro";
 import Button from "@/components/fundations/elements/Button.astro";
 import Wrapper from "@/components/fundations/containers/Wrapper.astro";
 // Components
 import SearchButton from "@/components/global/SearchButton.astro";
-
-const response = `{
-  "status": 404,
-  "code": "page_not_found",
-  "message": "This page does not exist or has moved."
-}`;
 ---
 
 <section>
@@ -19,16 +12,13 @@ const response = `{
     <div class="mx-auto flex max-w-xl flex-col items-center text-center">
       <Text tag="h1" variant="displayLG" class="font-semibold tracking-tight text-pretty lg:text-balance">Page not found</Text>
       <Text tag="p" variant="textLG" class="mt-4 text-pretty text-muted-foreground">
-        The link may be old, or the page moved when the docs were reorganised. Search for it or go back to the introduction.
+        The link may be old, or the page moved when the blog was reorganised. Search for it, or start from the archive.
       </Text>
-      <div class="mt-10 w-full overflow-hidden rounded-xl border border-muted text-left">
-        <Code code={response} lang="json" theme="css-variables" class="overflow-x-auto p-4 text-sm/7" />
-      </div>
-      <div class="mt-6 w-full">
+      <div class="mt-10 w-full">
         <SearchButton size="lg" />
       </div>
-      <Button isLink={true} href="/docs/getting-started/introduction" size="lg" variant="primary" class="mt-6">
-        Back to the docs
+      <Button isLink={true} href="/posts" size="lg" variant="primary" class="mt-6">
+        Back to all posts
       </Button>
     </div>
   </Wrapper>

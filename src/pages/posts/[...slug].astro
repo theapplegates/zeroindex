@@ -1,0 +1,35 @@
+---
+import { render } from "astro:content";
+import PostLayout from "@/layouts/PostLayout.astro";
+import { docsComponents } from "@/components/docs";
+import { getPosts, postHref } from "@/lib/posts";
+import { postMarkdown } from "@/lib/post-markdown";
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post, index) => ({
+    params: { slug: post.id },
+    props: {
+      post,
+      previous: posts[index + 1],
+      next: posts[index - 1],
+    },
+  }));
+}
+
+const { post, previous, next } = Astro.props;
+const { Content, headings } = await render(post);
+const link = (entry?: typeof post) =>
+  entry ? { title: entry.data.title, description: entry.data.description, href: postHref(entry.id) } : undefined;
+---
+
+<PostLayout
+  post={post}
+  headings={headings}
+  markdown={postMarkdown(post)}
+  markdownHref={`${postHref(post.id)}.md`}
+  previous={link(previous)}
+  next={link(next)}
+>
+  <Content components={docsComponents} />
+</PostLayout>

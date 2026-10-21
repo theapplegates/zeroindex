@@ -1,0 +1,24 @@
+---
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+
+interface Props {
+  count: number;
+}
+
+const { count } = Astro.props;
+---
+
+<section>
+  <Wrapper variant="panel" class="pt-28 pb-10">
+    <div class="max-w-2xl">
+      <Text tag="h1" variant="displayLG" class="font-semibold tracking-tight text-pretty lg:text-balance">All posts</Text>
+      <Text tag="p" variant="textLG" class="mt-4 text-pretty text-muted-foreground">
+        Field notes on web performance, images, Astro and the occasional story that has nothing to do with either.
+      </Text>
+      <Text tag="p" variant="textSM" class="mt-4 text-muted-foreground">
+        {`${count} ${count === 1 ? "post" : "posts"}, newest first.`}
+      </Text>
+    </div>
+  </Wrapper>
+</section>

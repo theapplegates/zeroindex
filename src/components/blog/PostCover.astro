@@ -1,0 +1,31 @@
+---
+import CloudinaryImage from "@/components/CloudinaryImage.astro";
+
+interface Props {
+  publicId: string;
+  alt: string;
+  class?: string;
+  widths?: number[];
+  loading?: "lazy" | "eager";
+}
+
+const {
+  publicId,
+  alt,
+  class: className,
+  widths = [480, 768, 1024, 1280],
+  loading = "lazy",
+} = Astro.props;
+---
+
+<CloudinaryImage
+  publicId={publicId}
+  alt={alt}
+  width={1600}
+  height={900}
+  widths={widths}
+  sizes="(max-width: 720px) calc(100vw - 3rem), 672px"
+  class={["aspect-video w-full rounded-xl border border-muted object-cover", className].filter(Boolean).join(" ")}
+  pictureClass="overflow-hidden rounded-xl"
+  loading={loading}
+/>

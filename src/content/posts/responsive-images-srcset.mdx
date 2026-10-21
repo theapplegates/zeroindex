@@ -1,0 +1,42 @@
+---
+title: Responsive images with srcset, sizes and Cloudinary
+description: Use picture for format selection and srcset with sizes for responsive image widths.
+date: 2024-12-08
+tags: ["cloudinary", "responsive", "performance"]
+cover: assets/images/queensland-australia-DYDbETQLjFk-unsplash
+coverAlt: A coastline in Queensland, Australia
+---
+
+Responsive images let the browser choose an image width that suits its layout, display density and loading preferences.
+
+## Formats and widths are separate decisions
+
+`<picture>` offers formats in order: **JXL, then AVIF, then WebP**. Within each supported source, `srcset` offers candidate widths and `sizes` describes the image's layout width.
+
+The browser considers both the rendered width and pixel density. A 400 pixel wide image on a 2x display may benefit from an 800 pixel wide file.
+
+## How sizes helps
+
+For an article image in this template, the prose column is at most 720 pixels wide, including 48 pixels of horizontal padding:
+
+```html
+sizes="(max-width: 720px) calc(100vw - 3rem), 672px"
+```
+
+Without a `sizes` hint, width descriptor image selection assumes the full viewport width. That can cause oversized downloads for images in a narrower column. It does not always select the largest candidate.
+
+## A working Markdown example
+
+The photograph below uses the same three format responsive picture as the cards and heroes. It is written directly in the MDX file without an import:
+
+<PostImage publicId="images/blog/nenad-radojcic-kIQoxt8-srU-unsplash" alt="A village beside the ocean" />
+
+```html
+<PostImage publicId="images/blog/photo" alt="Describe the photograph" />
+```
+
+For your own image, run the upload command and paste the component it prints. The component and Markdown plugin automatically use that image's saved Cloudinary breakpoints. Existing assets without saved analysis use a standard width list, which you can override using `widths`.
+
+## Preventing layout shift
+
+Image dimensions reserve space before the file loads. Uploaded images get these dimensions from the saved manifest. Images without a manifest entry need explicit width and height values.

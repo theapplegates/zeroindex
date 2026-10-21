@@ -1,0 +1,30 @@
+---
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+import Tag from "@/components/blog/Tag.astro";
+import ChevronRight from "@/components/fundations/icons/ChevronRight.astro";
+
+interface Props {
+  tags: { tag: string; label: string; count: number }[];
+}
+
+const { tags } = Astro.props;
+---
+
+<section>
+  <Wrapper variant="panel" class="pb-24">
+    <div class="flex flex-wrap items-end justify-between gap-4">
+      <Text tag="h2" variant="displaySM" class="font-semibold tracking-tight">Topics</Text>
+      <a
+        href="/topics"
+        class="flex items-center gap-1 text-sm font-medium text-muted-foreground transition-colors duration-200 hover:text-foreground"
+      >
+        All topics
+        <ChevronRight size="sm" />
+      </a>
+    </div>
+    <div class="mt-6 flex flex-wrap gap-2">
+      {tags.map(({ tag }) => <Tag tag={tag} class="h-7 px-3 text-sm" />)}
+    </div>
+  </Wrapper>
+</section>

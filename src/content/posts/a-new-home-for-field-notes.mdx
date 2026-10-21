@@ -1,0 +1,29 @@
+---
+title: A new home for field notes
+description: A quieter place for the blog, with a proper archive, working search and an assistant that answers from the posts.
+date: 2026-10-21
+tags: ["meta", "design", "astro"]
+cover: assets/images/mvhom9kgeg23ujtn16nv
+coverAlt: A house on a cliff at golden hour
+featured: true
+---
+
+The blog has moved into a new home. The old cabinet of curiosities is still the idea: a place for web performance, photographs and the quiet pleasure of figuring things out. The difference is the room around it.
+
+This version is built with Astro 7 and Tailwind CSS 4. The left sidebar is the index: all posts, topics and a short list of the latest notes. Search opens with `⌘K` and reads every post. The assistant opens with `⌘I`.
+
+## What changed
+
+The layout now keeps one panel for reading. The sidebar stays put, the page scrolls inside its own white surface, and the table of contents follows you on longer pieces. It is the same frame the original theme used, with the docs swapped for a blog.
+
+Every post is written in MDX. That means a post can use the same blocks as before: callouts, cards, steps, tabs, code groups and responsive Cloudinary images. The image pipeline still serves JXL first, then AVIF, then WebP.
+
+## An assistant that reads the posts
+
+The assistant is no longer just an interface. It retrieves passages from the posts with Gemini Embedding 2, then asks Gemma 4 to write a short answer from those passages. Every answer links back to the post it came from.
+
+If the API key is missing, or the service is unavailable, the panel falls back to a plain search over the same posts. You still get a useful excerpt and a link, just without the generated prose.
+
+## What comes next
+
+More field notes, more photographs, and a few pieces about the parts of the web that are easy to overlook. If you want to follow along, the [RSS feed](/rss.xml) is the quiet way to do it.

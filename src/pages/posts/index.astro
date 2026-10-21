@@ -1,0 +1,18 @@
+---
+// Fundations
+import DocShell from "@/components/doc/DocShell.astro";
+// Components
+import Footer from "@/components/global/Footer.astro";
+import PostsHero from "@/components/blog/PostsHero.astro";
+import PostsArchive from "@/components/blog/PostsArchive.astro";
+// Content
+import { getPosts } from "@/lib/posts";
+
+const posts = await getPosts();
+---
+
+<DocShell title="All posts" description="Every field note, newest first.">
+  <PostsHero count={posts.length} />
+  <PostsArchive posts={posts} />
+  <Footer variant="panel" />
+</DocShell>

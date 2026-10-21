@@ -15,17 +15,15 @@ import Menu from "@/components/fundations/icons/Menu.astro";
 import Sparkles from "@/components/fundations/icons/Sparkles.astro";
 
 interface Props {
-  // Docs pages carry search and the theme toggle in their sidebar.
+  // App pages carry search and the theme toggle in their sidebar.
   sidebar?: boolean;
 }
 
 const { sidebar = false } = Astro.props;
 const links = [
-  { label: "Guides", href: "/docs/getting-started/introduction" },
-  { label: "API reference", href: "/api/introduction" },
-  { label: "SDKs", href: "/sdks" },
-  { label: "Changelog", href: "/changelog" },
-  { label: "Overview", href: "/system/overview" },
+  { label: "Posts", href: "/posts" },
+  { label: "Topics", href: "/topics" },
+  { label: "About", href: "/about" },
 ];
 const linkClass = "text-sm font-medium text-muted-foreground transition-colors duration-200 hover:text-foreground";
 ---
@@ -33,7 +31,7 @@ const linkClass = "text-sm font-medium text-muted-foreground transition-colors d
 <header class:list={["sticky top-0 z-30", sidebar ? "bg-background" : "bg-surface"]}>
   <div class:list={["flex h-14 items-center justify-between gap-4", sidebar ? "px-4 lg:px-6" : "mx-auto w-full max-w-340 px-4 lg:px-24 2xl:max-w-380"]}>
     <div class="flex items-center gap-8">
-      <a href="/" aria-label="ZeroIndex home"><Logo /></a>
+      <a href="/" aria-label="Paul Applegate, home"><Logo /></a>
       {
         !sidebar && (
           <div class="hidden w-64 xl:block">
@@ -51,8 +49,8 @@ const linkClass = "text-sm font-medium text-muted-foreground transition-colors d
           </button>
         )
       }
-      <Button isLink={true} href="https://lexingtonthemes.com/templates/zeroindex" size="sm" variant="primary">
-        Buy ZeroIndex
+      <Button isLink={true} href="/rss.xml" size="sm" variant="primary">
+        RSS feed
       </Button>
     </nav>
     <div class="flex items-center gap-1 lg:hidden">

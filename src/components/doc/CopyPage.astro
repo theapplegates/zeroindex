@@ -42,7 +42,7 @@ const itemClass = "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left
         config.assistant && (
           <button type="button" class={itemClass} data-assistant-open>
             <Sparkles size="sm" class="text-muted-foreground" />
-            <span class="flex flex-col"><span>Ask the assistant</span><span class="text-xs text-muted-foreground">Questions about these docs</span></span>
+            <span class="flex flex-col"><span>Ask the assistant</span><span class="text-xs text-muted-foreground">Questions about this post</span></span>
           </button>
         )
       }
@@ -60,6 +60,8 @@ const itemClass = "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left
 </div>
 
 <script>
+  import { copyText } from "@/scripts/clipboard";
+
   const root = document.querySelector<HTMLElement>("[data-copy-page]");
   const menu = root?.querySelector<HTMLDetailsElement>("[data-copy-page-menu]");
   const markdown = root?.querySelector<HTMLTemplateElement>("[data-copy-page-markdown]")?.innerHTML ?? "";
@@ -71,7 +73,7 @@ const itemClass = "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left
 
   root?.querySelectorAll<HTMLButtonElement>("[data-copy-page-button]").forEach((button) => {
     button.addEventListener("click", async () => {
-      await navigator.clipboard.writeText(decode(markdown));
+      if (!(await copyText(decode(markdown)))) return;
       const main = root.querySelector("[data-copy-page-button]");
       main?.querySelector("[data-copy-idle]")?.classList.add("hidden");
       main?.querySelector("[data-copy-done]")?.classList.remove("hidden");

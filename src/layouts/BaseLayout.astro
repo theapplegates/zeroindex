@@ -6,15 +6,48 @@ import BaseHead from "@/components/fundations/head/BaseHead.astro";
 // Components
 import Footer from "@/components/global/Footer.astro";
 import Navigation from "@/components/global/Navigation.astro";
+
+interface Props {
+  hideNavigation?: boolean;
+  hideFooter?: boolean;
+  app?: boolean;
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: "website" | "article";
+  publishedTime?: Date;
+  updatedTime?: Date;
+  noindex?: boolean;
+}
+
 // Hides the navigation or footer on selected screens by passing props:
 // <BaseLayout hideNavigation={true} hideFooter={true}>
 // `app` pins the page to the viewport on desktop so only the docs panel scrolls.
-const { hideNavigation = false, hideFooter = false, app = false } = Astro.props;
+const {
+  hideNavigation = false,
+  hideFooter = false,
+  app = false,
+  title,
+  description,
+  image,
+  type,
+  publishedTime,
+  updatedTime,
+  noindex,
+} = Astro.props;
 ---
 
 <html lang="en">
   <head>
-    <BaseHead />
+    <BaseHead
+      title={title}
+      description={description}
+      image={image}
+      type={type}
+      publishedTime={publishedTime}
+      updatedTime={updatedTime}
+      noindex={noindex}
+    />
     <script is:inline>
       const theme = localStorage.getItem("theme");
       if (theme === "dark" || (!theme && matchMedia("(prefers-color-scheme: dark)").matches)) {

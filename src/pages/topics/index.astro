@@ -1,0 +1,18 @@
+---
+// Fundations
+import DocShell from "@/components/doc/DocShell.astro";
+// Components
+import Footer from "@/components/global/Footer.astro";
+import TopicsHero from "@/components/blog/TopicsHero.astro";
+import TopicsGrid from "@/components/blog/TopicsGrid.astro";
+// Content
+import { getPostTags } from "@/lib/posts";
+
+const tags = await getPostTags();
+---
+
+<DocShell title="Topics" description="Browse the field notes by topic.">
+  <TopicsHero count={tags.length} />
+  <TopicsGrid tags={tags} />
+  <Footer variant="panel" />
+</DocShell>

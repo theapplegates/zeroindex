@@ -8,6 +8,7 @@ import CodeBlock from "./CodeBlock.astro";
 import CodeGroup from "./CodeGroup.astro";
 import Frame from "./Frame.astro";
 import ParamField from "./ParamField.astro";
+import PostImage from "./PostImage.astro";
 import ResponseField from "./ResponseField.astro";
 import Step from "./Step.astro";
 import Steps from "./Steps.astro";
@@ -25,6 +26,7 @@ export const docsComponents = {
   CodeGroup,
   Frame,
   ParamField,
+  PostImage,
   ResponseField,
   Step,
   Steps,

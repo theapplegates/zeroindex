@@ -3,17 +3,25 @@
 import { getDocGroups, docHref } from "@/lib/docs";
 import { getEndpointGroups, apiHref } from "@/lib/api";
 import { getSdks, sdkHref } from "@/lib/sdks";
+import { getReleases, releaseHref } from "@/lib/changelog";
+import { getPosts, getPostTags, postHref, tagHref, tagLabel } from "@/lib/posts";
+import { site } from "@/lib/site";
 
 interface Item {
   title: string;
   href: string;
 }
 
-const current = Astro.url.pathname.replace(/\/$/, "");
-const section = current.startsWith("/api") ? "api" : current.startsWith("/sdks") ? "sdks" : "docs";
-const labels = { api: "API reference", sdks: "SDKs", docs: "Docs" };
+const current = Astro.url.pathname.replace(/\/$/, "") || "/";
+const legacy = /^\/(docs|api|sdks|changelog)(\/|$)/.test(current);
+const section = (current.startsWith("/api") ? "api" : current.startsWith("/sdks") ? "sdks" : current.startsWith("/changelog") ? "changelog" : "docs") as
+  | "api"
+  | "sdks"
+  | "docs"
+  | "changelog";
+const labels = { api: "API reference", sdks: "SDKs", docs: "Docs", changelog: "Changelog" };
 
-const loaders = {
+const legacyLoaders = {
   api: async () =>
     (await getEndpointGroups()).map((group) => ({
       label: group.label,
@@ -30,18 +38,62 @@ const loaders = {
       label: group.label,
       items: group.docs.map((doc) => ({ title: doc.data.title, href: docHref(doc.id) })),
     })),
+  changelog: async () => [
+    {
+      label: "Changelog",
+      items: [{ title: "All releases", href: "/changelog" }, ...(await getReleases()).map((release) => ({ title: release.data.title, href: releaseHref(release.id) }))],
+    },
+  ],
 };
-const groups: { label: string; items: Item[] }[] = await loaders[section]();
+
+const posts = await getPosts();
+const tags = await getPostTags();
+const blogGroups: { label: string; items: Item[] }[] = [
+  {
+    label: "Field notes",
+    items: [
+      { title: "Home", href: "/" },
+      { title: "All posts", href: "/posts" },
+      { title: "Topics", href: "/topics" },
+      { title: "About", href: "/about" },
+    ],
+  },
+  {
+    label: "Latest",
+    items: posts.slice(0, 4).map((post) => ({ title: post.data.title, href: postHref(post.id) })),
+  },
+  {
+    label: "Topics",
+    items: tags.slice(0, 5).map(({ tag }) => ({ title: tagLabel(tag), href: tagHref(tag) })),
+  },
+  {
+    label: "Elsewhere",
+    items: [
+      { title: "RSS feed", href: "/rss.xml" },
+      { title: "GitHub", href: site.github },
+      { title: "Email", href: `mailto:${site.email}` },
+    ],
+  },
+].filter((group) => group.items.length > 0);
+
+const groups: { label: string; items: Item[] }[] = legacy
+  ? [...(await legacyLoaders[section]()), { label: "Field notes", items: [{ title: "Back to the blog", href: "/" }] }]
+  : blogGroups;
+
+const isActive = (href: string) => {
+  if (href.startsWith("http") || href.startsWith("mailto:")) return false;
+  return current === href || (href !== "/" && current.startsWith(`${href}/`));
+};
 ---
 
-<nav class="flex flex-col gap-6" aria-label={labels[section]}>
+<nav class="flex flex-col gap-6" aria-label={legacy ? labels[section] : "Field notes"}>
   {
     groups.map((group) => (
       <div class="flex flex-col gap-1">
         <p class="px-3 pb-1 text-sm font-medium text-foreground">{group.label}</p>
         <ul class="flex flex-col gap-0.5">
           {group.items.map((item) => {
-            const active = current === item.href;
+            const active = isActive(item.href);
             return (
               <li>
                 <a

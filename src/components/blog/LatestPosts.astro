@@ -1,0 +1,39 @@
+---
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+import PostList from "@/components/blog/PostList.astro";
+import ChevronRight from "@/components/fundations/icons/ChevronRight.astro";
+import type { Post } from "@/lib/posts";
+
+interface Props {
+  posts: Post[];
+}
+
+const { posts } = Astro.props;
+---
+
+<section>
+  <Wrapper variant="panel" class="pb-24">
+    <div class="flex flex-wrap items-end justify-between gap-4">
+      <Text tag="h2" variant="displaySM" class="font-semibold tracking-tight">Latest posts</Text>
+      <a
+        href="/posts"
+        class="flex items-center gap-1 text-sm font-medium text-muted-foreground transition-colors duration-200 hover:text-foreground"
+      >
+        All posts
+        <ChevronRight size="sm" />
+      </a>
+    </div>
+    {
+      posts.length > 0 ? (
+        <div class="mt-4">
+          <PostList posts={posts} />
+        </div>
+      ) : (
+        <Text tag="p" variant="textBase" class="mt-6 text-muted-foreground">
+          The first post is being written. Check back soon.
+        </Text>
+      )
+    }
+  </Wrapper>
+</section>

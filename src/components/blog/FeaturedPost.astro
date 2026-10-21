@@ -1,0 +1,48 @@
+---
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+import Badge from "@/components/docs/Badge.astro";
+import PostCover from "@/components/blog/PostCover.astro";
+import PostMeta from "@/components/blog/PostMeta.astro";
+import ChevronRight from "@/components/fundations/icons/ChevronRight.astro";
+import { postHref, readingTime, type Post } from "@/lib/posts";
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+const href = postHref(post.id);
+const coverAlt = post.data.coverAlt ?? post.data.title;
+---
+
+<section>
+  <Wrapper variant="panel" class="pb-16">
+    <div class="grid gap-6 rounded-xl border border-muted bg-surface p-5 lg:grid-cols-2 lg:items-center lg:gap-10">
+      <div class="flex min-w-0 flex-col items-start">
+        <div class="flex flex-wrap items-center gap-3">
+          <Badge variant="outline">Latest</Badge>
+          <PostMeta date={post.data.date} readingTime={readingTime(post.body)} tags={post.data.tags} />
+        </div>
+        <Text tag="h2" variant="displayMD" class="mt-4 font-semibold tracking-tight text-pretty lg:text-balance">
+          <a href={href} class="transition-colors duration-200 hover:text-muted-foreground">{post.data.title}</a>
+        </Text>
+        <Text tag="p" variant="textLG" class="mt-3 text-pretty text-muted-foreground">{post.data.description}</Text>
+        <a
+          href={href}
+          class="mt-6 flex items-center gap-1 text-sm font-medium text-foreground transition-colors duration-200 hover:text-muted-foreground"
+        >
+          Read the post
+          <ChevronRight size="sm" />
+        </a>
+      </div>
+      {
+        post.data.cover && (
+          <a href={href} aria-label={post.data.title} class="order-first block lg:order-last">
+            <PostCover publicId={post.data.cover} alt={coverAlt} widths={[640, 960, 1280]} loading="eager" />
+          </a>
+        )
+      }
+    </div>
+  </Wrapper>
+</section>

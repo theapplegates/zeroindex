@@ -226,7 +226,7 @@ export async function main(args = process.argv.slice(2)) {
     `<cloudinary-picture src="${escapeAttribute(asset.publicId)}" cloud-name="${cloudName}" alt="${escapeAttribute(values.alt ?? "Describe this image")}" width="${asset.width}" height="${asset.height}" sizes="${escapeAttribute(asset.sizes)}"></cloudinary-picture>`,
   );
   console.log(
-    `\nFor a post cover, use:\ncoverImage: ${JSON.stringify(asset.publicId)}\ncoverAlt: ${JSON.stringify(values.alt ?? "Describe this image")}\ncoverCloudName: ${JSON.stringify(cloudName)}`,
+    `\nFor a post cover, use:\ncover: ${JSON.stringify(asset.publicId)}\ncoverAlt: ${JSON.stringify(values.alt ?? "Describe this image")}`,
   );
 }
 

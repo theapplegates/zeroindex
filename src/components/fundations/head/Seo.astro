@@ -1,31 +1,79 @@
 ---
 import { AstroSeo } from "@lexingtonthemes/seo";
+import { site } from "@/lib/site";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: "website" | "article";
+  publishedTime?: Date;
+  updatedTime?: Date;
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description = site.description,
+  image,
+  type = "website",
+  publishedTime,
+  updatedTime,
+  noindex = false,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
+const pageTitle = title ? `${title} | ${site.name}` : `${site.name} | ${site.author}`;
+const images = image
+  ? [{ url: image, width: 1200, height: 630, alt: title ?? site.name }]
+  : undefined;
+
+const jsonLd =
+  type === "article"
+    ? {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        headline: title,
+        description,
+        image,
+        datePublished: publishedTime?.toISOString(),
+        dateModified: (updatedTime ?? publishedTime)?.toISOString(),
+        author: { "@type": "Person", name: site.author },
+        publisher: { "@type": "Person", name: site.author },
+        mainEntityOfPage: canonical,
+      }
+    : {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        name: site.name,
+        description: site.description,
+        url: canonical,
+        author: { "@type": "Person", name: site.author },
+      };
 ---
 
 <AstroSeo
-  title="Your Page Title"
-  description="A detailed description of your page content."
-  canonical="https://yourwebsite.com/current-page"
+  title={pageTitle}
+  description={description}
+  canonical={canonical}
+  noindex={noindex}
   openGraph={{
-    url: "https://yourwebsite.com/current-page",
-    title: "Your Page Title",
-    description: "A detailed description of your page content.",
-    images: [
-      {
-        url: "https://yourwebsite.com/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Open Graph Image Alt",
-        type: "image/jpeg",
-      },
-    ],
-    site_name: "Your Site Name",
-    type: "website",
+    url: canonical,
+    title: pageTitle,
+    description,
+    site_name: site.name,
+    type,
     locale: "en_US",
+    images,
+    article:
+      type === "article"
+        ? {
+            publishedTime: publishedTime?.toISOString(),
+            modifiedTime: (updatedTime ?? publishedTime)?.toISOString(),
+            authors: [site.author],
+          }
+        : undefined,
   }}
-  twitter={{
-    handle: "@yourhandle",
-    site: "@yourwebsite",
-    cardType: "summary_large_image",
-  }}
+  twitter={{ cardType: "summary_large_image" }}
+  jsonLd={jsonLd}
 />

@@ -1,0 +1,17 @@
+---
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+import PostList from "@/components/blog/PostList.astro";
+import type { Post } from "@/lib/posts";
+
+interface Props {
+  posts: Post[];
+}
+
+const { posts } = Astro.props;
+---
+
+<section>
+  <Wrapper variant="panel" class="pb-24">
+    <PostList posts={posts} />
+  </Wrapper>
+</section>

@@ -1,0 +1,22 @@
+---
+import CloudinaryImage from "@/components/CloudinaryImage.astro";
+
+interface Props {
+  publicId: string;
+  alt: string;
+  caption?: string;
+}
+
+const { publicId, alt, caption } = Astro.props;
+---
+
+<figure class="not-prose my-6">
+  <CloudinaryImage
+    publicId={publicId}
+    alt={alt}
+    sizes="(max-width: 720px) calc(100vw - 3rem), 672px"
+    class="w-full rounded-xl border border-muted"
+    pictureClass="overflow-hidden rounded-xl"
+  />
+  {caption && <figcaption class="mt-3 text-center text-sm text-muted-foreground">{caption}</figcaption>}
+</figure>
