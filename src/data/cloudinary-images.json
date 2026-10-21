@@ -626,5 +626,45 @@
         1920
       ]
     }
+  },
+  "paulapplegate-com/images/blog/paris-bilal-zvpefC1kuSE-unsplash": {
+    "publicId": "images/blog/paris-bilal-zvpefC1kuSE-unsplash",
+    "cloudName": "paulapplegate-com",
+    "width": 6144,
+    "height": 4608,
+    "version": 1792608811,
+    "sizes": "(max-width: 720px) calc(100vw - 3rem), 672px",
+    "widths": {
+      "jxl": [
+        50,
+        581,
+        875,
+        1109,
+        1318,
+        1562,
+        1724,
+        1889,
+        1920
+      ],
+      "avif": [
+        50,
+        809,
+        1289,
+        1838,
+        1920
+      ],
+      "webp": [
+        50,
+        611,
+        901,
+        1153,
+        1231,
+        1330,
+        1485,
+        1643,
+        1808,
+        1920
+      ]
+    }
   }
 }
