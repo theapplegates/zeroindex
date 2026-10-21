@@ -19,6 +19,6 @@ export default defineConfig({
     "/docs": "/docs/getting-started/introduction",
     "/api": "/api/introduction",
   },
-  site: "https://yourwebsite.com",
+  site: "https://zero.paulapplegate.com",
   integrations: [sitemap(), mdx()],
 });
