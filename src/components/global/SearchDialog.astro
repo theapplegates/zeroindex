@@ -32,7 +32,7 @@ const index = [
 ---
 
 <dialog
-  class="inset-x-3 top-3 bottom-auto m-0 w-auto max-w-xl overflow-hidden rounded-2xl border border-muted bg-surface p-0 text-foreground shadow-xl backdrop:bg-foreground/20 sm:inset-x-0 sm:top-0 sm:mx-auto sm:mt-24"
+  class="inset-x-4 top-2 bottom-auto m-0 w-auto max-w-xl overflow-hidden rounded-2xl border border-muted bg-surface p-0 text-foreground shadow-xl backdrop:bg-foreground/20 sm:inset-x-0 sm:top-0 sm:mx-auto sm:mt-24"
   aria-label="Search the blog"
   data-search-dialog
 >
@@ -41,13 +41,13 @@ const index = [
     <input
       type="search"
       placeholder="Search the blog"
-      class="h-12 grow border-0 bg-transparent p-0 text-sm text-foreground placeholder:text-muted-foreground focus:ring-0"
+      class="h-12 grow border-0 bg-transparent p-0 text-base text-foreground placeholder:text-muted-foreground focus:ring-0 sm:text-sm"
       autocomplete="off"
       data-search-input
     />
-    <kbd class="font-sans text-xs text-muted-foreground">Esc</kbd>
+    <kbd class="hidden font-sans text-xs text-muted-foreground sm:block">Esc</kbd>
   </div>
-  <ul class="max-h-64 overflow-y-auto p-2 sm:max-h-96" data-search-results></ul>
+  <ul class="max-h-56 overflow-y-auto p-2 sm:max-h-96" data-search-results></ul>
   <p class="hidden px-4 py-8 text-center text-sm text-muted-foreground" data-search-empty>No posts found</p>
 </dialog>
 
