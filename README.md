@@ -128,3 +128,12 @@ Builds with `npm run build` and deploys to Vercel as is. Set
 
 The design is the ZeroIndex theme by
 [Lexington Themes](https://lexingtonthemes.com), used under its licence.
+
+## Search
+
+Search uses Orama in the browser. At build time, `src/pages/search-index.json.ts`
+creates a local index of published posts and the main blog pages using
+`src/lib/search.ts`. The search dialog loads it on first use, ranks titles and
+headings higher, tolerates typos, and highlights matching text. No search service
+or API key is needed. Add new searchable content in `getSearchDocuments`.
+

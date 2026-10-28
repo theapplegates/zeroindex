@@ -1,110 +1,489 @@
 ---
-// Content
-import { render } from "astro:content";
-import { getPosts, postHref, tagLabel } from "@/lib/posts";
 // Icons
 import Search from "@/components/fundations/icons/Search.astro";
+import Close from "@/components/fundations/icons/Close.astro";
 
-const posts = await getPosts();
-const headingsOf = async (entry: Parameters<typeof render>[0]) =>
-  (await render(entry)).headings.filter((heading) => heading.depth <= 3).map((heading) => heading.text);
-
-const pages = [
-  { title: "Home", description: "The latest field notes", category: "Page", href: "/", headings: [], body: "" },
-  { title: "All posts", description: "Every post, newest first", category: "Page", href: "/posts", headings: [], body: "" },
-  { title: "Topics", description: "Browse posts by topic", category: "Page", href: "/topics", headings: [], body: "" },
-  { title: "About", description: "About Paul and Field notes", category: "Page", href: "/about", headings: [], body: "" },
-];
-
-const index = [
-  ...pages,
-  ...(await Promise.all(
-    posts.map(async (post) => ({
-      title: post.data.title,
-      description: post.data.description,
-      category: post.data.tags.map(tagLabel).join(", ") || "Post",
-      href: postHref(post.id),
-      headings: await headingsOf(post),
-      body: post.body ?? "",
-    })),
-  )),
-];
+const keycap = "rounded-md border border-muted bg-background px-1.5 py-0.5 font-sans text-xs text-muted-foreground";
+const suggestions = ["Astro", "Cloudinary", "design"];
 ---
 
 <dialog
-  class="inset-x-4 top-2 bottom-auto m-0 w-auto max-w-xl overflow-hidden rounded-2xl border border-muted bg-surface p-0 text-foreground shadow-xl backdrop:bg-foreground/20 sm:inset-x-0 sm:top-0 sm:mx-auto sm:mt-24"
+  class="mx-auto mt-24 w-11/12 max-w-xl flex-col overflow-hidden rounded-2xl border border-muted bg-surface p-0 text-foreground shadow-2xl open:flex"
   aria-label="Search the blog"
   data-search-dialog
 >
-  <div class="flex items-center gap-3 border-b border-muted px-4">
+  <div class="flex h-14 shrink-0 items-center gap-3 border-b border-muted px-4">
     <Search size="sm" class="text-muted-foreground" />
+    <label for="search-input" class="sr-only">Search the blog</label>
     <input
+      id="search-input"
       type="search"
       placeholder="Search the blog"
-      class="h-12 grow border-0 bg-transparent p-0 text-base text-foreground placeholder:text-muted-foreground focus:ring-0 sm:text-sm"
+      class="h-full grow border-0 bg-transparent p-0 text-base text-foreground placeholder:text-muted-foreground focus:ring-0 focus-visible:outline-none sm:text-sm"
       autocomplete="off"
+      autocapitalize="off"
+      spellcheck="false"
+      role="combobox"
+      aria-expanded="false"
+      aria-controls="search-results"
+      aria-autocomplete="list"
+      aria-haspopup="listbox"
       data-search-input
     />
-    <kbd class="hidden font-sans text-xs text-muted-foreground sm:block">Esc</kbd>
+    <button
+      type="button"
+      class="hidden size-7 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors duration-200 hover:text-foreground"
+      aria-label="Clear search"
+      data-search-clear
+    >
+      <Close size="sm" />
+    </button>
+    <kbd class:list={[keycap, "hidden shrink-0 sm:block"]}>Esc</kbd>
+    <button
+      type="button"
+      class="flex size-8 shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-colors duration-200 hover:text-foreground sm:hidden"
+      aria-label="Close search"
+      data-search-close
+    >
+      <Close size="base" />
+    </button>
   </div>
-  <ul class="max-h-56 overflow-y-auto p-2 sm:max-h-96" data-search-results></ul>
-  <p class="hidden px-4 py-8 text-center text-sm text-muted-foreground" data-search-empty>No posts found</p>
+
+  <div class="min-h-48 grow overflow-y-auto sm:min-h-64" data-lenis-prevent>
+    <div class="mx-auto max-w-sm px-4 py-10 text-center" data-search-hint>
+      <p class="text-sm font-medium text-foreground">Search everything</p>
+      <p class="mt-1 text-sm text-pretty text-muted-foreground">Search posts and pages in one place.</p>
+      <div class="mt-5 flex flex-wrap justify-center gap-2">
+        {
+          suggestions.map((suggestion) => (
+            <button
+              type="button"
+              class="rounded-full border border-muted bg-background/50 px-3 py-1 text-xs text-muted-foreground transition-colors duration-200 hover:border-muted-foreground/40 hover:text-foreground"
+              data-search-suggestion={suggestion}
+            >
+              {suggestion}
+            </button>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="hidden px-4 py-12 text-center" data-search-loading>
+      <span class="mx-auto block size-5 animate-spin rounded-full border-2 border-muted border-t-muted-foreground" aria-hidden="true"></span>
+      <p class="mt-3 text-sm text-muted-foreground">Loading search…</p>
+    </div>
+
+    <div class="hidden px-4 py-12 text-center" data-search-empty>
+      <p class="text-sm font-medium text-foreground">
+        No results for &ldquo;<span data-search-query></span>&rdquo;
+      </p>
+      <p class="mt-1 text-sm text-pretty text-muted-foreground">Try a shorter query or a different word.</p>
+    </div>
+
+    <div class="hidden px-4 py-12 text-center" data-search-error>
+      <p class="text-sm font-medium text-foreground">Search is unavailable</p>
+      <p class="mt-1 text-sm text-pretty text-muted-foreground">Check your connection, then try again.</p>
+      <button
+        type="button"
+        class="mt-4 rounded-lg border border-muted px-3 py-1.5 text-xs font-medium text-foreground transition-colors duration-200 hover:bg-muted"
+        data-search-retry
+      >
+        Try again
+      </button>
+    </div>
+
+    <ul id="search-results" class="flex flex-col gap-0.5 p-2 hidden" role="listbox" aria-label="Search results" data-search-results></ul>
+
+  </div>
+
+  <div class="flex h-10 shrink-0 items-center justify-between gap-4 border-t border-muted px-4 text-xs text-muted-foreground">
+    <span role="status" aria-live="polite" data-search-count>Search the blog</span>
+    <div class="hidden items-center gap-4 sm:flex">
+      <span class="flex items-center gap-1.5">
+        <kbd class={keycap}>↑</kbd>
+        <kbd class={keycap}>↓</kbd>
+        <span>to navigate</span>
+      </span>
+      <span class="flex items-center gap-1.5">
+        <kbd class={keycap}>↵</kbd>
+        <span>to open</span>
+      </span>
+    </div>
+  </div>
 </dialog>
 
-<script type="application/json" data-search-index set:html={JSON.stringify(index)} />
-
 <script>
-  type Entry = { title: string; description: string; category: string; href: string; headings: string[]; body: string };
+  import type { AnyOrama } from "@orama/orama";
+
+  type SearchDocument = {
+    id: string;
+    title: string;
+    description: string;
+    category: string;
+    href: string;
+    headings: string[];
+    content: string;
+  };
+  type SearchResults = { count: number; hits: Array<{ document: SearchDocument }> };
+  type State = "hint" | "loading" | "results" | "empty" | "error";
 
   const dialog = document.querySelector<HTMLDialogElement>("[data-search-dialog]");
-  const input = document.querySelector<HTMLInputElement>("[data-search-input]");
-  const results = document.querySelector<HTMLUListElement>("[data-search-results]");
-  const empty = document.querySelector<HTMLElement>("[data-search-empty]");
-  const entries: Entry[] = JSON.parse(document.querySelector("[data-search-index]")?.textContent ?? "[]");
+  const input = dialog?.querySelector<HTMLInputElement>("[data-search-input]") ?? null;
+  const results = dialog?.querySelector<HTMLUListElement>("[data-search-results]") ?? null;
+  const clear = dialog?.querySelector<HTMLButtonElement>("[data-search-clear]") ?? null;
+  const retry = dialog?.querySelector<HTMLButtonElement>("[data-search-retry]") ?? null;
+  const emptyQuery = dialog?.querySelector<HTMLElement>("[data-search-query]") ?? null;
+  const count = dialog?.querySelector<HTMLElement>("[data-search-count]") ?? null;
 
-  const search = (query: string) => {
-    const terms = query.toLowerCase().split(/\s+/).filter(Boolean);
-    const matches = entries.filter((entry) => {
-      const text = [entry.title, entry.description, entry.category, ...entry.headings, entry.body].join(" ").toLowerCase();
-      return terms.every((term) => text.includes(term));
+  const states: Record<State, HTMLElement | null> = {
+    hint: dialog?.querySelector<HTMLElement>("[data-search-hint]") ?? null,
+    loading: dialog?.querySelector<HTMLElement>("[data-search-loading]") ?? null,
+    results,
+    empty: dialog?.querySelector<HTMLElement>("[data-search-empty]") ?? null,
+    error: dialog?.querySelector<HTMLElement>("[data-search-error]") ?? null,
+  };
+
+  const wordPattern = /[\p{L}\p{N}]+(?:['’][\p{L}\p{N}]+)*/gu;
+  const schema = {
+    title: "string",
+    description: "string",
+    category: "string",
+    headings: "string[]",
+    content: "string",
+  } as const;
+  const properties = ["title", "headings", "description", "category", "content"] as const;
+  const boost = { title: 8, headings: 4, description: 3, category: 2, content: 1 };
+
+  let database: AnyOrama | null = null;
+  let indexRequest: Promise<AnyOrama> | null = null;
+  let items: HTMLAnchorElement[] = [];
+  let activeIndex = -1;
+  let queryVersion = 0;
+
+  const load = () => {
+    if (database) return Promise.resolve(database);
+    if (!indexRequest) {
+      indexRequest = (async () => {
+        const [{ create, insertMultiple }, response] = await Promise.all([
+          import("@orama/orama"),
+          fetch(`${import.meta.env.BASE_URL}search-index.json`),
+        ]);
+        if (!response.ok) throw new Error(`Search index request failed with ${response.status}`);
+
+        const documents = (await response.json()) as SearchDocument[];
+        const orama = create({ schema });
+        insertMultiple(orama, documents);
+        database = orama;
+        return orama;
+      })().catch((error) => {
+        indexRequest = null;
+        throw error;
+      });
+    }
+    return indexRequest;
+  };
+
+  const show = (state: State) => {
+    for (const [name, element] of Object.entries(states)) {
+      element?.classList.toggle("hidden", name !== state);
+    }
+  };
+
+  const setCount = (text: string) => {
+    if (count) count.textContent = text;
+  };
+
+  const collapse = () => {
+    input?.setAttribute("aria-expanded", "false");
+    input?.removeAttribute("aria-activedescendant");
+  };
+
+  const setActive = (index: number) => {
+    if (!items.length) return;
+    activeIndex = (index + items.length) % items.length;
+    items.forEach((item, itemIndex) => {
+      const selected = itemIndex === activeIndex;
+      item.setAttribute("aria-selected", String(selected));
+      item.classList.toggle("bg-muted", selected);
     });
-    if (!results || !empty) return;
+    input?.setAttribute("aria-activedescendant", items[activeIndex].id);
+    items[activeIndex].scrollIntoView({ block: "nearest" });
+  };
+
+  const tokensOf = (query: string) =>
+    Array.from(query.toLowerCase().matchAll(wordPattern), (match) => match[0]);
+
+  const toleranceOf = (tokens: string[]) =>
+    tokens.length === 0 ? 0 : Math.min(...tokens.map((token) => (token.length >= 7 ? 2 : token.length >= 5 ? 1 : 0)));
+
+  const within = (a: string, b: string, limit: number) => {
+    if (Math.abs(a.length - b.length) > limit) return false;
+
+    let previous = Array.from({ length: b.length + 1 }, (_, index) => index);
+    for (let i = 1; i <= a.length; i++) {
+      const current = [i];
+      let best = i;
+      for (let j = 1; j <= b.length; j++) {
+        const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+        const distance = Math.min(previous[j] + 1, current[j - 1] + 1, previous[j - 1] + cost);
+        current.push(distance);
+        if (distance < best) best = distance;
+      }
+      if (best > limit) return false;
+      previous = current;
+    }
+    return previous[b.length] <= limit;
+  };
+
+  const matches = (word: string, token: string) => {
+    if (word === token) return true;
+    if (token.length >= 3 && word.startsWith(token)) return true;
+
+    const limit = token.length >= 7 ? 2 : token.length >= 5 ? 1 : 0;
+    return limit > 0 && word.length >= 4 && within(word, token, limit);
+  };
+
+  const rangesIn = (text: string, tokens: string[]) => {
+    const ranges: Array<{ start: number; end: number }> = [];
+    if (!tokens.length) return ranges;
+
+    for (const match of text.matchAll(wordPattern)) {
+      const word = match[0].toLowerCase();
+      if (tokens.some((token) => matches(word, token))) {
+        const start = match.index ?? 0;
+        ranges.push({ start, end: start + match[0].length });
+      }
+    }
+    return ranges;
+  };
+
+  /* Highlight from word offsets, never from HTML, so query text stays text. */
+  const appendHighlighted = (parent: HTMLElement, text: string, tokens: string[]) => {
+    const ranges = rangesIn(text, tokens);
+    let cursor = 0;
+
+    for (const range of ranges) {
+      if (range.start > cursor) parent.append(document.createTextNode(text.slice(cursor, range.start)));
+      const mark = document.createElement("mark");
+      mark.className = "search-mark";
+      mark.textContent = text.slice(range.start, range.end);
+      parent.append(mark);
+      cursor = range.end;
+    }
+
+    if (cursor < text.length) parent.append(document.createTextNode(text.slice(cursor)));
+  };
+
+  const excerpt = (text: string, tokens: string[]) => {
+    const flat = text.replace(/\s+/g, " ").trim();
+    if (!flat) return "";
+
+    const ranges = rangesIn(flat, tokens);
+    if (!ranges.length) {
+      if (flat.length <= 150) return flat;
+      const cut = flat.lastIndexOf(" ", 150);
+      return `${flat.slice(0, cut > 0 ? cut : 150)}…`;
+    }
+
+    const hit = ranges[0].start;
+    let start = Math.max(0, hit - 44);
+    if (start > 0) {
+      const space = flat.lastIndexOf(" ", start);
+      if (space > 0) start = space + 1;
+    }
+
+    let end = Math.min(flat.length, start + 150);
+    if (end < flat.length) {
+      const space = flat.lastIndexOf(" ", end);
+      if (space > hit) end = space;
+    }
+
+    return `${start > 0 ? "…" : ""}${flat.slice(start, end).trim()}${end < flat.length ? "…" : ""}`;
+  };
+
+  const snippetFor = (entry: SearchDocument, tokens: string[]) => {
+    if (rangesIn(entry.description, tokens).length) return entry.description;
+    if (rangesIn(entry.content, tokens).length) return excerpt(entry.content, tokens);
+    return entry.description;
+  };
+
+  const render = (found: SearchResults, query: string, tokens: string[]) => {
+    if (!results) return;
+
+    items = [];
+    activeIndex = -1;
     results.replaceChildren(
-      ...matches.map((entry) => {
+      ...found.hits.map((hit, index) => {
+        const entry = hit.document;
         const item = document.createElement("li");
+        item.setAttribute("role", "presentation");
+
         const link = document.createElement("a");
         link.href = entry.href;
-        link.className = "flex flex-col gap-0.5 rounded-lg px-3 py-2.5 hover:bg-muted focus:bg-muted focus:outline-none";
+        link.id = `search-result-${index}`;
+        link.tabIndex = -1;
+        link.setAttribute("role", "option");
+        link.setAttribute("aria-selected", "false");
+        link.className = "block rounded-lg px-3 py-2.5 transition-colors duration-150 hover:bg-muted";
+
+        const heading = document.createElement("span");
+        heading.className = "flex items-baseline justify-between gap-3";
         const title = document.createElement("span");
-        title.className = "text-sm font-medium text-foreground";
-        title.textContent = entry.title;
-        const meta = document.createElement("span");
-        meta.className = "text-xs text-muted-foreground";
-        meta.textContent = `${entry.category}, ${entry.description}`;
-        link.append(title, meta);
+        title.className = "truncate text-sm font-medium text-foreground";
+        appendHighlighted(title, entry.title, tokens);
+        const category = document.createElement("span");
+        category.className = "shrink-0 text-xs text-muted-foreground";
+        appendHighlighted(category, entry.category, tokens);
+        heading.append(title, category);
+
+        const snippet = document.createElement("span");
+        snippet.className = "mt-0.5 line-clamp-2 text-xs/5 text-muted-foreground";
+        appendHighlighted(snippet, snippetFor(entry, tokens), tokens);
+
+        link.append(heading, snippet);
+        link.addEventListener("mouseenter", () => setActive(index));
+        link.addEventListener("click", () => dialog?.close());
         item.append(link);
+        items.push(link);
         return item;
       }),
     );
-    empty.classList.toggle("hidden", matches.length > 0);
+
+    if (!found.hits.length) {
+      if (emptyQuery) emptyQuery.textContent = query;
+      show("empty");
+      setCount("No results");
+      collapse();
+      return;
+    }
+
+    show("results");
+    input?.setAttribute("aria-expanded", "true");
+    setCount(found.count > found.hits.length ? `${found.hits.length} of ${found.count} results` : `${found.count} ${found.count === 1 ? "result" : "results"}`);
+    setActive(0);
+  };
+
+  const fail = () => {
+    show("error");
+    setCount("Unavailable");
+    collapse();
+    items = [];
+    activeIndex = -1;
+  };
+
+  const update = async () => {
+    const query = input?.value.trim() ?? "";
+    const version = ++queryVersion;
+    clear?.classList.toggle("hidden", !input?.value);
+    clear?.classList.toggle("flex", Boolean(input?.value));
+
+    if (!query) {
+      show("hint");
+      setCount("Search the blog");
+      collapse();
+      results?.replaceChildren();
+      items = [];
+      activeIndex = -1;
+      return;
+    }
+
+    if (!database) {
+      show("loading");
+      setCount("Loading…");
+      collapse();
+      try {
+        await load();
+      } catch {
+        if (version === queryVersion) fail();
+        return;
+      }
+      if (version !== queryVersion) return;
+    }
+
+    if (!database) return;
+
+    try {
+      const tokens = tokensOf(query);
+      const found = (await import("@orama/orama")).search(database, {
+        term: query,
+        properties: [...properties],
+        boost,
+        tolerance: toleranceOf(tokens),
+        limit: 8,
+      }) as unknown as SearchResults;
+
+      if (version === queryVersion) render(found, query, tokens);
+    } catch {
+      if (version === queryVersion) fail();
+    }
   };
 
   const open = () => {
     if (!dialog || !input) return;
     input.value = "";
-    search("");
+    clear?.classList.add("hidden");
+    clear?.classList.remove("flex");
+    show("hint");
+    setCount("Search the blog");
     dialog.showModal();
     input.focus();
+    void load().catch(() => {});
   };
 
   document.querySelectorAll("[data-search-open]").forEach((button) => button.addEventListener("click", open));
-  input?.addEventListener("input", () => search(input.value));
+
+  input?.addEventListener("input", () => void update());
   input?.addEventListener("keydown", (event) => {
-    if (event.key === "Enter") results?.querySelector("a")?.click();
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      setActive(activeIndex + 1);
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault();
+      setActive(activeIndex - 1);
+    } else if (event.key === "Enter" && items.length) {
+      event.preventDefault();
+      (items[activeIndex] ?? items[0]).click();
+    } else if (event.key === "Escape") {
+      event.preventDefault();
+      dialog?.close();
+    }
   });
+
+  clear?.addEventListener("click", () => {
+    if (!input) return;
+    input.value = "";
+    input.focus();
+    void update();
+  });
+
+  dialog?.querySelector("[data-search-close]")?.addEventListener("click", () => dialog.close());
+  dialog?.querySelectorAll<HTMLButtonElement>("[data-search-suggestion]").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (!input) return;
+      input.value = button.dataset.searchSuggestion ?? "";
+      input.focus();
+      void update();
+    });
+  });
+
+  retry?.addEventListener("click", () => void update());
+
   dialog?.addEventListener("click", (event) => {
     if (event.target === dialog) dialog.close();
   });
+  dialog?.addEventListener("close", () => {
+    if (input) input.value = "";
+    clear?.classList.add("hidden");
+    clear?.classList.remove("flex");
+    results?.replaceChildren();
+    items = [];
+    activeIndex = -1;
+    queryVersion++;
+    show("hint");
+    setCount("Search the blog");
+    collapse();
+  });
+
   document.addEventListener("keydown", (event) => {
     if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
       event.preventDefault();

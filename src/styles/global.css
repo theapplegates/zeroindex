@@ -199,3 +199,28 @@ summary::-webkit-details-marker {
     transition: none;
   }
 }
+
+[data-search-dialog] {
+  max-height: calc(100dvh - 7rem);
+}
+
+[data-search-dialog] [data-lenis-prevent] {
+  min-height: 0;
+}
+
+.search-mark {
+  border-radius: 0.25rem;
+  background-color: color-mix(in oklch, var(--accent) 16%, transparent);
+  color: inherit;
+  padding: 0 0.1em;
+}
+
+.dark .search-mark {
+  background-color: color-mix(in oklch, var(--accent) 28%, transparent);
+}
+
+/* The dialog has its own clear button */
+[data-search-input]::-webkit-search-cancel-button,
+[data-search-input]::-webkit-search-decoration {
+  appearance: none;
+}
